@@ -11,7 +11,7 @@ export const env = {
   OLLAMA_MODEL: process.env.OLLAMA_MODEL || 'gemma2',
   GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
   TARGET_REPO: process.env.TARGET_REPO || '',
-  JULES_API_URL: process.env.JULES_API_URL || '',
+  JULES_API_URL: process.env.JULES_API_URL || 'https://jules.googleapis.com/v1alpha/sessions',
   JULES_API_KEY: process.env.JULES_API_KEY || '',
 };
 

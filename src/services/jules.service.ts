@@ -22,9 +22,18 @@ export class JulesService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${env.JULES_API_KEY}`
+          'X-Goog-Api-Key': env.JULES_API_KEY
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          prompt: payload.prompt,
+          sourceContext: {
+            source: `sources/github/${payload.repository}`,
+            githubRepoContext: {
+              startingBranch: "master"
+            }
+          },
+          title: "Melhoria Automática - Jules Orchestrator"
+        })
       });
 
       if (!response.ok) {

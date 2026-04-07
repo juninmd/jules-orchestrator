@@ -20,7 +20,7 @@ describe('JulesService', () => {
     expect(global.fetch).toHaveBeenCalledWith('http://mock-jules/api', expect.objectContaining({
       method: 'POST',
       headers: expect.objectContaining({
-        'Authorization': 'Bearer mock-key'
+        'X-Goog-Api-Key': 'mock-key'
       })
     }));
   });
