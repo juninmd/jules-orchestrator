@@ -13,31 +13,24 @@ export class K8sService {
   constructor() {
     const kc = new k8s.KubeConfig();
     try {
-      // Tenta carregar as credenciais embutidas dentro do proprio container (ServiceAccount local)
       kc.loadFromCluster();
       console.log('[K8sService] Conectado na API via Cluster ServiceAccount.');
     } catch {
-      // Fallback para desenvolvimento local ou config ~/.kube/config
       kc.loadFromDefault();
       console.log('[K8sService] Conectado na API via config Kubeconfig local.');
     }
     this.coreApi = kc.makeApiClient(k8s.CoreV1Api);
   }
 
-  /**
-   * Busca por Pods com status indicando falhas graves no cluster inteiro.
-   */
   async getCrashingPods(): Promise<CrashingPod[]> {
     const crashingPods: CrashingPod[] = [];
     
     try {
-      const res = await this.coreApi.listPodForAllNamespaces();
-      const pods = res.body.items;
+      const pods = (await this.coreApi.listPodForAllNamespaces()).items;
 
       for (const pod of pods) {
         if (!pod.status || !pod.metadata) continue;
 
-        // Verifica o estado de loop de crash ou morte nos containers
         const containerStatuses = pod.status.containerStatuses || [];
         const isCrashing = containerStatuses.some((status: any) => {
           const stateWait = status.state?.waiting;
@@ -52,7 +45,7 @@ export class K8sService {
           
           if (repoAnnotation) {
             // Buscando as ultimas 100 linhas pro stack trace  
-            const logRes = await this.coreApi.readNamespacedPodLog(
+            const logTrace = await this.coreApi.readNamespacedPodLog(
                 pod.metadata.name!, 
                 pod.metadata.namespace!,
                 undefined,
@@ -68,7 +61,7 @@ export class K8sService {
               name: pod.metadata.name!,
               namespace: pod.metadata.namespace!,
               repo: repoAnnotation,
-              logTrace: logRes.body
+              logTrace: typeof logTrace === 'string' ? logTrace : (logTrace as any).body
             });
           } else {
              console.log(`[K8sService] Pod ${pod.metadata.name} sofrendo crash mas sem label 'source-repo'. Ignorando auto-cura.`);

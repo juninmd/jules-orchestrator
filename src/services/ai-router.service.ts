@@ -1,5 +1,5 @@
 import { env } from '../config/env.config.js';
-import { generateText, tool, CoreTool } from 'ai';
+import { generateText, tool } from 'ai';
 import { createOllama } from 'ollama-ai-provider';
 import { z } from 'zod';
 import { GithubService } from './github.service.js';
@@ -18,7 +18,7 @@ export class AIRouterService {
 
     try {
       const result = await generateText({
-        model: this.ollama(env.OLLAMA_MODEL),
+        model: this.ollama(env.OLLAMA_MODEL) as any,
         prompt: `Analise as necessidades de melhoria do projeto e execute os comandos mais eficientes.
 CONTEXTO: ${context}
 Se precisar de código no github, crie uma issue.
@@ -29,7 +29,6 @@ Se precisar acordar o agente Jules para já resolver, chame o agente.`,
             parameters: z.object({
               instruction: z.string().describe('Instrução extremamente detalhada focada no problema com regras SOLID e Arquiteturais.')
             }),
-             // @ts-ignore: fallback para inferencia do AI SDK
             execute: async ({ instruction }: { instruction: string }) => {
               await this.julesService.invokeSession({
                 prompt: instruction,
@@ -39,14 +38,14 @@ Se precisar acordar o agente Jules para já resolver, chame o agente.`,
             }
           })
         },
-        maxSteps: 3 // Permitir que o modelo chame tools, veja a resposta, e chame outra, até 3 vezes
-      });
+        maxSteps: 3
+      } as any);
 
       console.log('[AIRouterService] Resultado final do roteamento:');
       console.log(result.text);
 
-      if (result.toolCalls && result.toolCalls.length > 0) {
-        console.log(`[AIRouterService] Foram executados ${result.toolCalls.length} comandos automáticos do Jules/Github!`);
+      if (result.toolResults && result.toolResults.length > 0) {
+        console.log(`[AIRouterService] Foram executados ${result.toolResults.length} comandos automáticos do Jules/Github!`);
       }
     } catch (error) {
       console.error('[AIRouterService] Falha crítica ao gerar texto/chamar ferramentas.', error);
