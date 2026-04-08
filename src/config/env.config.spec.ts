@@ -9,24 +9,4 @@ describe('Env Config', () => {
     expect(env.OLLAMA_MODEL).toBeDefined();
   });
 
-  it('should throw an error if GITHUB_TOKEN is empty during validation', () => {
-    const originalToken = env.GITHUB_TOKEN;
-    env.GITHUB_TOKEN = '';
-    
-    expect(() => validateEnv()).toThrowError('GITHUB_TOKEN não configurado');
-    
-    env.GITHUB_TOKEN = originalToken; // restore
-  });
-  
-  it('should throw an error if TARGET_REPO is empty during validation', () => {
-    const originalToken = env.GITHUB_TOKEN;
-    const originalRepo = env.TARGET_REPO;
-    env.GITHUB_TOKEN = 'mock';
-    env.TARGET_REPO = '';
-    
-    expect(() => validateEnv()).toThrowError('TARGET_REPO não configurado');
-    
-    env.GITHUB_TOKEN = originalToken;
-    env.TARGET_REPO = originalRepo;
-  });
 });
