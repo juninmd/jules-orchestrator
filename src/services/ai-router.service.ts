@@ -24,32 +24,18 @@ CONTEXTO: ${context}
 Se precisar de código no github, crie uma issue.
 Se precisar acordar o agente Jules para já resolver, chame o agente.`,
         tools: {
-          createGithubIssue: tool({
-            description: 'Cria uma issue no Repositório do GitHub contendo uma proposta de refatoração ou melhoria técnica.',
+          requestJulesAgent: tool({
+            description: 'Instrui a inteligência artificial corporativa (Agente Jules da Google) a implementar uma refatoração em um repositório.',
             parameters: z.object({
-              title: z.string().describe('Título curto e limpo da melhoria.'),
-              description: z.string().describe('Descrição clara dos problemas atuais e o que precisa ser feito.')
+              instruction: z.string().describe('Instrução extremamente detalhada focada no problema com regras SOLID e Arquiteturais.')
             }),
-            // @ts-ignore: a inferência interna do Zod às vezes falha na tipagem do execute do ai sdk
-            execute: async ({ title, description }: { title: string, description: string }) => {
-              const url = await this.githubService.createImprovementIssue(repository, title, description);
-              return { url, message: 'Issue criada com sucesso no Github.' };
-            }
-          }),
-          triggerJulesAgent: tool({
-            description: 'Chama a API do Jules Orchestrator passando as instruções para o robô atuar sobre um Repositório (ou issue).',
-            parameters: z.object({
-              instruction: z.string().describe('A instrução clara e o prompt de melhoria para o Agente.'),
-              githubIssueUrl: z.string().optional().describe('URL da issue do GitHub associada à tarefa (se você já criou uma).')
-            }),
-            // @ts-ignore: fallback para o mesmo problema
-            execute: async ({ instruction, githubIssueUrl }: { instruction: string, githubIssueUrl?: string }) => {
+             // @ts-ignore: fallback para inferencia do AI SDK
+            execute: async ({ instruction }: { instruction: string }) => {
               await this.julesService.invokeSession({
                 prompt: instruction,
-                repository: repository,
-                issueUrl: githubIssueUrl
+                repository: repository
               });
-              return { message: 'Jules agent invocado com sucesso.' };
+              return { message: 'Jules agent invocado com sucesso na nuvem sem gerar issues rastreáveis localmente.' };
             }
           })
         },

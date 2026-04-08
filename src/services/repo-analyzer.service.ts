@@ -4,13 +4,16 @@ import path from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { env } from '../config/env.config.js';
+import { GithubService } from './github.service.js';
 
 const execAsync = promisify(exec);
 
 export class RepoAnalyzerService {
   private workspaceBase: string = '/tmp/.workspace';
+  private githubService: GithubService;
 
   constructor() {
+    this.githubService = new GithubService();
     // Garantir que a workspace existirá
     if (!fsSync.existsSync(this.workspaceBase)) {
       fsSync.mkdirSync(this.workspaceBase, { recursive: true });
@@ -38,9 +41,24 @@ export class RepoAnalyzerService {
       console.log(`[RepoAnalyzer] 📥 Clonando repositório para ${clonePath}...`);
       await execAsync(`git clone --depth 1 ${gitUrl} ${clonePath}`);
 
-      // 3. Informar o prompt e forçar stdout
+      // 3. Sistema Anti-Spam: Buscar Pull Requests pendentes para servir como inibidor dinâmico
+      const activePRs = await this.githubService.getOpenPullRequests(repository);
+      let prMemoryContext = '';
+
+      if (activePRs.length > 0) {
+        const prTitles = activePRs.map(pr => `- PR #${pr.number}: ${pr.title}`).join('\n');
+        prMemoryContext = `
+[MEMÓRIA DE SISTEMA - ANTI SPAM]
+O sistema já está trabalhando ou revisando no momento os seguintes tópicos pendentes mapeados por Pull Requests:
+${prTitles}
+>>> IGNORAR COMPLETAMENTE E NÃO REPORTAR OU SUGERIR MUDANÇAS ENVOLVENDO ESTES ASSUNTOS ACIMA <<<.
+`;
+      }
+
+      // 4. Informar o prompt e forçar stdout
       // O opencode-ai tem um comportamento CLI. Dependendo da api real usaremos echo ou args padrão.
-      const aiPrompt = `Examine o código fonte atual. Retorne UNICA E EXCLUSIVAMENTE UM paragrafo dizendo qual a principal refatoração de Clean Code (SOLID/DRY) a ser feita e em qual arquivo. Se estiver tudo perfeito, responda EXATAMENTE: 'NENHUMA AÇÃO NECESSÁRIA' e nada mais.`;
+      const aiPrompt = `Examine o código fonte atual. ${prMemoryContext} 
+Retorne UNICA E EXCLUSIVAMENTE UM paragrafo dizendo qual a principal refatoração de Clean Code (SOLID/DRY) a ser feita e em qual arquivo que ainda não foi listada nos ignorados. Se estiver tudo perfeito ou tudo o que achou já está sendo arrumado nos PRs existentes, responda EXATAMENTE: 'NENHUMA AÇÃO NECESSÁRIA' e nada mais.`;
       
       const opencodeCmd = `opencode-ai --non-interactive --message "${aiPrompt}"`;
       

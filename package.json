@@ -8,6 +8,7 @@
     "start": "tsx src/index.ts",
     "start:sessions": "cross-env JOB_NAME=create-sessions tsx src/index.ts",
     "start:questions": "cross-env JOB_NAME=resolve-questions tsx src/index.ts",
+    "start:reviews": "cross-env JOB_NAME=review-prs tsx src/index.ts",
     "test": "vitest run src",
     "test:coverage": "vitest run src --coverage",
     "build": "tsc"

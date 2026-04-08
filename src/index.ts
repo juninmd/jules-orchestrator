@@ -1,6 +1,6 @@
 import { validateEnv } from './config/env.config.js';
 import { runCreateSessionsJob } from './jobs/create-sessions.job.js';
-import { runResolveQuestionsJob } from './jobs/resolve-questions.job.js';
+import { runReviewPrsJob } from './jobs/review-prs.job.js';
 
 async function bootstrap() {
   try {
@@ -12,13 +12,12 @@ async function bootstrap() {
       case 'create-sessions':
         await runCreateSessionsJob();
         break;
-      case 'resolve-questions':
-        await runResolveQuestionsJob();
+      case 'review-prs':
+        await runReviewPrsJob();
         break;
       default:
-        console.warn(`[AVISO] Nenhum JOB_NAME especifico fornecido. Executando ambos em sequencia...`);
-        await runCreateSessionsJob();
-        await runResolveQuestionsJob();
+        console.warn(`[AVISO] Nenhum JOB_NAME especifico fornecido. Executando revisor por padrão...`);
+        await runReviewPrsJob();
         break;
     }
     
