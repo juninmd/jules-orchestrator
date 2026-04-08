@@ -1,8 +1,13 @@
 import { generateText } from 'ai';
 import { createOllama } from 'ollama-ai-provider';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
+import fsSync from 'node:fs';
 import { GithubService } from '../services/github.service.js';
 import { TelegramService } from '../services/telegram.service.js';
 import { env } from '../config/env.config.js';
+
+const execAsync = promisify(exec);
 
 export async function runReviewPrsJob() {
   console.log('🤖 Iniciando rotina: REVIEW_PRS (Autonomous Reviewer)');
@@ -40,6 +45,29 @@ export async function runReviewPrsJob() {
         if (!diff || diff.length < 5) {
           console.log(`Diff ausente ou muito curto. Ignorando PR.`);
           continue;
+        }
+
+        // NOVIDADE: Auto-Build (Sistema Imumológico)
+        const clonePath = `/tmp/.workspace-pr-${pr.number}`;
+        if (fsSync.existsSync(clonePath)) fsSync.rmSync(clonePath, { recursive: true, force: true });
+
+        try {
+          console.log(`[ReviewPRS] Preparando ambiente isolado para o PR #${pr.number}...`);
+          const gitUrl = `https://x-access-token:${env.GITHUB_TOKEN}@github.com/${repo}.git`;
+          
+          await execAsync(`git clone ${gitUrl} ${clonePath}`);
+          await execAsync(`cd ${clonePath} && git fetch origin pull/${pr.number}/head:pr-${pr.number} && git checkout pr-${pr.number}`);
+          
+          console.log(`[ReviewPRS] Mão na massa! Rodando build pra checar se a app quebra...`);
+          await execAsync(`cd ${clonePath} && pnpm install --ignore-scripts && pnpm run build`);
+          console.log(`[ReviewPRS] 🟩 Build da Branch do PR Local finalizado com sucesso!`);
+        } catch (buildError: any) {
+          console.error(`❌ [ReviewPRS] PR #${pr.number} introduziu código que não compila!`);
+          await githubService.addPullRequestComment(repo, pr.number, `🚨 **Falha de Compilação Detectada no Orquestrador**\n\nAviso automático: O orquestrador clonou seu código e tentou realizar um \`pnpm run build\` no escopo das suas mudanças, e aconteceu um Crash.\n\n<details><summary>Log da Compilação Local</summary>\n\n\`\`\`\n${buildError.message || buildError}\n\`\`\`\n\n</details>\n\n⛔ **Bloqueado**: Conserte este erro para habilitar a revisão da IA.`);
+          await telegramService.sendMessage(`❌ <b>Bloqueio na Fonte</b>\nO PR #${pr.number} em ${repo} injetou código fatal e foi barrado no pnpm build!`);
+          continue;
+        } finally {
+          if (fsSync.existsSync(clonePath)) fsSync.rmSync(clonePath, { recursive: true, force: true });
         }
 
         // 2. Chamar o Ollama para avaliar a qualidade e perfomance e SOLID do diff

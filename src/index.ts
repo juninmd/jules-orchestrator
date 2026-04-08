@@ -1,6 +1,7 @@
 import { validateEnv } from './config/env.config.js';
 import { runCreateSessionsJob } from './jobs/create-sessions.job.js';
 import { runReviewPrsJob } from './jobs/review-prs.job.js';
+import { runSelfHealingJob } from './jobs/self-healing.job.js';
 
 async function bootstrap() {
   try {
@@ -14,6 +15,9 @@ async function bootstrap() {
         break;
       case 'review-prs':
         await runReviewPrsJob();
+        break;
+      case 'self-healing':
+        await runSelfHealingJob();
         break;
       default:
         console.warn(`[AVISO] Nenhum JOB_NAME especifico fornecido. Executando revisor por padrão...`);
