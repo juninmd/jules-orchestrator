@@ -48,7 +48,7 @@ export class K8sService {
         });
 
         if (isCrashing) {
-          const repoAnnotation = pod.metadata.annotations?.['jules.ai/source-repo'];
+          const repoAnnotation = pod.metadata.annotations?.['source-repo'];
           
           if (repoAnnotation) {
             // Buscando as ultimas 100 linhas pro stack trace  
@@ -71,7 +71,7 @@ export class K8sService {
               logTrace: logRes.body
             });
           } else {
-             console.log(`[K8sService] Pod ${pod.metadata.name} sofrendo crash mas sem label 'jules.ai/source-repo'. Ignorando auto-cura.`);
+             console.log(`[K8sService] Pod ${pod.metadata.name} sofrendo crash mas sem label 'source-repo'. Ignorando auto-cura.`);
           }
         }
       }
