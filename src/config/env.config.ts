@@ -1,29 +1,32 @@
-import { config } from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { z } from 'zod';
+import dotenv from 'dotenv';
+dotenv.config();
 
-// Garante que o .env seja carregado correntemente (mesmo a partir de outros lugares)
-const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: resolve(__dirname, '../../.env') });
+const envSchema = z.object({
+  OLLAMA_HOST: z.string().url().optional(),
+  OLLAMA_MODEL: z.string().optional(),
+  GITHUB_TOKEN: z.string().min(1, 'Token do GitHub é obrigatório'),
+  JULES_API_URL: z.string().url().optional(),
+  JULES_API_KEY: z.string().min(1, 'Chave da API do Jules é obrigatória')
+});
+
+// Validação deferida
+const _env = envSchema.safeParse(process.env);
 
 export const env = {
   OLLAMA_HOST: process.env.OLLAMA_HOST || 'http://localhost:11434',
   OLLAMA_MODEL: process.env.OLLAMA_MODEL || 'gemma2',
   GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
-  TARGET_REPO: process.env.TARGET_REPO || '',
   JULES_API_URL: process.env.JULES_API_URL || 'https://jules.googleapis.com/v1alpha/sessions',
   JULES_API_KEY: process.env.JULES_API_KEY || '',
 };
 
 export const validateEnv = (): void => {
-  if (!env.GITHUB_TOKEN) {
-    throw new Error('GITHUB_TOKEN não configurado. Por favor, adicione ao seu .env.');
+  if (!_env.success) {
+    console.error('❌ Variáveis de ambiente inválidas:', _env.error.format());
+    process.exit(1);
   }
 
-  if (!env.TARGET_REPO) {
-    throw new Error('TARGET_REPO não configurado. Por favor, adicione ao seu .env no formato owner/repo.');
-  }
-  
   if (!env.JULES_API_URL) {
     console.warn('[AVISO] JULES_API_URL não configurado. Usando fallback amigável ou vai falhar na chamada da API do Jules.');
   }

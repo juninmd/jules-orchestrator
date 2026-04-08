@@ -10,8 +10,11 @@ export class AIRouterService {
   private githubService = new GithubService();
   private julesService = new JulesService();
 
-  public async routeImprovement(context: string): Promise<void> {
-    console.log(`[AIRouterService] Iniciando roteamento da melhoria via Ollama (${env.OLLAMA_MODEL})`);
+  /**
+   * Analisa a intenção e decide a ferramenta a ser utilizada.
+   */
+  public async routeImprovement(repository: string, context: string): Promise<void> {
+    console.log(`[AIRouterService] Iniciando roteamento da melhoria para ${repository} via Ollama (${env.OLLAMA_MODEL})`);
 
     try {
       const result = await generateText({
@@ -29,7 +32,7 @@ Se precisar acordar o agente Jules para já resolver, chame o agente.`,
             }),
             // @ts-ignore: a inferência interna do Zod às vezes falha na tipagem do execute do ai sdk
             execute: async ({ title, description }: { title: string, description: string }) => {
-              const url = await this.githubService.createImprovementIssue(title, description);
+              const url = await this.githubService.createImprovementIssue(repository, title, description);
               return { url, message: 'Issue criada com sucesso no Github.' };
             }
           }),
@@ -43,7 +46,7 @@ Se precisar acordar o agente Jules para já resolver, chame o agente.`,
             execute: async ({ instruction, githubIssueUrl }: { instruction: string, githubIssueUrl?: string }) => {
               await this.julesService.invokeSession({
                 prompt: instruction,
-                repository: env.TARGET_REPO,
+                repository: repository,
                 issueUrl: githubIssueUrl
               });
               return { message: 'Jules agent invocado com sucesso.' };

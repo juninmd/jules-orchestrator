@@ -1,26 +1,30 @@
 import { validateEnv } from './config/env.config.js';
-import { AIRouterService } from './services/ai-router.service.js';
+import { runCreateSessionsJob } from './jobs/create-sessions.job.js';
+import { runResolveQuestionsJob } from './jobs/resolve-questions.job.js';
 
 async function bootstrap() {
-  console.log('🚀 Iniciando o Orquestrador Jules com Vercel AI SDK!');
-  
-  validateEnv();
-
-  const router = new AIRouterService();
-
-  const mockContext = `
-    O repositório está desatualizado com bibliotecas vuneráveis e com controllers acoplados ao DB.
-    Queria que você primeiro criasse uma issue reportando o débito técnico geral, 
-    e depois já invocasse o agente Jules pedindo pra ele atualizar os pacotes mais críticos.
-  `;
-
   try {
-    console.log('\n🧠 Calculando e distribuindo tarefas nas ferramentas do SDK...');
-    await router.routeImprovement(mockContext);
+    validateEnv();
 
-    console.log('\n✅ Orquestração em cadeia concluída com sucesso!');
-  } catch (err) {
-    console.error('\n❌ Erro durante a orquestração:', err);
+    const jobName = process.env.JOB_NAME;
+
+    switch (jobName) {
+      case 'create-sessions':
+        await runCreateSessionsJob();
+        break;
+      case 'resolve-questions':
+        await runResolveQuestionsJob();
+        break;
+      default:
+        console.warn(`[AVISO] Nenhum JOB_NAME especifico fornecido. Executando ambos em sequencia...`);
+        await runCreateSessionsJob();
+        await runResolveQuestionsJob();
+        break;
+    }
+    
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Falha fatal no Orquestrador:', error);
     process.exit(1);
   }
 }

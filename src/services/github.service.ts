@@ -5,28 +5,66 @@ export class GithubService {
   private octokit: Octokit;
 
   constructor() {
-    this.octokit = new Octokit({ auth: env.GITHUB_TOKEN });
+    this.octokit = new Octokit({
+      auth: env.GITHUB_TOKEN
+    });
   }
 
-  public async createImprovementIssue(title: string, body: string): Promise<string> {
-    try {
-      const [owner, repo] = env.TARGET_REPO.split('/');
-      
-      console.log(`[GithubService] Criando Issue no repositório ${owner}/${repo}...`);
+  async createImprovementIssue(repository: string, title: string, description: string): Promise<string> {
+    const owner = repository.split('/')[0];
+    const repo = repository.split('/')[1];
 
-      const response = await this.octokit.issues.create({
+    const { data } = await this.octokit.issues.create({
+      owner,
+      repo,
+      title: `[Jules] ${title}`,
+      body: description,
+      labels: ['enhancement', 'ai-generated']
+    });
+
+    return data.html_url;
+  }
+
+  async getRepoReadme(repository: string): Promise<string | null> {
+    try {
+      const owner = repository.split('/')[0];
+      const repo = repository.split('/')[1];
+      const { data } = await this.octokit.repos.getReadme({
         owner,
         repo,
-        title: `[Enhancement] ${title}`,
-        body: `${body}\n\n---\n*Issue gerada automaticamente pelo Jules Orchestrator via Ollama.*`,
-        labels: ['enhancement', 'ai-generated']
       });
+      return Buffer.from(data.content, 'base64').toString('utf8');
+    } catch {
+      return null;
+    }
+  }
 
-      console.log(`[GithubService] Issue criada com sucesso: ${response.data.html_url}`);
-      return response.data.html_url;
-    } catch (error) {
-      console.error('[GithubService] Erro ao criar Issue:', error);
-      throw error;
+  async getRecentIssues(repository: string): Promise<any[]> {
+    try {
+      const owner = repository.split('/')[0];
+      const repo = repository.split('/')[1];
+      const { data } = await this.octokit.issues.listForRepo({
+        owner,
+        repo,
+        state: 'open',
+        per_page: 3
+      });
+      return data;
+    } catch {
+      return [];
+    }
+  }
+  
+  async getActiveRepositories(limit: number = 5): Promise<string[]> {
+    try {
+      const { data } = await this.octokit.repos.listForAuthenticatedUser({
+        sort: 'pushed',
+        direction: 'desc',
+        per_page: limit
+      });
+      return data.map(r => r.full_name);
+    } catch {
+      return [];
     }
   }
 }
