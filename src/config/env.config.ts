@@ -8,6 +8,7 @@ const envSchema = z.object({
   GITHUB_TOKEN: z.string().min(1, 'Token do GitHub é obrigatório'),
   JULES_API_URL: z.string().url().optional(),
   JULES_API_KEY: z.string().min(1, 'Chave da API do Jules é obrigatória'),
+  TARGET_REPO: z.string().optional(),
   TELEGRAM_BOT_TOKEN: z.string().optional(),
   TELEGRAM_CHAT_ID: z.string().optional()
 });
@@ -21,6 +22,7 @@ export const env = {
   GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
   JULES_API_URL: process.env.JULES_API_URL || 'https://jules.googleapis.com/v1alpha/sessions',
   JULES_API_KEY: process.env.JULES_API_KEY || '',
+  TARGET_REPO: process.env.TARGET_REPO || '',
   TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || '',
   TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || ''
 };
