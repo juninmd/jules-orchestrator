@@ -116,4 +116,44 @@ export class GithubService {
     }
     return repos;
   }
+
+  async createIssue(repository: string, title: string, body: string): Promise<string> {
+    try {
+      const owner = repository.split('/')[0];
+      const repo = repository.split('/')[1];
+
+      const { data } = await this.octokit.issues.create({
+        owner,
+        repo,
+        title,
+        body
+      });
+      console.log(`[GithubService] Issue #${data.number} criada: ${title}`);
+      return data.html_url;
+    } catch (err) {
+      console.error(`[GithubService] Erro ao criar Issue em ${repository}:`, err);
+      throw err;
+    }
+  }
+
+  async createPullRequest(repository: string, title: string, head: string, base: string, body: string): Promise<string> {
+    try {
+      const owner = repository.split('/')[0];
+      const repo = repository.split('/')[1];
+
+      const { data } = await this.octokit.pulls.create({
+        owner,
+        repo,
+        title,
+        head,
+        base,
+        body
+      });
+      console.log(`[GithubService] Pull Request #${data.number} criado: ${title}`);
+      return data.html_url;
+    } catch (err) {
+      console.error(`[GithubService] Erro ao criar PR em ${repository}:`, err);
+      throw err;
+    }
+  }
 }
