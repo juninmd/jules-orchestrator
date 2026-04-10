@@ -1,22 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { mockExecAsync, mockGetOpenPullRequests } = vi.hoisted(() => ({
+const { mockExecAsync, mockGetOpenPullRequests, mockGenerateText } = vi.hoisted(() => ({
   mockExecAsync: vi.fn(),
-  mockGetOpenPullRequests: vi.fn().mockResolvedValue([])
+  mockGetOpenPullRequests: vi.fn().mockResolvedValue([]),
+  mockGenerateText: vi.fn().mockResolvedValue({ text: 'NENHUMA AÇÃO NECESSÁRIA' })
 }));
 
-// Intercepta promisify(exec) para retornar mockExecAsync que resolve { stdout, stderr }
 vi.mock('node:util', async (importOriginal) => {
   const actual = await importOriginal<typeof import('node:util')>();
-  return {
-    ...actual,
-    promisify: (fn: unknown) => {
-      // Qualquer chamada a promisify dentro do serviço retorna nosso mock
-      void fn;
-      return mockExecAsync;
-    }
-  };
+  return { ...actual, promisify: () => mockExecAsync };
 });
+
+vi.mock('ai', () => ({ generateText: mockGenerateText }));
+
+vi.mock('ollama-ai-provider', () => ({
+  createOllama: () => () => 'mock-model'
+}));
 
 vi.mock('../services/github.service.js', () => {
   function GithubService(this: any) {
@@ -29,7 +28,9 @@ vi.mock('node:fs/promises', () => ({
   default: {
     rm: vi.fn().mockResolvedValue(undefined),
     mkdir: vi.fn().mockResolvedValue(undefined),
-    writeFile: vi.fn().mockResolvedValue(undefined)
+    writeFile: vi.fn().mockResolvedValue(undefined),
+    readdir: vi.fn().mockResolvedValue([]),
+    readFile: vi.fn().mockResolvedValue('')
   }
 }));
 
@@ -52,29 +53,7 @@ vi.mock('node:child_process', () => ({ exec: vi.fn() }));
 
 import fs from 'node:fs/promises';
 import fsSync from 'node:fs';
-import { RepoAnalyzerService, writeOpencodeConfig } from './repo-analyzer.service.js';
-
-function setupExec(stdout: string) {
-  mockExecAsync.mockResolvedValue({ stdout, stderr: '' });
-}
-
-describe('writeOpencodeConfig', () => {
-  beforeEach(() => vi.clearAllMocks());
-
-  it('cria o diretório e escreve o arquivo com host e model corretos', async () => {
-    await writeOpencodeConfig();
-
-    expect(fs.mkdir).toHaveBeenCalledWith(
-      expect.stringContaining('opencode'),
-      { recursive: true }
-    );
-    const writeCall = (fs.writeFile as ReturnType<typeof vi.fn>).mock.calls[0];
-    expect(writeCall[0]).toContain('opencode.json');
-    const written = JSON.parse(writeCall[1]);
-    expect(written.provider.ollama.api).toBe('http://ollama:11434/v1');
-    expect(written.provider.ollama.models).toHaveProperty('gemma2');
-  });
-});
+import { RepoAnalyzerService } from './repo-analyzer.service.js';
 
 describe('RepoAnalyzerService.analyzeRepoAndGeneratePrompt', () => {
   let service: RepoAnalyzerService;
@@ -82,55 +61,57 @@ describe('RepoAnalyzerService.analyzeRepoAndGeneratePrompt', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockGetOpenPullRequests.mockResolvedValue([]);
+    mockExecAsync.mockResolvedValue({ stdout: '', stderr: '' });
+    mockGenerateText.mockResolvedValue({ text: 'NENHUMA AÇÃO NECESSÁRIA' });
     service = new RepoAnalyzerService();
   });
 
-  it('retorna null quando opencode responde NENHUMA AÇÃO NECESSÁRIA', async () => {
-    setupExec('NENHUMA AÇÃO NECESSÁRIA');
-
+  it('retorna null quando Ollama responde NENHUMA AÇÃO NECESSÁRIA', async () => {
     const result = await service.analyzeRepoAndGeneratePrompt('juninmd/some-repo');
-
     expect(result).toBeNull();
   });
 
-  it('retorna o insight quando opencode encontra oportunidade', async () => {
+  it('retorna o insight quando Ollama encontra oportunidade de refatoração', async () => {
     const insight = 'O arquivo src/service.ts viola SRP ao misturar lógica de negócio com persistência.';
-    setupExec(insight);
+    mockGenerateText.mockResolvedValue({ text: insight });
 
     const result = await service.analyzeRepoAndGeneratePrompt('juninmd/some-repo');
 
     expect(result).toBe(insight);
   });
 
-  it('usa --model ollama/<model> no comando opencode', async () => {
-    setupExec('NENHUMA AÇÃO NECESSÁRIA');
-
+  it('envia o código fonte coletado no prompt para o Ollama', async () => {
     await service.analyzeRepoAndGeneratePrompt('juninmd/some-repo');
 
-    const cmds = mockExecAsync.mock.calls.map(c => c[0] as string);
-    const opencodeCall = cmds.find((cmd: string) => cmd.startsWith('opencode'));
-    expect(opencodeCall).toBeDefined();
-    expect(opencodeCall).toContain('--model ollama/gemma2');
+    expect(mockGenerateText).toHaveBeenCalledWith(
+      expect.objectContaining({ prompt: expect.stringContaining('CÓDIGO FONTE') })
+    );
   });
 
   it('inclui títulos de PRs abertos no prompt (anti-spam)', async () => {
     mockGetOpenPullRequests.mockResolvedValue([
       { number: 42, title: 'refactor: extract auth logic', body: '' }
     ]);
-    setupExec('NENHUMA AÇÃO NECESSÁRIA');
 
     await service.analyzeRepoAndGeneratePrompt('juninmd/some-repo');
 
-    const cmds = mockExecAsync.mock.calls.map(c => c[0] as string);
-    const opencodeCall = cmds.find((cmd: string) => cmd.startsWith('opencode'));
-    expect(opencodeCall).toContain('refactor: extract auth logic');
+    const call = mockGenerateText.mock.calls[0][0];
+    expect(call.prompt).toContain('refactor: extract auth logic');
+    expect(call.prompt).toContain('ANTI SPAM');
   });
 
-  it('retorna null e faz cleanup quando opencode falha', async () => {
+  it('faz cleanup do clone após análise bem-sucedida', async () => {
+    await service.analyzeRepoAndGeneratePrompt('juninmd/some-repo');
+
+    expect(fs.rm).toHaveBeenCalledWith(
+      expect.stringContaining('some-repo'),
+      expect.objectContaining({ recursive: true })
+    );
+  });
+
+  it('retorna null e faz cleanup quando Ollama falha', async () => {
     (fsSync.existsSync as ReturnType<typeof vi.fn>).mockReturnValue(true);
-    mockExecAsync
-      .mockResolvedValueOnce({ stdout: '', stderr: '' })           // git clone
-      .mockRejectedValueOnce(new Error('opencode: not found'));    // opencode
+    mockGenerateText.mockRejectedValue(new Error('connection refused'));
 
     const result = await service.analyzeRepoAndGeneratePrompt('juninmd/some-repo');
 

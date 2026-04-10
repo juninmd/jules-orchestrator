@@ -14,9 +14,8 @@ FROM node:22-alpine AS production
 
 RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
-# Instalar Git e a CLI do OpenCode (necessários para a rotina de RAG agentic)
+# Instalar Git (necessário para clonar repos na rotina de análise)
 RUN apk add --no-cache git
-RUN npm install -g opencode-ai && opencode --version
 
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
