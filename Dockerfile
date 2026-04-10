@@ -16,7 +16,7 @@ RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 # Instalar Git e a CLI do OpenCode (necessários para a rotina de RAG agentic)
 RUN apk add --no-cache git
-RUN npm install -g opencode-ai
+RUN npm install -g opencode-ai && opencode --version
 
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
