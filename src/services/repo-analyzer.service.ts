@@ -13,7 +13,7 @@ const execAsync = promisify(exec);
 const SOURCE_EXTENSIONS = new Set(['.ts', '.js', '.tsx', '.jsx', '.py', '.go', '.java', '.cs', '.rb', '.php']);
 const IGNORE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next', 'vendor', '__pycache__', 'coverage']);
 
-async function collectSourceFiles(dir: string, maxChars = 40000): Promise<string> {
+async function collectSourceFiles(dir: string, maxChars = 6000): Promise<string> {
   const chunks: string[] = [];
   let total = 0;
 
@@ -95,7 +95,9 @@ Se estiver tudo perfeito ou tudo já coberto pelos PRs, responda EXATAMENTE: 'NE
       const { text } = await generateText({
         // @ts-ignore
         model: ollama(env.OLLAMA_MODEL),
-        prompt
+        prompt,
+        maxRetries: 0,
+        abortSignal: AbortSignal.timeout(180_000)
       });
 
       await fs.rm(clonePath, { recursive: true, force: true });
