@@ -17,7 +17,7 @@ export async function runReviewPrsJob() {
   const ollama = createOllama({ baseURL: env.OLLAMA_HOST + '/api' });
   const model = ollama(env.OLLAMA_MODEL);
 
-  const repos = await githubService.getActiveRepositories(5);
+  const repos = await githubService.getAllRepositories();
 
   if (!repos.length) {
     console.log('Zero repositórios ativos encontrados.');

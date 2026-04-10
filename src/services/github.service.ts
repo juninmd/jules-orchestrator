@@ -99,4 +99,21 @@ export class GithubService {
       return [];
     }
   }
+
+  async getAllRepositories(): Promise<string[]> {
+    const repos: string[] = [];
+    let page = 1;
+    while (true) {
+      const { data } = await this.octokit.repos.listForAuthenticatedUser({
+        sort: 'pushed',
+        direction: 'desc',
+        per_page: 100,
+        page
+      });
+      repos.push(...data.map(r => r.full_name));
+      if (data.length < 100) break;
+      page++;
+    }
+    return repos;
+  }
 }

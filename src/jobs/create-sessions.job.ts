@@ -12,7 +12,7 @@ export async function runCreateSessionsJob() {
   const githubService = new GithubService();
   const telegramService = new TelegramService();
   
-  const repos = await githubService.getActiveRepositories(5);
+  const repos = await githubService.getActiveRepositories(20);
 
   if (!repos.length) {
     console.log('Zero repositórios ativos encontrados.');
