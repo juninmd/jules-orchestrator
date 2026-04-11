@@ -29,13 +29,19 @@ export class RoadmapParserService {
 
     // Expressão regular para encontrar blocos de feature
     // Procura por "- [ ] **Feature:" ou "- [x] **Feature:"
-    const featureRegex = /- \[(x| )\] \*\*Feature: (.*?)\*\*(.*?)(?=(?:- \[(?:x| )\] \*\*Feature:)|$)/gs;
+    const featureRegex = /- \[(x| )\] \*\*Feature: (.*?)\*\*/gi;
 
     let match;
     while ((match = featureRegex.exec(markdown)) !== null) {
       const isCompleted = match[1].toLowerCase() === 'x';
       const title = match[2].trim();
-      const body = match[3];
+      const startIndex = featureRegex.lastIndex;
+
+      // Find the next feature block or end of string
+      const nextFeatureIndex = markdown.substring(startIndex).search(/- \[(?:x| )\] \*\*Feature:/i);
+      const endIndex = nextFeatureIndex !== -1 ? startIndex + nextFeatureIndex : markdown.length;
+
+      const body = markdown.substring(startIndex, endIndex);
 
       // Busca pela descrição (até os critérios de aceite ou o próximo tópico)
       const descMatch = body.match(/- \*\*Descrição:\*\* (.*?)(?:\n|$)/);
@@ -47,7 +53,7 @@ export class RoadmapParserService {
 
       tasks.push({
         title,
-        description: body.trim(), // Salvamos o corpo inteiro como descrição ou usamos o body mesmo
+        description: body.trim() || description,
         completed: isCompleted,
         trigger
       });
