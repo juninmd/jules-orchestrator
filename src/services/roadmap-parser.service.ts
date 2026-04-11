@@ -48,7 +48,7 @@ export class RoadmapParserService {
       const description = descMatch ? descMatch[1].trim() : '';
 
       // Busca pelo gatilho, ex: "- **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task \"Nome da Task\"."
-      const triggerMatch = body.match(/- \*\*Gatilho de Novas Tasks:\*\*.*?"([^"]+)"/);
+      const triggerMatch = body.match(/- \\*\\*Gatilho de Novas Tasks:\\*\\*.*?[\"']([^\"']+)[\"']/);
       const trigger = triggerMatch ? triggerMatch[1].trim() : undefined;
 
       tasks.push({
