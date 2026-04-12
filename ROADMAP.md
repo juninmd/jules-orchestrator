@@ -28,7 +28,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
 ### ÉPICO 1: Aprimoramento da Análise de Repositórios e Criação de Sessões
 *Focado na inteligência de como o orquestrador vasculha os repositórios à procura de débitos técnicos.*
 
-- [ ] **Feature: Heurística Avançada de Análise Estática**
+- [x] **Feature: Heurística Avançada de Análise Estática**
   - **Descrição:** Refatorar o `RepoAnalyzerService` para utilizar não apenas prompts de IA, mas também AST (Abstract Syntax Tree) das linguagens do repositório alvo.
   - **Critérios de Aceite:**
     - [ ] Integrar biblioteca de parsing AST para TypeScript e Python.
@@ -104,6 +104,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar mecanismo de controle para evitar loops infinitos de geração de tarefas.
 
 ---
+
+- [ ] **Feature: Dashboard de Métricas de Código em Tempo Real**
+  - **Descrição:** Desenvolver um painel de controle (dashboard) interativo que agregue e exiba, em tempo real, as métricas de qualidade de código (complexidade ciclomática, duplicação, violações de SRP) extraídas pela Heurística Avançada de Análise Estática, proporcionando visibilidade imediata dos débitos técnicos para a equipe.
+  - **Critérios de Aceite:**
+    - [ ] Criar interface web responsiva utilizando React/Next.js.
+    - [ ] Consumir os relatórios gerados pelo `RepoAnalyzerService` via API REST/GraphQL.
+    - [ ] Implementar gráficos visuais (ex: evolução do débito técnico ao longo do tempo).
+    - [ ] Garantir que o dashboard atualize os dados em tempo real ou sob demanda (WebSockets ou Polling otimizado).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração do Dashboard com Alertas no Slack/Telegram".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
