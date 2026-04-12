@@ -7,6 +7,7 @@ import { generateText } from 'ai';
 import { createOllama } from 'ollama-ai-provider';
 import { env } from '../config/env.config.js';
 import { GithubService } from './github.service.js';
+import { createWorkspacePath } from './workspace-path.service.js';
 
 const execAsync = promisify(exec);
 
@@ -41,30 +42,31 @@ async function collectSourceFiles(dir: string, maxChars = 6000): Promise<string>
 }
 
 export class RepoAnalyzerService {
-  private workspaceBase: string = '/tmp/.workspace';
   private githubService: GithubService;
 
   constructor() {
     this.githubService = new GithubService();
-    if (!fsSync.existsSync(this.workspaceBase)) {
-      fsSync.mkdirSync(this.workspaceBase, { recursive: true });
-    }
   }
 
   async analyzeRepoAndGeneratePrompt(repository: string): Promise<string | null> {
     console.log(`\n============== DEEP SCAN: ${repository} ==============`);
 
     const repoName = repository.split('/')[1];
-    const clonePath = path.join(this.workspaceBase, repoName);
+    const clonePath = createWorkspacePath('repo-scan', repository);
+    const workspaceBase = path.dirname(clonePath);
     const gitUrl = `https://x-access-token:${env.GITHUB_TOKEN}@github.com/${repository}.git`;
 
     try {
+      if (!fsSync.existsSync(workspaceBase)) {
+        fsSync.mkdirSync(workspaceBase, { recursive: true });
+      }
+
       if (fsSync.existsSync(clonePath)) {
         await fs.rm(clonePath, { recursive: true, force: true });
       }
 
       console.log(`[RepoAnalyzer] 📥 Clonando repositório para ${clonePath}...`);
-      await execAsync(`git clone --depth 1 ${gitUrl} ${clonePath}`);
+      await execAsync(`git clone --depth 1 ${gitUrl} "${clonePath}"`);
 
       const activePRs = await this.githubService.getOpenPullRequests(repository);
       let prMemoryContext = '';

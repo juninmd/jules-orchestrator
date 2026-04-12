@@ -3,11 +3,13 @@ import { env } from '../config/env.config.js';
 
 export class GithubService {
   private octokit: Octokit;
+  private targetRepositories: string[];
 
   constructor() {
     this.octokit = new Octokit({
       auth: env.GITHUB_TOKEN
     });
+    this.targetRepositories = env.TARGET_REPOSITORIES || [];
   }
 
   async getOpenPullRequests(repository: string): Promise<{ number: number; title: string, body: string }[]> {
@@ -69,6 +71,25 @@ export class GithubService {
     }
   }
 
+  async listPullRequestComments(repository: string, prNumber: number): Promise<string[]> {
+    try {
+      const owner = repository.split('/')[0];
+      const repo = repository.split('/')[1];
+
+      const { data } = await this.octokit.issues.listComments({
+        owner,
+        repo,
+        issue_number: prNumber,
+        per_page: 100
+      });
+
+      return data.map(comment => comment.body).filter((comment): comment is string => Boolean(comment));
+    } catch (err) {
+      console.error(`[GithubService] Erro ao listar comentários do PR #${prNumber}:`, err);
+      return [];
+    }
+  }
+
   async mergePullRequest(repository: string, prNumber: number, mergeMessage: string): Promise<void> {
     try {
       const owner = repository.split('/')[0];
@@ -88,6 +109,10 @@ export class GithubService {
   }
   
   async getActiveRepositories(limit: number = 5): Promise<string[]> {
+    if (this.targetRepositories.length > 0) {
+      return this.targetRepositories.slice(0, limit);
+    }
+
     try {
       const { data } = await this.octokit.repos.listForAuthenticatedUser({
         sort: 'pushed',
@@ -101,6 +126,10 @@ export class GithubService {
   }
 
   async getAllRepositories(): Promise<string[]> {
+    if (this.targetRepositories.length > 0) {
+      return this.targetRepositories;
+    }
+
     const repos: string[] = [];
     let page = 1;
     while (true) {

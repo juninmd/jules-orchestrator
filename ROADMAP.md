@@ -10,6 +10,30 @@ Ser a plataforma definitiva de engenharia de software autônoma e orquestração
 
 ---
 
+## ⚙️ Estado Atual do Produto
+
+Saímos da fase de "ideia poderosa" e entramos na fase de **productização operacional**. O foco imediato agora é garantir que o orquestrador rode bem como workload de cluster, sem comportamento repetitivo, sem acoplamentos frágeis de ambiente e com manifestos coerentes para o ArgoCD/k3s.
+
+### Marco atual
+
+- [x] Registro centralizado de jobs (`create-sessions`, `resolve-questions`, `review-prs`, `self-healing`)
+- [x] Compatibilidade multiplataforma para workspaces temporários
+- [x] Seleção explícita de repositórios alvo via `TARGET_REPO`
+- [x] Dedupe de feedback em PRs para evitar spam do bot em execuções recorrentes
+- [x] Docker de produção endurecido para execução real
+- [x] Manifestos do `app-charts` atualizados com self-healing, pull secret e secrets opcionais
+
+### Próximo gate de release
+
+O próximo ciclo deve fechar a lacuna entre "job funcional" e "plataforma autônoma observável":
+
+1. publicar pipeline de build/push da imagem para GHCR;
+2. adicionar telemetria estruturada por execução e por repositório;
+3. criar fluxo persistente de backlog/roadmap para geração de tasks com idempotência;
+4. promover a autocura de "dispatch de análise" para "ação segura com rollback/control gate".
+
+---
+
 ## 🔄 Como aprimoramos os repositórios?
 
 Nosso fluxo de desenvolvimento e melhoria contínua é **orientado a tarefas (Task-Driven)** e integrado ao preenchimento de checklists. O ciclo funciona da seguinte maneira:
@@ -24,6 +48,32 @@ Nosso fluxo de desenvolvimento e melhoria contínua é **orientado a tarefas (Ta
 ## 📌 Épicos e Features em Foco
 
 Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimento progredir para alimentar o ciclo de criação de novas funcionalidades.
+
+### ÉPICO 0: Productização e Deploy no Cluster
+*Focado em transformar o orquestrador em serviço confiável, publicável e operável no ArgoCD/k3s.*
+
+- [x] **Feature: Endurecimento do Runtime Base**
+  - **Descrição:** Consolidar registro de jobs, corrigir inconsistências de bootstrap, validar ambiente de forma previsível e remover dependências de paths Unix-only.
+  - **Critérios de Aceite:**
+    - [x] Centralizar a seleção do `JOB_NAME`.
+    - [x] Permitir execução sem Jules quando a integração não estiver configurada.
+    - [x] Tornar a seleção de repositórios explícita via `TARGET_REPO`.
+    - [x] Garantir workspaces temporários compatíveis com Windows/Linux.
+
+- [x] **Feature: Controle de Repetição no Revisor de PRs**
+  - **Descrição:** Evitar comentários duplicados para o mesmo diff quando o cron de revisão rodar várias vezes sem alteração no PR.
+  - **Critérios de Aceite:**
+    - [x] Gerar fingerprint estável do diff revisado.
+    - [x] Verificar comentários já existentes antes de build/review.
+    - [x] Pular feedback repetido quando o mesmo diff já recebeu análise.
+
+- [x] **Feature: Hardening de Deploy no app-charts**
+  - **Descrição:** Fechar as lacunas do workload Kubernetes para o orquestrador subir com cronjobs coerentes, secrets opcionais e endurecimento básico de container.
+  - **Critérios de Aceite:**
+    - [x] Incluir `docker-pull-secret.yaml` no `kustomization.yaml`.
+    - [x] Publicar cronjob de `self-healing`.
+    - [x] Expor chaves opcionais de Telegram/Jules no `ExternalSecret`.
+    - [x] Aplicar limites de recursos e `securityContext` nos jobs.
 
 ### ÉPICO 1: Aprimoramento da Análise de Repositórios e Criação de Sessões
 *Focado na inteligência de como o orquestrador vasculha os repositórios à procura de débitos técnicos.*

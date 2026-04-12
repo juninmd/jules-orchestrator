@@ -1,34 +1,10 @@
 import { validateEnv } from './config/env.config.js';
-import { runCreateSessionsJob } from './jobs/create-sessions.job.js';
-import { runReviewPrsJob } from './jobs/review-prs.job.js';
-import { runSelfHealingJob } from './jobs/self-healing.job.js';
-import { runProductOwnerJob } from './jobs/product-owner.job.js';
+import { runConfiguredJob } from './jobs/job-registry.js';
 
 async function bootstrap() {
   try {
     validateEnv();
-
-    const jobName = process.env.JOB_NAME;
-
-    switch (jobName) {
-      case 'create-sessions':
-        await runCreateSessionsJob();
-        break;
-      case 'review-prs':
-        await runReviewPrsJob();
-        break;
-      case 'self-healing':
-        await runSelfHealingJob();
-        break;
-      case 'product-owner':
-        await runProductOwnerJob();
-        break;
-      default:
-        console.warn(`[AVISO] Nenhum JOB_NAME especifico fornecido. Executando revisor por padrão...`);
-        await runReviewPrsJob();
-        break;
-    }
-    
+    await runConfiguredJob(process.env.JOB_NAME);
     process.exit(0);
   } catch (error) {
     console.error('❌ Falha fatal no Orquestrador:', error);

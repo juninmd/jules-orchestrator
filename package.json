@@ -10,6 +10,7 @@
     "start:questions": "cross-env JOB_NAME=resolve-questions tsx src/index.ts",
     "start:reviews": "cross-env JOB_NAME=review-prs tsx src/index.ts",
     "start:product-owner": "cross-env JOB_NAME=product-owner tsx src/index.ts",
+    "start:self-healing": "cross-env JOB_NAME=self-healing tsx src/index.ts",
     "test": "vitest run src",
     "test:coverage": "vitest run src --coverage",
     "build": "tsc"
