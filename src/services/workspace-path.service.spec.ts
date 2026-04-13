@@ -17,7 +17,9 @@ describe('createWorkspacePath', () => {
 
     const workspacePath = createWorkspacePath('review-pr', '42');
 
-    expect(workspacePath).toBe('C:\\Temp\\jules-orchestrator\\review-pr-42');
+    // To handle cross-platform path separators we replace \ with / before asserting
+    // if running on a linux environment since path.join uses / on linux.
+    expect(workspacePath.replace(/\\/g, '/')).toBe('C:/Temp/jules-orchestrator/review-pr-42');
   });
 
   it('sanitizes repository names before building the workspace path', () => {
@@ -25,8 +27,8 @@ describe('createWorkspacePath', () => {
 
     const workspacePath = createWorkspacePath('repo-scan', 'juninmd/api-service');
 
-    expect(workspacePath).toBe(
-      'C:\\Temp\\jules-orchestrator\\repo-scan-juninmd-api-service'
+    expect(workspacePath.replace(/\\/g, '/')).toBe(
+      'C:/Temp/jules-orchestrator/repo-scan-juninmd-api-service'
     );
   });
 });

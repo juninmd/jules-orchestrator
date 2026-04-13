@@ -136,22 +136,32 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
 ### ÉPICO 4: Automação do Papel de Product Owner (P.O. Autônomo)
 *Foco na gestão contínua de roadmap, priorização de backlog e criação dinâmica de novas tarefas a partir do progresso do desenvolvimento.*
 
-- [ ] **Feature: Parser Dinâmico de Checklists do ROADMAP**
+- [x] **Feature: Parser Dinâmico de Checklists do ROADMAP**
   - **Descrição:** O orquestrador deve ler continuamente o estado do `ROADMAP.md` para monitorar a progressão (checklists marcados como `[x]`).
   - **Critérios de Aceite:**
-    - [ ] Criar um parser em Markdown (`RoadmapParserService`) focado na extração de estados de checklists.
-    - [ ] Implementar watcher/cron-job que detecte alterações e commits no arquivo de Roadmap.
-    - [ ] Identificar de forma autônoma quais tarefas foram recém-concluídas comparando com o histórico (git diff).
-    - [ ] Salvar o estado em um banco de dados leve ou arquivo persistente para garantir a idempotência e evitar ações duplicadas.
+    - [x] Criar um parser em Markdown (`RoadmapParserService`) focado na extração de estados de checklists.
+    - [x] Implementar watcher/cron-job que detecte alterações e commits no arquivo de Roadmap.
+    - [x] Identificar de forma autônoma quais tarefas foram recém-concluídas comparando com o histórico (git diff).
+    - [x] Salvar o estado em um banco de dados leve ou arquivo persistente para garantir a idempotência e evitar ações duplicadas.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração do Parser de Roadmap com o Gerenciador de Issues do GitHub".
 
-- [ ] **Feature: Motor de Geração de Novas Features (Task Feedback Loop)**
+- [x] **Feature: Motor de Geração de Novas Features (Task Feedback Loop)**
   - **Descrição:** Uma vez detectado que uma tarefa com um "Gatilho" foi concluída, o orquestrador como P.O. autônomo deve gerar novas issues/tarefas subsequentes e atualizar o ROADMAP.
   - **Critérios de Aceite:**
-    - [ ] Criar prompt para o LLM atuar como Product Owner, capaz de pegar o contexto da tarefa concluída e o gatilho, e detalhar a nova feature.
-    - [ ] Auto-modificar o arquivo `ROADMAP.md` via pull request para injetar a nova feature nas seções apropriadas após revisão humana.
-    - [ ] Abrir uma Issue no repositório vinculando a nova feature do roadmap, já populada com Critérios de Aceite gerados pela IA.
-    - [ ] Implementar mecanismo de controle para evitar loops infinitos de geração de tarefas.
+    - [x] Criar prompt para o LLM atuar como Product Owner, capaz de pegar o contexto da tarefa concluída e o gatilho, e detalhar a nova feature.
+    - [x] Auto-modificar o arquivo `ROADMAP.md` via pull request para injetar a nova feature nas seções apropriadas após revisão humana.
+    - [x] Abrir uma Issue no repositório vinculando a nova feature do roadmap, já populada com Critérios de Aceite gerados pela IA.
+    - [x] Implementar mecanismo de controle para evitar loops infinitos de geração de tarefas.
+
+- [ ] **Feature: Integração do Parser de Roadmap com o Gerenciador de Issues do GitHub**
+  - **Descrição:** Uma vez que o parser detectou mudanças e gerou uma nova task, o sistema precisa integrar-se diretamente com o GitHub para criar uma nova Issue oficial no repositório. Isso garante rastreabilidade e visibilidade para todos os desenvolvedores. A nova funcionalidade deve ser robusta o suficiente para mapear o conteúdo Markdown da feature para o formato suportado pelo GitHub, incluindo labels automáticos e designação de milestones se aplicável.
+  - **Critérios de Aceite:**
+    - [ ] Criar um método `createIssueFromFeature` no serviço `GithubService` usando o `@octokit/rest` configurado no projeto.
+    - [ ] A Issue gerada deve conter a descrição detalhada e o checklist de critérios de aceite extraídos da geração via IA no corpo (`body`) da Issue.
+    - [ ] O título da Issue deve seguir um padrão claro (e.g., "Feature: [Nome da Feature]").
+    - [ ] Adicionar labels apropriados de forma automática, como `enhancement`, `AI-generated` e `autocreated`.
+    - [ ] Antes de criar a Issue, consultar se já existe uma issue com título similar no repositório para evitar a duplicação de tarefas (`idempotência`).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Bidirecional: Sincronização de Status de Issues com o ROADMAP".
 
 ---
 
