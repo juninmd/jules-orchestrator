@@ -21,16 +21,16 @@ O título da nova tarefa será: "${newFeatureTitle}".
 
 Gere o corpo desta nova feature em formato Markdown, seguindo a estrutura padrão:
 - [ ] **Feature: ${newFeatureTitle}**
-  - **Descrição:** [Uma descrição detalhada sobre a funcionalidade, o porquê de existir e seu objetivo de negócio/técnico]
+  - **Descrição:** [Uma descrição EXTREMAMENTE detalhada sobre a funcionalidade, o porquê de existir e seu objetivo de negócio/técnico]
   - **Critérios de Aceite:**
-    - [ ] [Critério 1]
-    - [ ] [Critério 2]
-    - [ ] [Critério 3]
-    - [ ] [Critério 4]
+    - [ ] [Critério explícito, abrangente e detalhado 1]
+    - [ ] [Critério explícito, abrangente e detalhado 2]
+    - [ ] [Critério explícito, abrangente e detalhado 3]
+    - [ ] [Critério explícito, abrangente e detalhado 4]
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "[Pense em uma próxima task que daria continuidade lógica]".
 
 Sua resposta deve ser EXATAMENTE o markdown da feature a ser inserido, sem nenhuma saudação ou comentário inicial/final.
-Apenas o bloco Markdown. Retorne APENAS conteúdo Markdown com os checkboxes exatamente como o template e com muito detalhe em português do Brasil.`;
+Apenas o bloco Markdown. Retorne APENAS conteúdo Markdown com os checkboxes exatamente como o template. As tarefas PRECISAM ser criadas com MUITOS detalhes, incluindo descrições abrangentes e critérios de aceite explícitos em português do Brasil.`;
 
     try {
       const result = await generateText({
