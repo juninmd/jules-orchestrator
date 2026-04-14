@@ -87,6 +87,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Criar testes unitários (mínimo 80% de cobertura) para a nova classe de heurísticas.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Métricas de Código em Tempo Real".
 
+- [ ] **Feature: Dashboard de Métricas de Código em Tempo Real**
+  - **Descrição:** Desenvolver uma interface visual integrada (dashboard) para exibir em tempo real as métricas extraídas pela heurística de análise estática e a saúde geral do código-fonte do repositório alvo.
+  - **Critérios de Aceite:**
+    - [ ] Criar um front-end leve (ex: React/Vue) ou estender o serviço atual para servir a página do dashboard.
+    - [ ] Exibir gráficos de complexidade ciclomática, débitos técnicos identificados, e saúde do repositório por módulo/diretório.
+    - [ ] Integrar com a base de dados onde as heurísticas salvam o relatório técnico estruturado.
+    - [ ] Fornecer filtros por data, severidade do débito e status de correção.
+    - [ ] Permitir a exportação dos relatórios (PDF/CSV) a partir da interface.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Alertas Automáticos de Degradação de Qualidade via Slack/Teams".
+
 - [ ] **Feature: Otimização no Roteamento de IA (AI Router)**
   - **Descrição:** Melhorar o `AIRouterService` para selecionar o modelo de IA (ex: Claude, GPT-4, Llama) baseado na complexidade do problema detectado.
   - **Critérios de Aceite:**
@@ -125,6 +135,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Aplicar diff e commitar usando o `GithubService`.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Interface Web para Aprovação de Self-Healing".
 
+- [ ] **Feature: Interface Web para Aprovação de Self-Healing**
+  - **Descrição:** Criar um painel de controle interativo onde os operadores humanos possam revisar e aprovar as ações de self-healing propostas pelo orquestrador antes que elas sejam efetivamente aplicadas em ambientes produtivos (ex: commits corretivos ou reboots de pods).
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver a interface que exibe os logs de CI/CD falhos e o diff (patch) gerado pela IA.
+    - [ ] Implementar botões de "Aprovar" e "Rejeitar" (com justificativa de rejeição para alimentar o loop de aprendizado).
+    - [ ] Integrar com o motor de Self-Healing para que ele aguarde o status de aprovação em cenários configurados como "Approval Required".
+    - [ ] Criar log de auditoria rastreável (quem aprovou, quando e qual foi o diff exato aplicado).
+    - [ ] Adicionar autenticação básica (SSO/OAuth) para garantir que apenas pessoas autorizadas façam o controle.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor de Aprendizado Ativo: Retroalimentação a partir de Rejeições Humanas".
+
 - [ ] **Feature: Integração com Monitoramento de Kubernetes**
   - **Descrição:** Expandir a funcionalidade de self-healing utilizando o `@kubernetes/client-node` já presente no `package.json` para reiniciar pods travados ou reverter deploys que disparam muitos erros 500.
   - **Critérios de Aceite:**
@@ -162,6 +182,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Adicionar labels apropriados de forma automática, como `enhancement`, `AI-generated` e `autocreated`.
     - [ ] Antes de criar a Issue, consultar se já existe uma issue com título similar no repositório para evitar a duplicação de tarefas (`idempotência`).
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Bidirecional: Sincronização de Status de Issues com o ROADMAP".
+
+- [ ] **Feature: Integração Bidirecional: Sincronização de Status de Issues com o ROADMAP**
+  - **Descrição:** Fazer com que o `ROADMAP.md` e o GitHub Issues operem em perfeita sincronia bidirecional. Quando uma Issue vinculada ao ROADMAP for fechada (via PR ou manualmente), o item do ROADMAP correspondente deve ter seu checklist automaticamente marcado como `[x]`, alimentando o ciclo sem necessidade de commit manual do desenvolvedor no arquivo Markdown.
+  - **Critérios de Aceite:**
+    - [ ] Criar listener de webhooks do GitHub escutando o evento `issues.closed` e `pull_request.closed` (merged).
+    - [ ] Mapear o ID/Título da Issue fechada com a sua respectiva feature detalhada dentro do `ROADMAP.md`.
+    - [ ] Modificar programaticamente o arquivo `ROADMAP.md`, alterando o `[ ]` para `[x]` na respectiva subtask ou feature principal.
+    - [ ] Criar e realizar o merge automático do commit de atualização do ROADMAP via GitHub API de forma silenciosa e performática.
+    - [ ] Testar cenários de edge cases (Issue reaberta, texto levemente alterado, falha na API de commit) e implementar tratamento de erros adequado.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel P.O. Visual: Geração de Relatório de Progresso de Sprint".
 
 ---
 
