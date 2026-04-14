@@ -91,7 +91,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Descrição:** Desenvolver uma interface visual integrada (dashboard) para exibir em tempo real as métricas extraídas pela heurística de análise estática e a saúde geral do código-fonte do repositório alvo.
   - **Critérios de Aceite:**
     - [ ] Criar um front-end leve (ex: React/Vue) ou estender o serviço atual para servir a página do dashboard.
-    - [ ] Exibir gráficos de complexidade ciclomática, débitos técnicos identificados, e saúde do repositório por módulo/diretório.
+    - [ ] Exibir gráficos de complexidade ciclomática, débitos técnicos identificados e saúde do repositório por módulo/diretório.
     - [ ] Integrar com a base de dados onde as heurísticas salvam o relatório técnico estruturado.
     - [ ] Fornecer filtros por data, severidade do débito e status de correção.
     - [ ] Permitir a exportação dos relatórios (PDF/CSV) a partir da interface.
@@ -142,7 +142,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar botões de "Aprovar" e "Rejeitar" (com justificativa de rejeição para alimentar o loop de aprendizado).
     - [ ] Integrar com o motor de Self-Healing para que ele aguarde o status de aprovação em cenários configurados como "Approval Required".
     - [ ] Criar log de auditoria rastreável (quem aprovou, quando e qual foi o diff exato aplicado).
-    - [ ] Adicionar autenticação básica (SSO/OAuth) para garantir que apenas pessoas autorizadas façam o controle.
+    - [ ] Adicionar um mecanismo de autenticação (SSO/OAuth) para garantir que apenas pessoas autorizadas façam o controle.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor de Aprendizado Ativo: Retroalimentação a partir de Rejeições Humanas".
 
 - [ ] **Feature: Integração com Monitoramento de Kubernetes**
@@ -189,7 +189,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Criar listener de webhooks do GitHub escutando o evento `issues.closed` e `pull_request.closed` (merged).
     - [ ] Mapear o ID/Título da Issue fechada com a sua respectiva feature detalhada dentro do `ROADMAP.md`.
     - [ ] Modificar programaticamente o arquivo `ROADMAP.md`, alterando o `[ ]` para `[x]` na respectiva subtask ou feature principal.
-    - [ ] Criar e realizar o merge automático do commit de atualização do ROADMAP via GitHub API de forma silenciosa e performática.
+    - [ ] Realizar o commit automático de atualização do ROADMAP via GitHub API de forma silenciosa e performática.
     - [ ] Testar cenários de edge cases (Issue reaberta, texto levemente alterado, falha na API de commit) e implementar tratamento de erros adequado.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel P.O. Visual: Geração de Relatório de Progresso de Sprint".
 
