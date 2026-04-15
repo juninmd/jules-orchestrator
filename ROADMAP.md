@@ -115,6 +115,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Expandir o prompt do revisor para incluir assinaturas de métodos impactados.
     - [ ] Adicionar funcionalidade de aprovação automática de PRs triviais (ex: alteração apenas de documentação ou typos).
     - [ ] Validar cobertura de testes do repositório destino durante o review.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sugestão Autônoma de Refatoração baseada no Dependency Graph".
 
 - [ ] **Feature: Detecção de Vulnerabilidades de Segurança (DevSecOps)**
   - **Descrição:** Incluir um passo de segurança durante a revisão do PR antes do feedback de arquitetura.
@@ -122,6 +123,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Detectar chaves de API/Secrets em hardcode.
     - [ ] Verificar uso de pacotes npm/pip desatualizados e marcados como vulneráveis (integração com banco de dados de CVEs).
     - [ ] Adicionar seção "Security" no comentário gerado pelo bot no GitHub.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Criação de PRs Automáticos para Correção de Dependências Vulneráveis".
 
 ### ÉPICO 3: Capacidades de Self-Healing (Autocura)
 *Foco na resiliência e correção autônoma de falhas em produção ou durante pipelines.*
@@ -152,6 +154,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Ler logs de pods que entraram no estado CrashLoopBackOff.
     - [ ] Disparar alerta via `TelegramService` com a análise da causa raiz gerada por IA.
     - [ ] Criar opção de "Revert Autônomo" baseado em limiares configuráveis.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Eventos de Self-Healing e Resiliência do Cluster".
 
 ### ÉPICO 4: Automação do Papel de Product Owner (P.O. Autônomo)
 *Foco na gestão contínua de roadmap, priorização de backlog e criação dinâmica de novas tarefas a partir do progresso do desenvolvimento.*
@@ -192,6 +195,18 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Realizar o commit automático de atualização do ROADMAP via GitHub API de forma silenciosa e performática.
     - [ ] Testar cenários de edge cases (Issue reaberta, texto levemente alterado, falha na API de commit) e implementar tratamento de erros adequado.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel P.O. Visual: Geração de Relatório de Progresso de Sprint".
+
+### ÉPICO 5: Engenharia de Prompt e Otimização de Custos de IA
+*Foco em tornar as chamadas de LLMs mais baratas, rápidas e consistentes.*
+
+- [ ] **Feature: Sistema de Cache Semântico de Respostas de IA**
+  - **Descrição:** Implementar uma camada de cache vetorial para armazenar as respostas a perguntas comuns ou reviews de trechos de código idênticos, reduzindo o custo das chamadas de API e acelerando os tempos de resposta do orquestrador.
+  - **Critérios de Aceite:**
+    - [ ] Integrar um banco de dados vetorial leve ou em memória (ex: Chroma, Redisearch) para armazenar os embeddings dos prompts gerados.
+    - [ ] Criar mecanismo de similaridade por cosseno que retorne a resposta em cache caso um novo prompt atinja 95% de similaridade semântica.
+    - [ ] Desenvolver fallback suave (graceful degradation): caso o cache caia, o sistema continua roteando requisições para a IA normalmente.
+    - [ ] Adicionar testes de unidade que validem a recuperação do cache para prompts repetidos com pequenas variações.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel de Métricas de Economia de Tokens e Hit-Rate do Cache".
 
 ---
 
