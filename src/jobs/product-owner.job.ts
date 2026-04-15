@@ -1,19 +1,21 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
 import { RoadmapParserService, RoadmapTask } from '../services/roadmap-parser.service.js';
 import { POService } from '../services/po.service.js';
+import { GithubService } from '../services/github.service.js';
+import { TelegramService } from '../services/telegram.service.js';
+import { env } from '../config/env.config.js';
+import { logger } from '../services/logger.service.js';
+
+const ROADMAP_FILE = 'ROADMAP.md';
 
 async function processTaskAndInjectFeature(
   task: RoadmapTask,
   roadmapContent: string,
   poService: POService
-): Promise<{ modifiedContent: string, modificationsMade: boolean }> {
+): Promise<{ modifiedContent: string; modificationsMade: boolean }> {
   const taskAlreadyExists = roadmapContent.includes(`**Feature: ${task.trigger}**`);
   if (taskAlreadyExists) return { modifiedContent: roadmapContent, modificationsMade: false };
 
-  console.log(`\n========================================`);
-  console.log(`🚀 Gatilho detectado: Tarefa '${task.title}' foi concluída!`);
-  console.log(`📝 Criando nova tarefa: '${task.trigger}'`);
+  logger.info('PO', `Gatilho detectado: '${task.title}' concluída → criando '${task.trigger}'`);
 
   try {
     const newFeatureMarkdown = await poService.generateNewFeature(
@@ -26,57 +28,79 @@ async function processTaskAndInjectFeature(
     const injectionPoint = '## 📝 Gestão do Documento e Próximos Passos';
 
     if (updatedContent.includes(injectionPoint)) {
-        updatedContent = updatedContent.replace(
-          injectionPoint,
-          `${newFeatureMarkdown}\n\n${injectionPoint}`
-        );
+      updatedContent = updatedContent.replace(injectionPoint, `${newFeatureMarkdown}\n\n${injectionPoint}`);
     } else {
-        updatedContent += `\n\n${newFeatureMarkdown}\n`;
+      updatedContent += `\n\n${newFeatureMarkdown}\n`;
     }
 
-    console.log(`✅ Nova tarefa gerada e injetada no ROADMAP!`);
     return { modifiedContent: updatedContent, modificationsMade: true };
   } catch (err) {
-    console.error(`❌ Erro ao gerar nova tarefa via IA para o gatilho '${task.trigger}':`, err);
+    logger.error('PO', `Erro ao gerar feature para gatilho '${task.trigger}'`, err);
     return { modifiedContent: roadmapContent, modificationsMade: false };
   }
 }
 
 export async function runProductOwnerJob() {
-  console.log('🤖 Iniciando rotina: PRODUCT_OWNER');
+  logger.info('PO', 'Iniciando rotina: PRODUCT_OWNER');
 
-  const roadmapPath = path.resolve(process.cwd(), 'ROADMAP.md');
+  const githubService = new GithubService();
+  const telegramService = new TelegramService();
   const parser = new RoadmapParserService();
   const poService = new POService();
 
-  try {
-    const tasks = await parser.parseRoadmap(roadmapPath);
-    let roadmapContent = await fs.readFile(roadmapPath, 'utf-8');
-    let hasAnyModifications = false;
+  const repos = env.TARGET_REPOSITORIES.length > 0
+    ? env.TARGET_REPOSITORIES
+    : await githubService.getActiveRepositories(5);
 
-    // Procura por tarefas concluídas que têm um gatilho para nova task
-    for (const task of tasks) {
-      if (task.completed && task.trigger) {
-        const { modifiedContent, modificationsMade } = await processTaskAndInjectFeature(
-          task,
-          roadmapContent,
-          poService
-        );
-        roadmapContent = modifiedContent;
-        if (modificationsMade) hasAnyModifications = true;
+  for (const repo of repos) {
+    try {
+      let fileData: { content: string; sha: string };
+      try {
+        fileData = await githubService.getFileContents(repo, ROADMAP_FILE);
+      } catch {
+        logger.info(repo, 'ROADMAP.md não encontrado. Pulando.');
+        continue;
       }
-    }
 
-    if (hasAnyModifications) {
-      await fs.writeFile(roadmapPath, roadmapContent, 'utf-8');
-      console.log('💾 ROADMAP.md atualizado com novas tarefas geradas.');
-    } else {
-      console.log('Nenhuma nova task gerada neste ciclo.');
-    }
+      const tasks = parser.extractTasks(fileData.content);
+      let roadmapContent = fileData.content;
+      let hasModifications = false;
 
-  } catch (error) {
-    console.error('❌ Falha na execução do job PRODUCT_OWNER:', error);
+      for (const task of tasks) {
+        if (task.completed && task.trigger) {
+          const { modifiedContent, modificationsMade } = await processTaskAndInjectFeature(task, roadmapContent, poService);
+          roadmapContent = modifiedContent;
+          if (modificationsMade) hasModifications = true;
+        }
+      }
+
+      if (!hasModifications) {
+        logger.info(repo, 'Nenhuma nova task gerada neste ciclo.');
+        continue;
+      }
+
+      const branchName = `feat/roadmap-${Date.now()}`;
+      await githubService.createBranch(repo, branchName);
+      await githubService.createOrUpdateFile(
+        repo, ROADMAP_FILE, roadmapContent,
+        'chore: auto-generate new features from roadmap triggers',
+        branchName, fileData.sha
+      );
+      const prNumber = await githubService.createPullRequest(
+        repo,
+        '🤖 Roadmap: Novas features geradas automaticamente',
+        'Features geradas pelo P.O. autônomo baseadas em gatilhos de tasks concluídas.',
+        branchName
+      );
+
+      await telegramService.sendMessage(
+        `📝 <b>P.O. Autônomo:</b> PR #${prNumber} criado em ${repo} com novas features no ROADMAP.`
+      );
+      logger.info(repo, `PR #${prNumber} criado com novas features do ROADMAP.`);
+    } catch (error) {
+      logger.error(repo, 'Falha no job PRODUCT_OWNER', error);
+    }
   }
 
-  console.log('✅ PRODUCT_OWNER Job concluído.');
+  logger.info('PO', 'Job concluído.');
 }

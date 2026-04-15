@@ -12,11 +12,15 @@ export class GithubService {
     this.targetRepositories = env.TARGET_REPOSITORIES || [];
   }
 
+  private splitRepo(repository: string) {
+    const [owner, repo] = repository.split('/');
+    return { owner, repo };
+  }
+
   async getOpenPullRequests(repository: string): Promise<{ number: number; title: string, body: string }[]> {
     try {
-      const owner = repository.split('/')[0];
-      const repo = repository.split('/')[1];
-      
+      const { owner, repo } = this.splitRepo(repository);
+
       const { data } = await this.octokit.pulls.list({
         owner,
         repo,
@@ -36,9 +40,8 @@ export class GithubService {
 
   async getPullRequestDiff(repository: string, prNumber: number): Promise<string> {
     try {
-      const owner = repository.split('/')[0];
-      const repo = repository.split('/')[1];
-      
+      const { owner, repo } = this.splitRepo(repository);
+
       const { data } = await this.octokit.pulls.get({
         owner,
         repo,
@@ -47,7 +50,6 @@ export class GithubService {
           format: "diff",
         },
       });
-      // The response data is the raw diff string when requesting the diff format fallback
       return String(data);
     } catch (err) {
       console.error(`[GithubService] Erro ao buscar diff do PR #${prNumber}:`, err);
@@ -57,13 +59,12 @@ export class GithubService {
 
   async addPullRequestComment(repository: string, prNumber: number, comment: string): Promise<void> {
     try {
-      const owner = repository.split('/')[0];
-      const repo = repository.split('/')[1];
+      const { owner, repo } = this.splitRepo(repository);
 
       await this.octokit.issues.createComment({
         owner,
         repo,
-        issue_number: prNumber, // No GITHUB API os PRs usam a rota de issues para comentarios gerais
+        issue_number: prNumber,
         body: comment
       });
     } catch (err) {
@@ -73,8 +74,7 @@ export class GithubService {
 
   async listPullRequestComments(repository: string, prNumber: number): Promise<string[]> {
     try {
-      const owner = repository.split('/')[0];
-      const repo = repository.split('/')[1];
+      const { owner, repo } = this.splitRepo(repository);
 
       const { data } = await this.octokit.issues.listComments({
         owner,
@@ -92,8 +92,7 @@ export class GithubService {
 
   async mergePullRequest(repository: string, prNumber: number, mergeMessage: string): Promise<void> {
     try {
-      const owner = repository.split('/')[0];
-      const repo = repository.split('/')[1];
+      const { owner, repo } = this.splitRepo(repository);
 
       await this.octokit.pulls.merge({
         owner,
@@ -101,13 +100,13 @@ export class GithubService {
         pull_number: prNumber,
         commit_title: `Merge origin PR #${prNumber} (Automated Squash)`,
         commit_message: mergeMessage,
-        merge_method: 'squash' // FORCING squash merge protocol
+        merge_method: 'squash'
       });
     } catch (err) {
       console.error(`[GithubService] Erro ao fazer Squash Merge no PR #${prNumber}:`, err);
     }
   }
-  
+
   async getActiveRepositories(limit: number = 5): Promise<string[]> {
     if (this.targetRepositories.length > 0) {
       return this.targetRepositories.slice(0, limit);
@@ -130,19 +129,94 @@ export class GithubService {
       return this.targetRepositories;
     }
 
+    const perPage = 100;
     const repos: string[] = [];
     let page = 1;
     while (true) {
       const { data } = await this.octokit.repos.listForAuthenticatedUser({
         sort: 'pushed',
         direction: 'desc',
-        per_page: 100,
+        per_page: perPage,
         page
       });
       repos.push(...data.map(r => r.full_name));
-      if (data.length < 100) break;
+      if (data.length < perPage) break;
       page++;
     }
     return repos;
+  }
+
+  async listIssuesByLabel(repository: string, label: string): Promise<{ number: number; title: string; body: string }[]> {
+    try {
+      const { owner, repo } = this.splitRepo(repository);
+      const { data } = await this.octokit.issues.listForRepo({
+        owner,
+        repo,
+        labels: label,
+        state: 'open',
+        per_page: 20
+      });
+      return data
+        .filter(issue => !issue.pull_request)
+        .map(issue => ({ number: issue.number, title: issue.title, body: issue.body || '' }));
+    } catch {
+      return [];
+    }
+  }
+
+  async listIssueComments(repository: string, issueNumber: number): Promise<{ body: string; user: string }[]> {
+    try {
+      const { owner, repo } = this.splitRepo(repository);
+      const { data } = await this.octokit.issues.listComments({
+        owner,
+        repo,
+        issue_number: issueNumber,
+        per_page: 50
+      });
+      return data.map(c => ({ body: c.body || '', user: c.user?.login || '' }));
+    } catch {
+      return [];
+    }
+  }
+
+  async addLabelToIssue(repository: string, issueNumber: number, label: string): Promise<void> {
+    const { owner, repo } = this.splitRepo(repository);
+    await this.octokit.issues.addLabels({ owner, repo, issue_number: issueNumber, labels: [label] });
+  }
+
+  async removeLabelFromIssue(repository: string, issueNumber: number, label: string): Promise<void> {
+    const { owner, repo } = this.splitRepo(repository);
+    await this.octokit.issues.removeLabel({ owner, repo, issue_number: issueNumber, name: label }).catch(() => {});
+  }
+
+  async getFileContents(repository: string, filePath: string, ref?: string): Promise<{ content: string; sha: string }> {
+    const { owner, repo } = this.splitRepo(repository);
+    const { data } = await this.octokit.repos.getContent({
+      owner, repo, path: filePath, ...(ref ? { ref } : {})
+    });
+    if (Array.isArray(data) || data.type !== 'file') throw new Error(`${filePath} is not a file`);
+    const content = Buffer.from(data.content, 'base64').toString('utf-8');
+    return { content, sha: data.sha };
+  }
+
+  async createBranch(repository: string, branchName: string, fromRef = 'master'): Promise<void> {
+    const { owner, repo } = this.splitRepo(repository);
+    const { data: ref } = await this.octokit.git.getRef({ owner, repo, ref: `heads/${fromRef}` });
+    await this.octokit.git.createRef({ owner, repo, ref: `refs/heads/${branchName}`, sha: ref.object.sha });
+  }
+
+  async createOrUpdateFile(repository: string, filePath: string, content: string, message: string, branch: string, sha?: string): Promise<void> {
+    const { owner, repo } = this.splitRepo(repository);
+    await this.octokit.repos.createOrUpdateFileContents({
+      owner, repo, path: filePath, message, branch,
+      content: Buffer.from(content).toString('base64'),
+      ...(sha ? { sha } : {})
+    });
+  }
+
+  async createPullRequest(repository: string, title: string, body: string, head: string, base = 'master'): Promise<number> {
+    const { owner, repo } = this.splitRepo(repository);
+    const { data } = await this.octokit.pulls.create({ owner, repo, title, body, head, base });
+    return data.number;
   }
 }

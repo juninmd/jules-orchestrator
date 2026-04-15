@@ -1,9 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { mockExecAsync, mockGetOpenPullRequests, mockGenerateText } = vi.hoisted(() => ({
+const { mockExecAsync, mockGetOpenPullRequests, mockGenerateText, mockSafeGitClone } = vi.hoisted(() => ({
   mockExecAsync: vi.fn(),
   mockGetOpenPullRequests: vi.fn().mockResolvedValue([]),
-  mockGenerateText: vi.fn().mockResolvedValue({ text: 'NENHUMA AÇÃO NECESSÁRIA' })
+  mockGenerateText: vi.fn().mockResolvedValue({ text: 'NENHUMA AÇÃO NECESSÁRIA' }),
+  mockSafeGitClone: vi.fn().mockResolvedValue(undefined)
 }));
 
 vi.mock('node:util', async (importOriginal) => {
@@ -50,6 +51,10 @@ vi.mock('../config/env.config.js', () => ({
 }));
 
 vi.mock('node:child_process', () => ({ exec: vi.fn() }));
+
+vi.mock('./git-helper.service.js', () => ({
+  safeGitClone: mockSafeGitClone
+}));
 
 import fs from 'node:fs/promises';
 import fsSync from 'node:fs';

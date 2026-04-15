@@ -1,15 +1,13 @@
 import fs from 'node:fs/promises';
 import fsSync from 'node:fs';
 import path from 'node:path';
-import { exec } from 'node:child_process';
-import { promisify } from 'node:util';
 import { generateText } from 'ai';
 import { createOllama } from 'ollama-ai-provider';
 import { env } from '../config/env.config.js';
 import { GithubService } from './github.service.js';
 import { createWorkspacePath } from './workspace-path.service.js';
-
-const execAsync = promisify(exec);
+import { safeGitClone } from './git-helper.service.js';
+import { logger } from './logger.service.js';
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.js', '.tsx', '.jsx', '.py', '.go', '.java', '.cs', '.rb', '.php']);
 const IGNORE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next', 'vendor', '__pycache__', 'coverage']);
@@ -49,12 +47,10 @@ export class RepoAnalyzerService {
   }
 
   async analyzeRepoAndGeneratePrompt(repository: string): Promise<string | null> {
-    console.log(`\n============== DEEP SCAN: ${repository} ==============`);
-
     const repoName = repository.split('/')[1];
+    logger.info(repoName, `Deep scan iniciado: ${repository}`);
     const clonePath = createWorkspacePath('repo-scan', repository);
     const workspaceBase = path.dirname(clonePath);
-    const gitUrl = `https://x-access-token:${env.GITHUB_TOKEN}@github.com/${repository}.git`;
 
     try {
       if (!fsSync.existsSync(workspaceBase)) {
@@ -65,8 +61,8 @@ export class RepoAnalyzerService {
         await fs.rm(clonePath, { recursive: true, force: true });
       }
 
-      console.log(`[RepoAnalyzer] 📥 Clonando repositório para ${clonePath}...`);
-      await execAsync(`git clone --depth 1 ${gitUrl} "${clonePath}"`);
+      logger.info(repoName, `Clonando repositório para ${clonePath}...`);
+      await safeGitClone(repository, env.GITHUB_TOKEN, clonePath, { depth: 1 });
 
       const activePRs = await this.githubService.getOpenPullRequests(repository);
       let prMemoryContext = '';
@@ -80,7 +76,7 @@ ${prTitles}
 `;
       }
 
-      console.log(`[RepoAnalyzer] 📂 Lendo arquivos fonte de ${repoName}...`);
+      logger.info(repoName, 'Lendo arquivos fonte...');
       const sourceCode = await collectSourceFiles(clonePath);
 
       const prompt = `Você é um engenheiro sênior revisando o código abaixo em busca de oportunidades de refatoração.
@@ -92,30 +88,29 @@ ${sourceCode}
 Retorne UNICAMENTE UM parágrafo descrevendo a principal refatoração de Clean Code (SOLID/DRY/KISS) a ser feita e em qual arquivo, que ainda não esteja coberta pelos PRs ignorados acima.
 Se estiver tudo perfeito ou tudo já coberto pelos PRs, responda EXATAMENTE: 'NENHUMA AÇÃO NECESSÁRIA' e nada mais.`;
 
-      console.log(`[RepoAnalyzer] 🤖 Analisando ${repoName} via Ollama...`);
+      logger.info(repoName, 'Analisando via Ollama...');
       const ollama = createOllama({ baseURL: env.OLLAMA_HOST + '/api' });
       const { text } = await generateText({
-        // @ts-ignore
-        model: ollama(env.OLLAMA_MODEL),
+        model: ollama(env.OLLAMA_MODEL) as Parameters<typeof generateText>[0]['model'],
         prompt,
         maxRetries: 0,
         abortSignal: AbortSignal.timeout(180_000)
       });
 
       await fs.rm(clonePath, { recursive: true, force: true });
-      console.log(`[RepoAnalyzer] 🧹 Clone de ${repoName} removido do disco.`);
+      logger.info(repoName, 'Clone removido do disco.');
 
       const response = text.trim();
 
       if (response.includes('NENHUMA AÇÃO NECESSÁRIA')) {
-        console.log(`[RepoAnalyzer] Nenhuma oportunidade identificada no momento para ${repoName}.`);
+        logger.info(repoName, 'Nenhuma oportunidade identificada.');
         return null;
       }
 
-      console.log(`[RepoAnalyzer] 💡 Descoberta: ${response}`);
+      logger.info(repoName, `Descoberta: ${response}`);
       return response;
     } catch (error) {
-      console.error(`[RepoAnalyzer] ❌ Falha crítica ao processar ${repoName}:`, error);
+      logger.error(repoName, 'Falha crítica ao processar repositório', error);
       if (fsSync.existsSync(clonePath)) {
         await fs.rm(clonePath, { recursive: true, force: true }).catch(() => {});
       }

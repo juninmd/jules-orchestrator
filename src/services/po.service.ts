@@ -1,15 +1,13 @@
 import { generateText } from 'ai';
 import { createOllama } from 'ollama-ai-provider';
 import { env } from '../config/env.config.js';
+import { logger } from './logger.service.js';
 
 export class POService {
   private ollama = createOllama({ baseURL: `${env.OLLAMA_HOST}/api` });
 
-  /**
-   * Gera uma nova feature baseada em um gatilho e no contexto de uma task recém-completada.
-   */
   public async generateNewFeature(completedTaskTitle: string, completedTaskContext: string, newFeatureTitle: string): Promise<string> {
-    console.log(`[POService] Gerando nova feature: "${newFeatureTitle}" baseada em "${completedTaskTitle}"`);
+    logger.info('PO', `Gerando nova feature: "${newFeatureTitle}" baseada em "${completedTaskTitle}"`);
 
     const prompt = `Você atua como um Product Owner sênior e técnico.
 A tarefa "${completedTaskTitle}" acaba de ser concluída.
@@ -34,13 +32,15 @@ Apenas o bloco Markdown. Retorne APENAS conteúdo Markdown com os checkboxes exa
 
     try {
       const result = await generateText({
-        model: this.ollama(env.OLLAMA_MODEL),
-        prompt: prompt,
+        model: this.ollama(env.OLLAMA_MODEL) as Parameters<typeof generateText>[0]['model'],
+        prompt,
+        abortSignal: AbortSignal.timeout(180_000),
+        maxRetries: 2
       });
 
       return result.text.trim();
     } catch (error) {
-      console.error('[POService] Falha ao gerar nova feature:', error);
+      logger.error('PO', 'Falha ao gerar nova feature', error);
       throw error;
     }
   }

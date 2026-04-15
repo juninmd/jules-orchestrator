@@ -1,25 +1,20 @@
-// @ts-nocheck
 import { env } from '../config/env.config.js';
 import { generateText, tool } from 'ai';
 import { createOllama } from 'ollama-ai-provider';
 import { z } from 'zod';
-import { GithubService } from './github.service.js';
 import { JulesService } from './jules.service.js';
+import { logger } from './logger.service.js';
 
 export class AIRouterService {
   private ollama = createOllama({ baseURL: `${env.OLLAMA_HOST}/api` });
-  private githubService = new GithubService();
   private julesService = new JulesService();
 
-  /**
-   * Analisa a intenção e decide a ferramenta a ser utilizada.
-   */
   public async routeImprovement(repository: string, context: string): Promise<void> {
-    console.log(`[AIRouterService] Iniciando roteamento da melhoria para ${repository} via Ollama (${env.OLLAMA_MODEL})`);
+    logger.info('AIRouter', `Roteando melhoria para ${repository} via Ollama (${env.OLLAMA_MODEL})`);
 
     try {
       const result = await generateText({
-        model: this.ollama(env.OLLAMA_MODEL),
+        model: this.ollama(env.OLLAMA_MODEL) as Parameters<typeof generateText>[0]['model'],
         prompt: `Analise as necessidades de melhoria do projeto e execute os comandos mais eficientes.
 CONTEXTO: ${context}
 Se precisar de código no github, crie uma issue.
@@ -35,21 +30,22 @@ Se precisar acordar o agente Jules para já resolver, chame o agente.`,
                 prompt: instruction,
                 repository: repository
               });
-              return { message: 'Jules agent invocado com sucesso na nuvem sem gerar issues rastreáveis localmente.' };
+              return { message: 'Jules agent invocado com sucesso.' };
             }
           })
         },
-        maxSteps: 3
+        maxSteps: 3,
+        abortSignal: AbortSignal.timeout(180_000),
+        maxRetries: 2
       });
 
-      console.log('[AIRouterService] Resultado final do roteamento:');
-      console.log(result.text);
+      logger.info('AIRouter', `Resultado: ${result.text}`);
 
       if (result.toolResults && result.toolResults.length > 0) {
-        console.log(`[AIRouterService] Foram executados ${result.toolResults.length} comandos automáticos do Jules/Github!`);
+        logger.info('AIRouter', `Executados ${result.toolResults.length} comandos automáticos.`);
       }
     } catch (error) {
-      console.error('[AIRouterService] Falha crítica ao gerar texto/chamar ferramentas.', error);
+      logger.error('AIRouter', 'Falha crítica ao gerar texto/chamar ferramentas.', error);
       throw error;
     }
   }

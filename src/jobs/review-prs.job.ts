@@ -8,44 +8,48 @@ import { appendReviewMarker, createReviewMarker } from '../services/review-comme
 import { TelegramService } from '../services/telegram.service.js';
 import { env } from '../config/env.config.js';
 import { createWorkspacePath } from '../services/workspace-path.service.js';
+import { safeGitClone, gitFetchPr, detectPackageManager } from '../services/git-helper.service.js';
+import { logger } from '../services/logger.service.js';
 
 const execAsync = promisify(exec);
+const DIFF_LIMIT = 8000;
+const LLM_DELAY_MS = 2000;
+const delay = (ms: number) => new Promise(r => setTimeout(r, ms));
 
 export async function runReviewPrsJob() {
-  console.log('🤖 Iniciando rotina: REVIEW_PRS (Autonomous Reviewer)');
-  
+  logger.info('ReviewPRS', 'Iniciando rotina: REVIEW_PRS (Autonomous Reviewer)');
+
   const githubService = new GithubService();
   const telegramService = new TelegramService();
   const ollama = createOllama({ baseURL: env.OLLAMA_HOST + '/api' });
   const model = ollama(env.OLLAMA_MODEL);
+  let totalReviewed = 0;
 
   const repos = await githubService.getAllRepositories();
 
   if (!repos.length) {
-    console.log('Zero repositórios ativos encontrados.');
+    logger.info('ReviewPRS', 'Zero repositórios ativos encontrados.');
     return;
   }
 
   for (const repo of repos) {
-    console.log(`\n========================================`);
-    console.log(`👁️ Revisando Pull Requests de: ${repo}`);
-    
+    logger.info('ReviewPRS', `Revisando Pull Requests de: ${repo}`);
+
     try {
       const openPrs = await githubService.getOpenPullRequests(repo);
-      
+
       if (openPrs.length === 0) {
-        console.log(`Nenhum PR aberto para avaliar em ${repo}.`);
+        logger.info(repo, 'Nenhum PR aberto para avaliar.');
         continue;
       }
 
       for (const pr of openPrs) {
-        console.log(`\n🔍 Analisando PR #${pr.number}: ${pr.title}`);
-        
-        // 1. Baixar o código modificado (DIFF) do PR
+        logger.info(repo, `Analisando PR #${pr.number}: ${pr.title}`);
+
         const diff = await githubService.getPullRequestDiff(repo, pr.number);
-        
+
         if (!diff || diff.length < 5) {
-          console.log(`Diff ausente ou muito curto. Ignorando PR.`);
+          logger.warn(repo, `Diff ausente ou muito curto. Ignorando PR #${pr.number}.`);
           continue;
         }
 
@@ -53,40 +57,39 @@ export async function runReviewPrsJob() {
         const existingComments = await githubService.listPullRequestComments(repo, pr.number);
 
         if (existingComments.some(comment => comment.includes(reviewMarker))) {
-          console.log(`[ReviewPRS] PR #${pr.number} já recebeu feedback para este diff. Pulando repetição.`);
+          logger.info(repo, `PR #${pr.number} já recebeu feedback para este diff. Pulando.`);
           continue;
         }
 
-        // NOVIDADE: Auto-Build (Sistema Imumológico)
         const clonePath = createWorkspacePath('review-pr', String(pr.number));
         if (fsSync.existsSync(clonePath)) fsSync.rmSync(clonePath, { recursive: true, force: true });
 
         try {
-          console.log(`[ReviewPRS] Preparando ambiente isolado para o PR #${pr.number}...`);
-          const gitUrl = `https://x-access-token:${env.GITHUB_TOKEN}@github.com/${repo}.git`;
-          
-          await execAsync(`git clone ${gitUrl} "${clonePath}"`);
-          await execAsync(`cd "${clonePath}" && git fetch origin pull/${pr.number}/head:pr-${pr.number} && git checkout pr-${pr.number}`);
-          
-          console.log(`[ReviewPRS] Mão na massa! Rodando build pra checar se a app quebra...`);
-          await execAsync(`cd "${clonePath}" && pnpm install --ignore-scripts && pnpm run build`);
-          console.log(`[ReviewPRS] 🟩 Build da Branch do PR Local finalizado com sucesso!`);
-        } catch (buildError: any) {
-          console.error(`❌ [ReviewPRS] PR #${pr.number} introduziu código que não compila!`);
-          await githubService.addPullRequestComment(repo, pr.number, appendReviewMarker(`🚨 **Falha de Compilação Detectada no Orquestrador**\n\nAviso automático: O orquestrador clonou seu código e tentou realizar um \`pnpm run build\` no escopo das suas mudanças, e aconteceu um Crash.\n\n<details><summary>Log da Compilação Local</summary>\n\n\`\`\`\n${buildError.message || buildError}\n\`\`\`\n\n</details>\n\n⛔ **Bloqueado**: Conserte este erro para habilitar a revisão da IA.`, diff));
-          await telegramService.sendMessage(`❌ <b>Bloqueio na Fonte</b>\nO PR #${pr.number} em ${repo} injetou código fatal e foi barrado no pnpm build!`);
+          logger.info(repo, `Preparando ambiente isolado para o PR #${pr.number}...`);
+
+          await safeGitClone(repo, env.GITHUB_TOKEN, clonePath);
+          await gitFetchPr(clonePath, pr.number);
+
+          const pm = detectPackageManager(clonePath);
+          logger.info(repo, `Package manager detectado: ${pm.name}`);
+          await execAsync(`cd "${clonePath}" && ${pm.install} && ${pm.build}`);
+          logger.info(repo, `Build do PR #${pr.number} finalizado com sucesso!`);
+        } catch (buildError: unknown) {
+          const errMsg = buildError instanceof Error ? buildError.message : String(buildError);
+          logger.error(repo, `PR #${pr.number} introduziu código que não compila!`);
+          await githubService.addPullRequestComment(repo, pr.number, appendReviewMarker(`🚨 **Falha de Compilação Detectada no Orquestrador**\n\nAviso automático: O orquestrador clonou seu código e tentou realizar um build no escopo das suas mudanças, e aconteceu um Crash.\n\n<details><summary>Log da Compilação Local</summary>\n\n\`\`\`\n${errMsg}\n\`\`\`\n\n</details>\n\n⛔ **Bloqueado**: Conserte este erro para habilitar a revisão da IA.`, diff));
+          await telegramService.sendMessage(`❌ <b>Bloqueio na Fonte</b>\nO PR #${pr.number} em ${repo} injetou código fatal e foi barrado no build!`);
           continue;
         } finally {
           if (fsSync.existsSync(clonePath)) fsSync.rmSync(clonePath, { recursive: true, force: true });
         }
 
-        // 2. Chamar o Ollama para avaliar a qualidade e perfomance e SOLID do diff
         const reviewPrompt = `
 Você é o CTO e Engenheiro de Software Chefe do projeto.
 Forneça a sua revisão para o diff do Pull Request em formato de texto.
 
 --- PR DIFF ---
-${diff.substring(0, 3000)} // (Lendo os primeiros 3000 chars por segurança estrutural)
+${diff.substring(0, DIFF_LIMIT)}
 ----------------
 
 Regras para sua resposta:
@@ -94,37 +97,39 @@ Regras para sua resposta:
 - Se o código estiver enxuto, direto ao ponto e seguir engenharia boa, responda única e EXATAMENTE com a palavra: "APROVADO".
 `;
 
-        const { text } = await generateText({
-          // @ts-ignore
-          model,
-          prompt: reviewPrompt
-        });
+        const { text } = await logger.timed(repo, `Ollama review PR #${pr.number}`, () =>
+          generateText({
+            model: model as Parameters<typeof generateText>[0]['model'],
+            prompt: reviewPrompt,
+            abortSignal: AbortSignal.timeout(180_000),
+            maxRetries: 2
+          })
+        );
 
         const evaluation = text.trim();
+        totalReviewed++;
 
-        // 3. Tomada de Decisão Autônoma
         if (evaluation === 'APROVADO' || evaluation.startsWith('APROVADO')) {
-          console.log(`✅ O PR #${pr.number} tem a bênção do Revisor IA. Aplicando Squash Merge!`);
-          
+          logger.info(repo, `PR #${pr.number} aprovado pela IA. Aplicando Squash Merge!`);
+
           await githubService.addPullRequestComment(repo, pr.number, "🤖 O código foi revisado por Inteligência Artificial e aprovado para entrar na base baseando-se no framework de qualidade da equipe. Fazendo auto-merge!");
           await githubService.mergePullRequest(repo, pr.number, "Merge via Automação Orquestrador IA.");
-          
-          await telegramService.sendMessage(`🎉 <b>Novo Squash Merge Automático!</b>\nO PR #${pr.number} de ${repo} foi aprovado com louvores peka IA e mesclado direto na master.`);
-          console.log(`🎉 PR #${pr.number} mergeado com sucesso.`);
+
+          await telegramService.sendMessage(`🎉 <b>Novo Squash Merge Automático!</b>\nO PR #${pr.number} de ${repo} foi aprovado com louvores pela IA e mesclado direto na master.`);
         } else {
-          console.log(`⚠️ O PR #${pr.number} precisa de ajustes. Lançando comentários da revisão...`);
-          
-          // Tratando a mensagem (retira a tag inicial possivel caso vazada)
+          logger.info(repo, `PR #${pr.number} precisa de ajustes. Lançando comentários da revisão...`);
+
           const commentFormated = "🤖 **Análise de Revisão Automática do Código:**\n\n" + evaluation.replace(/^CR[IÍ]TICA:\s*/i, '');
           await githubService.addPullRequestComment(repo, pr.number, appendReviewMarker(commentFormated, diff));
-          await telegramService.sendMessage(`⚠️ <b>Revisão Submetida:</b>\nO PR #${pr.number} em ${repo} tomou bloqueio na revisão estrita. O choro é livre no GitHub!`);
-          console.log(`💬 Comentário formatado submetido ao Github.`);
+          await telegramService.sendMessage(`⚠️ <b>Revisão Submetida:</b>\nO PR #${pr.number} em ${repo} tomou bloqueio na revisão estrita.`);
         }
+
+        await delay(LLM_DELAY_MS);
       }
     } catch (error) {
-      console.error(`❌ Erro revisando PRs do repositório ${repo}:`, error);
+      logger.error(repo, 'Erro revisando PRs', error);
     }
   }
 
-  console.log('\n✅ REVIEW_PRS Job concluído.');
+  logger.info('ReviewPRS', `Job concluído. Total de PRs revisados: ${totalReviewed}`);
 }
