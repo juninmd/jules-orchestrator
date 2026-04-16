@@ -97,6 +97,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Permitir a exportação dos relatórios (PDF/CSV) a partir da interface.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Alertas Automáticos de Degradação de Qualidade via Slack/Teams".
 
+- [ ] **Feature: Alertas Automáticos de Degradação de Qualidade via Slack/Teams**
+  - **Descrição:** Notificar a equipe de forma proativa quando a saúde do repositório cair abaixo de um limiar configurável, ou quando débitos técnicos críticos (ex: alta complexidade ciclomática, quebra clara de SRP) forem detectados na pipeline.
+  - **Critérios de Aceite:**
+    - [ ] Integrar webhook/app do Slack e Microsoft Teams usando a API oficial.
+    - [ ] Criar template de mensagem rica (blocos/cards) com o sumário do débito técnico encontrado e links diretos para o dashboard.
+    - [ ] Adicionar mecanismo de "Snooze" ou "Acknowledge" (Reconhecer) via bot actions para silenciar o alerta de um débito específico temporariamente.
+    - [ ] O alerta só deve disparar uma vez por detecção e apenas se o status do débito não for resolvido em um prazo configurável (ex: 2 dias).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Métricas de Qualidade em Comentários Automáticos de Pull Requests".
+
 - [ ] **Feature: Otimização no Roteamento de IA (AI Router)**
   - **Descrição:** Melhorar o `AIRouterService` para selecionar o modelo de IA (ex: Claude, GPT-4, Llama) baseado na complexidade do problema detectado.
   - **Critérios de Aceite:**
@@ -117,6 +126,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Validar cobertura de testes do repositório destino durante o review.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sugestão Autônoma de Refatoração baseada no Dependency Graph".
 
+- [ ] **Feature: Sugestão Autônoma de Refatoração baseada no Dependency Graph**
+  - **Descrição:** Usando o contexto expandido do Dependency Graph, a IA deverá não só avaliar o código alterado, mas também gerar um patch de código sugerindo como refatorar os componentes acoplados que dependem da modificação.
+  - **Critérios de Aceite:**
+    - [ ] Ampliar o prompt de IA com todo o contexto do nó afetado no Dependency Graph e seus dependentes diretos.
+    - [ ] Se uma mudança de assinatura ocorrer, sugerir automaticamente os diffs de atualização nas chamadas de funções nos arquivos acoplados.
+    - [ ] Incluir sugestões formatadas em code blocks executáveis do GitHub (`suggestion`) nos comentários do PR.
+    - [ ] Medir a taxa de aceitação (Hit-Rate) das sugestões pelos desenvolvedores para realimentação.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Execução Automática em Sandbox das Sugestões de Refatoração".
+
 - [ ] **Feature: Detecção de Vulnerabilidades de Segurança (DevSecOps)**
   - **Descrição:** Incluir um passo de segurança durante a revisão do PR antes do feedback de arquitetura.
   - **Critérios de Aceite:**
@@ -124,6 +142,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Verificar uso de pacotes npm/pip desatualizados e marcados como vulneráveis (integração com banco de dados de CVEs).
     - [ ] Adicionar seção "Security" no comentário gerado pelo bot no GitHub.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Criação de PRs Automáticos para Correção de Dependências Vulneráveis".
+
+- [ ] **Feature: Criação de PRs Automáticos para Correção de Dependências Vulneráveis**
+  - **Descrição:** Evoluir a detecção de vulnerabilidades permitindo que o orquestrador não apenas alerte, mas crie automaticamente um Pull Request para atualizar a dependência afetada para uma versão segura (similar ao Dependabot, porém com capacidades de análise de quebra de contrato e refatoração).
+  - **Critérios de Aceite:**
+    - [ ] Analisar as notas de lançamento e changelogs da dependência afetada usando IA para identificar "Breaking Changes".
+    - [ ] Criar o PR de atualização da versão vulnerável isoladamente.
+    - [ ] Se houver breaking changes, aplicar diffs de atualização no código do repositório para contornar a quebra de compatibilidade.
+    - [ ] Aguardar resultados da CI; se a CI falhar, tentar uma auto-correção iterativa.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Gestão de Risco e Saúde de Dependências de Terceiros".
 
 ### ÉPICO 3: Capacidades de Self-Healing (Autocura)
 *Foco na resiliência e correção autônoma de falhas em produção ou durante pipelines.*
@@ -147,6 +174,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Adicionar um mecanismo de autenticação (SSO/OAuth) para garantir que apenas pessoas autorizadas façam o controle.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor de Aprendizado Ativo: Retroalimentação a partir de Rejeições Humanas".
 
+- [ ] **Feature: Motor de Aprendizado Ativo: Retroalimentação a partir de Rejeições Humanas**
+  - **Descrição:** Implementar um loop de aprendizado contínuo onde as rejeições humanas no painel de Self-Healing sejam capturadas, contextualizadas e armazenadas em um banco vetorial para melhorar a qualidade dos patches futuros propostos pelo modelo.
+  - **Critérios de Aceite:**
+    - [ ] Interceptar o payload de "Rejeição" com o texto da justificativa inserida pelo operador humano.
+    - [ ] Processar o contexto do problema, a solução falha da IA e a justificativa humana, gerando um documento de "Lição Aprendida" em banco vetorial (Embeddings).
+    - [ ] Modificar o prompt do Self-Healing para buscar e incluir essas "Lições Aprendidas" do histórico antes de propor um novo patch.
+    - [ ] Reportar evolução da métrica de aceitação vs. rejeição dos patches propostos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Testes Unitários de Regressão após Aplicação de Self-Healing".
+
 - [ ] **Feature: Integração com Monitoramento de Kubernetes**
   - **Descrição:** Expandir a funcionalidade de self-healing utilizando o `@kubernetes/client-node` já presente no `package.json` para reiniciar pods travados ou reverter deploys que disparam muitos erros 500.
   - **Critérios de Aceite:**
@@ -155,6 +191,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Disparar alerta via `TelegramService` com a análise da causa raiz gerada por IA.
     - [ ] Criar opção de "Revert Autônomo" baseado em limiares configuráveis.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Eventos de Self-Healing e Resiliência do Cluster".
+
+- [ ] **Feature: Dashboard de Eventos de Self-Healing e Resiliência do Cluster**
+  - **Descrição:** Uma interface de observabilidade para acompanhar em tempo real as anomalias detectadas no cluster, os pods afetados, e as intervenções autônomas executadas (ex: reboots de pod, rollbacks), permitindo visualizar a métrica de "Tempo de Indisponibilidade Evitado".
+  - **Critérios de Aceite:**
+    - [ ] Exibir timeline histórica dos eventos de crash e intervenções executadas no cluster Kubernetes.
+    - [ ] Mostrar gráficos de resiliência (quantidade de interações manuais vs. interações autônomas).
+    - [ ] Listar o log de anomalia, o prompt enviado ao modelo de IA e a conclusão recebida.
+    - [ ] Incluir filtros por namespace, label de deployment e tipo de intervenção.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agendamento Inteligente de Manutenção Preventiva baseado em Histórico de Anomalias".
 
 ### ÉPICO 4: Automação do Papel de Product Owner (P.O. Autônomo)
 *Foco na gestão contínua de roadmap, priorização de backlog e criação dinâmica de novas tarefas a partir do progresso do desenvolvimento.*
@@ -196,6 +241,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Testar cenários de edge cases (Issue reaberta, texto levemente alterado, falha na API de commit) e implementar tratamento de erros adequado.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel P.O. Visual: Geração de Relatório de Progresso de Sprint".
 
+- [ ] **Feature: Painel P.O. Visual: Geração de Relatório de Progresso de Sprint**
+  - **Descrição:** Oferecer uma visão rica e gamificada do progresso do time em relação ao Roadmap estabelecido, calculando métricas de velocidade de entrega e burndown de forma completamente autônoma, mapeado pelo estado dos check-lists e issues conectadas.
+  - **Critérios de Aceite:**
+    - [ ] Criar interface visual listando épicos, progresso em % e status do checklist do `ROADMAP.md`.
+    - [ ] Calcular velocidade de resolução de épicos baseando-se no timestamp das issues fechadas no GitHub.
+    - [ ] Implementar motor de sugestão de escopo: A IA atua como P.O. alertando se o fluxo atual não é viável para uma data alvo predefinida, sugerindo reordenar prioridades.
+    - [ ] Exportação do relatório visual (Sprint Review em PDF) utilizando IA generativa para sumarizar as maiores entregas em uma linguagem executiva.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Criação de Dailies Assíncronas Automáticas com Resumos de Gargalos".
+
 ### ÉPICO 5: Engenharia de Prompt e Otimização de Custos de IA
 *Foco em tornar as chamadas de LLMs mais baratas, rápidas e consistentes.*
 
@@ -207,6 +261,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver fallback suave (graceful degradation): caso o cache caia, o sistema continua roteando requisições para a IA normalmente.
     - [ ] Adicionar testes de unidade que validem a recuperação do cache para prompts repetidos com pequenas variações.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel de Métricas de Economia de Tokens e Hit-Rate do Cache".
+
+- [ ] **Feature: Painel de Métricas de Economia de Tokens e Hit-Rate do Cache**
+  - **Descrição:** Um dashboard voltado para a engenharia de custos para visualizar a eficiência do cache semântico de respostas.
+  - **Critérios de Aceite:**
+    - [ ] Monitorar tempo de resposta e economia em número de tokens não gastos nas APIs de LLM.
+    - [ ] Exibir relatórios gráficos mensais do impacto financeiro do cache de embeddings vs. custo sem cache.
+    - [ ] Fornecer interface de invalidação manual de entradas de cache problemáticas ou desatualizadas.
+    - [ ] Notificar via Slack quando os tokens consumidos pela plataforma alcançarem cotas financeiras de orçamento definidas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Políticas de Retenção e Expiração Inteligente de Embeddings no Cache Vetorial".
 
 ---
 
