@@ -59,6 +59,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [x] Permitir execução sem Jules quando a integração não estiver configurada.
     - [x] Tornar a seleção de repositórios explícita via `TARGET_REPO`.
     - [x] Garantir workspaces temporários compatíveis com Windows/Linux.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Suporte Avançado a Múltiplos SOs nos Workspaces".
+
+- [ ] **Feature: Suporte Avançado a Múltiplos SOs nos Workspaces**
+  - **Descrição:** Para consolidar o endurecimento do runtime, devemos criar um serviço agnóstico que encapsule todas as interações com o File System de forma abstraída, permitindo a execução perfeita em macOS, Windows (WSL/nativo) e Linux, além de gerir montagens de volume temporários com cleanup automático.
+  - **Critérios de Aceite:**
+    - [ ] Criar a interface `IFileSystemManager` com abstrações para `createTempDir`, `cleanupTempDir`, `readFile`, `writeFile`.
+    - [ ] Desenvolver a implementação `LocalFileSystemManager` garantindo que paths sejam formatados usando a API `path` nativa do Node em vez de hardcodes.
+    - [ ] Criar um mecanismo de garbage collection para garantir a limpeza de arquivos temporários, mesmo em falhas não tratadas (ex. interceptar sinais SIGINT, SIGTERM).
+    - [ ] Escrever testes unitários que garantam o comportamento compatível multi-OS.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mapeamento Seguro de Workspaces Efêmeros em Clusters Kubernetes".
 
 - [x] **Feature: Controle de Repetição no Revisor de PRs**
   - **Descrição:** Evitar comentários duplicados para o mesmo diff quando o cron de revisão rodar várias vezes sem alteração no PR.
@@ -66,6 +76,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [x] Gerar fingerprint estável do diff revisado.
     - [x] Verificar comentários já existentes antes de build/review.
     - [x] Pular feedback repetido quando o mesmo diff já recebeu análise.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Resumo Agrupado Diário de Feedbacks Repetitivos de PRs".
+
+- [ ] **Feature: Resumo Agrupado Diário de Feedbacks Repetitivos de PRs**
+  - **Descrição:** Tendo resolvido a questão de duplicidade nos comentários isolados, precisamos agregar estatísticas. O orquestrador vai criar e notificar os engenheiros com relatórios diários de quais débitos estão sendo os mais detectados, atuando como um coach de qualidade de código.
+  - **Critérios de Aceite:**
+    - [ ] Armazenar de forma leve (SQLite ou logs indexados) os eventos de detecção de erros/feedbacks que foram deixados nos PRs durante as últimas 24h.
+    - [ ] Processar esses eventos criando um ranking de erros mais frequentes (ex. "Tipagem Fraca", "Code Smell: SRP").
+    - [ ] Gerar uma mensagem sumarizada (via IA) focada em educação do time e não punição.
+    - [ ] Enviar notificação automatizada ao time via serviço de Telegram existente (ou nova integração).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Criação de Tech Talks Dinâmicos com base em Débitos Frequentes".
 
 - [x] **Feature: Hardening de Deploy no app-charts**
   - **Descrição:** Fechar as lacunas do workload Kubernetes para o orquestrador subir com cronjobs coerentes, secrets opcionais e endurecimento básico de container.
@@ -74,6 +94,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [x] Publicar cronjob de `self-healing`.
     - [x] Expor chaves opcionais de Telegram/Jules no `ExternalSecret`.
     - [x] Aplicar limites de recursos e `securityContext` nos jobs.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Monitoramento Dinâmico de Consumo e Escalonamento dos CronJobs".
+
+- [ ] **Feature: Monitoramento Dinâmico de Consumo e Escalonamento dos CronJobs**
+  - **Descrição:** Após o hardening no ambiente, o próximo passo lógico é observar ativamente o uso. Essa feature envolve integrar o prometheus/grafana ou um agent de APM dentro do deployment para escalar recursos de acordo com a fila de repos ou PRs pendentes.
+  - **Critérios de Aceite:**
+    - [ ] Expor o endpoint `/metrics` utilizando a lib `prom-client` do Node.
+    - [ ] Registrar métricas de duração de jobs, número de chamadas em falha e número de repositórios processados por execução.
+    - [ ] Adicionar um ServiceMonitor no Helm/Kustomize do Kubernetes para raspagem automática pelo Prometheus.
+    - [ ] Implementar política de alerta no Alertmanager para interrupções sucessivas nos jobs (ex: "Job self-healing falhando mais de 3 vezes em 1h").
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Visualização Centralizada de Custo e Performance de Agentes IA".
 
 ### ÉPICO 1: Aprimoramento da Análise de Repositórios e Criação de Sessões
 *Focado na inteligência de como o orquestrador vasculha os repositórios à procura de débitos técnicos.*
@@ -220,6 +250,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [x] Auto-modificar o arquivo `ROADMAP.md` via pull request para injetar a nova feature nas seções apropriadas após revisão humana.
     - [x] Abrir uma Issue no repositório vinculando a nova feature do roadmap, já populada com Critérios de Aceite gerados pela IA.
     - [x] Implementar mecanismo de controle para evitar loops infinitos de geração de tarefas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Melhoria do Prompt P.O. com Base de Conhecimento Vetorial".
+
+- [ ] **Feature: Melhoria do Prompt P.O. com Base de Conhecimento Vetorial**
+  - **Descrição:** O motor de geração atual utiliza um prompt fixo e depende exclusivamente do título e descrição da task anterior. Para aprimorar a profundidade e relevância das novas features criadas, introduziremos uma camada de RAG (Retrieval-Augmented Generation) integrando uma base de dados vetorial de histórico de projetos e boas práticas.
+  - **Critérios de Aceite:**
+    - [ ] Integrar a biblioteca de client para banco vetorial (ex. Milvus ou Qdrant).
+    - [ ] Modificar o `POService` para realizar buscas na base vetorial utilizando embeddings do gatilho e do contexto da tarefa concluída.
+    - [ ] Ajustar o prompt de geração para injetar até três "lições aprendidas" ou "boas práticas similares" recuperadas da busca vetorial.
+    - [ ] Testar a consistência dos resultados gerados (com IA usando temperatura baixa) e criar suite de testes isolada para o novo método enriquecido do `POService`.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Interface de Administração do Conhecimento P.O.".
 
 - [ ] **Feature: Integração do Parser de Roadmap com o Gerenciador de Issues do GitHub**
   - **Descrição:** Uma vez que o parser detectou mudanças e gerou uma nova task, o sistema precisa integrar-se diretamente com o GitHub para criar uma nova Issue oficial no repositório. Isso garante rastreabilidade e visibilidade para todos os desenvolvedores. A nova funcionalidade deve ser robusta o suficiente para mapear o conteúdo Markdown da feature para o formato suportado pelo GitHub, incluindo labels automáticos e designação de milestones se aplicável.
