@@ -143,6 +143,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar fallback caso o modelo primário falhe ou retorne timeout.
     - [ ] Registrar telemetria das escolhas do modelo no console/log.
     - [ ] Testes de integração simulando falha do provedor de IA.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Monitoramento de Custos e Roteamento de IA".
 
 ### ÉPICO 2: Evolução do Revisor de Pull Requests (`review-prs`)
 *Focado na assertividade, contexto e didática dos Code Reviews feitos pelo bot.*
@@ -310,6 +311,36 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Fornecer interface de invalidação manual de entradas de cache problemáticas ou desatualizadas.
     - [ ] Notificar via Slack quando os tokens consumidos pela plataforma alcançarem cotas financeiras de orçamento definidas.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Políticas de Retenção e Expiração Inteligente de Embeddings no Cache Vetorial".
+
+### ÉPICO 6: Conhecimento Institucional e Documentação Autônoma
+*Focado em garantir que o conhecimento técnico sobre a aplicação seja perene, acessível e sempre atualizado pelo próprio orquestrador de forma autônoma, dispensando a documentação manual massiva.*
+
+- [ ] **Feature: Geração Autônoma de Arquitetura Viva (C4 Model)**
+  - **Descrição:** O ecossistema está crescendo rapidamente e mapas mentais estáticos ficam obsoletos. Esta feature introduz um gerador dinâmico de documentação arquitetural. O orquestrador irá varrer os repositórios alvos para mapear os serviços, bancos de dados, conexões e fluxos, gerando diagramas usando a notação do C4 Model, sendo versionados em formato "como código" (e.g. PlantUML ou Mermaid). Essa iniciativa tornará a base de conhecimento institucional mais rica e acessível para novos desenvolvedores, garantindo a governança técnica.
+  - **Critérios de Aceite:**
+    - [ ] Criar um scanner que percorre dependências de `package.json`, `docker-compose.yaml` e arquivos de infraestrutura (Terraform/Kubernetes).
+    - [ ] Traduzir essas dependências e conexões em diagramas de Contexto e Containers (C4 Model) utilizando a linguagem PlantUML ou Mermaid, de forma programática.
+    - [ ] O diagrama deve ser atualizado automaticamente em um arquivo `ARCHITECTURE.md` via Pull Request sempre que ocorrerem mudanças estruturais no projeto principal ou no seu próprio orquestrador.
+    - [ ] O processo de atualização não deve sobrescrever anotações manuais dos engenheiros na documentação, garantindo coexistência pacífica e merge inteligente de seções.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Documentação de API Autônoma e Testável".
+
+- [ ] **Feature: Documentação de API Autônoma e Testável**
+  - **Descrição:** Dando continuidade à Arquitetura Viva, as APIs expostas pelos microsserviços devem ter seus contratos mantidos estritamente sob supervisão da IA. O orquestrador vasculhará arquivos de roteamento e controladores, deduzirá as interfaces de entrada e saída (DTOs) com base no AST ou tipagens TypeScript/Pydantic, e gerará ou atualizará especificações OpenAPI (Swagger) automaticamente.
+  - **Critérios de Aceite:**
+    - [ ] Implementar a leitura dos *controllers/routers* das aplicações, suportando inicialmente Express e FastAPI, para extração de rotas, métodos (GET/POST) e *payloads*.
+    - [ ] Gerar ou atualizar arquivos `openapi.yaml` garantindo conformidade com a especificação OpenAPI 3.0.
+    - [ ] Adicionar um estágio no CI/CD gerado pelo orquestrador que testa automaticamente as respostas da API contra o contrato gerado usando ferramentas como Dredd ou Postman Newman, bloqueando merges de PRs que quebrem os contratos.
+    - [ ] Se o PR quebrar o contrato sem intenção declarada, o agente autônomo P.O. ou de Self-Healing deverá deixar um comentário ou sugerir uma correção autônoma revertendo ou ajustando os DTOs.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Chatbot Institucional para Onboarding e Consultas de Arquitetura".
+
+- [ ] **Feature: Chatbot Institucional para Onboarding e Consultas de Arquitetura**
+  - **Descrição:** Aproveitando os dados da base vetorial do ÉPICO 3, os diagramas de Arquitetura Viva e a especificação OpenAPI, será criado um agente de conhecimento focado nos desenvolvedores. Este Chatbot (via Slack ou Web) permitirá que membros da equipe, principalmente em *onboarding*, façam perguntas sobre o ecossistema, regras de negócios documentadas no ROADMAP ou arquitetura, respondendo baseando-se única e exclusivamente nos repositórios internos e documentações geradas ativamente.
+  - **Critérios de Aceite:**
+    - [ ] Indexar a documentação de arquitetura, `ROADMAP.md` e o código dos microsserviços em uma base vetorial leve atualizada de forma periódica.
+    - [ ] Criar uma interface conversacional (integração direta no Slack/Teams ou CLI própria).
+    - [ ] As respostas fornecidas pelo Chatbot devem ser sempre concisas e conter links para a documentação ou linhas de código (referências da fonte) de onde a informação foi extraída, aumentando a confiabilidade (RAG com citações).
+    - [ ] Monitorar perguntas não respondidas ou onde o Chatbot demonstrou incerteza. Isso deve gerar alertas para o P.O. ou desenvolvedores mais experientes enriquecerem a documentação.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração de Vídeos Explicativos (Screen-cast) via IA para Novas Features Documentadas".
 
 ---
 
