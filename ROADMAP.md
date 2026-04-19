@@ -344,6 +344,69 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
 
 ---
 
+
+### ÉPICO 7: Expansão do Ecossistema de Testes (QA Autônomo)
+*Foco na automação avançada de testes, garantindo qualidade extrema e ausência de regressões em fluxos complexos.*
+
+- [ ] **Feature: Execução Autônoma de Testes E2E com Playwright**
+  - **Descrição:** Para garantir que as integrações visuais e fluxos complexos de interface (quando aplicáveis) não sofram regressão, o orquestrador deve gerar e executar testes End-to-End (E2E) dinamicamente utilizando Playwright, validando o impacto de mudanças de PRs diretamente em ambientes efêmeros.
+  - **Critérios de Aceite:**
+    - [ ] Integrar a biblioteca Playwright para instanciar navegadores em modo headless no ambiente temporário.
+    - [ ] Criar um motor que leia os casos de uso ou especificações e gere scripts de teste no padrão Playwright.
+    - [ ] Executar a suíte gerada contra a branch em revisão, capturando artefatos como screenshots ou vídeos das falhas.
+    - [ ] Postar comentários ricos no PR em caso de quebra de fluxo E2E, contendo o log e anexando a mídia gerada.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Testes de Regressão Visual no Pipeline de E2E".
+
+- [ ] **Feature: Integração de Testes de Regressão Visual no Pipeline de E2E**
+  - **Descrição:** Após a estabilização do Playwright, o orquestrador deve identificar mudanças visuais não-intencionais. Esta feature estende os testes E2E adicionando comparações pixel-a-pixel entre o branch atual e o main, atuando como um QA visual automatizado.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar engine de comparação de imagens (ex: pixelmatch) acoplada aos testes E2E do Playwright.
+    - [ ] Definir baselines para telas/componentes críticos e salvá-los no artefato do repositório alvo.
+    - [ ] Se um PR alterar o visual de forma maior que o *threshold* permitido, a IA deve analisar se a mudança foi intencional (baseada no diff do CSS/HTML).
+    - [ ] Criar relatório visual no GitHub informando "Mudança Visual Detectada" com o overlay de diferença entre a baseline e a nova versão.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação de Testes de Mutação Autônomos (Mutation Testing)".
+
+- [ ] **Feature: Implementação de Testes de Mutação Autônomos (Mutation Testing)**
+  - **Descrição:** Testes unitários com 100% de cobertura podem esconder falsos positivos. Para validar a qualidade dos testes unitários e de integração, o orquestrador introduzirá ferramentas de testes de mutação (ex: Stryker Mutator) de forma autônoma para garantir que a suíte de testes realmente falhe quando o código de negócios for sabotado.
+  - **Critérios de Aceite:**
+    - [ ] Integrar e configurar dinamicamente o Stryker Mutator (ou equivalente para Python/TS) nos repositórios alvo.
+    - [ ] Executar a suíte de mutação de forma assíncrona devido ao alto custo computacional.
+    - [ ] Utilizar a IA para ler o relatório de mutação e apontar quais testes são fracos (sobrevivem à mutação) nos PRs ou Issues criadas.
+    - [ ] Opcionalmente, o agente de IA P.O. pode sugerir PRs com novos testes reforçados para cobrir mutantes sobreviventes.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Consolidado de Saúde do QA Autônomo e Confiabilidade de Testes".
+
+### ÉPICO 8: Observabilidade e FinOps Autônomo
+*Foco no gerenciamento inteligente da infraestrutura e otimização de custos e recursos.*
+
+- [ ] **Feature: Scale-to-Zero Inteligente de Workspaces Efêmeros**
+  - **Descrição:** Manter workspaces provisionados quando não há PRs ou jobs ativos desperdiça recursos no cluster. O orquestrador implementará políticas agressivas de scale-to-zero, suspendendo pods e liberando volumes imediatamente após o processamento, escalando de volta apenas via Webhook sob demanda.
+  - **Critérios de Aceite:**
+    - [ ] Configurar os manifestos do ArgoCD/Kustomize e do job runner para operar em modo de escala reativa.
+    - [ ] Criar um "Scale Manager" que monitore a fila de PRs/Issues pendentes.
+    - [ ] Desalocar volumes persistentes não utilizados após um período de TTL (Time to Live) configurável (ex: 30 minutos).
+    - [ ] Medir a redução no consumo de memória e CPU e gerar log estruturado indicando a economia obtida.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Monitoramento Preditivo de Anomalias no Consumo de Recursos".
+
+- [ ] **Feature: Monitoramento Preditivo de Anomalias no Consumo de Recursos**
+  - **Descrição:** Usando os dados coletados de observabilidade, o orquestrador identificará padrões anormais de uso da infraestrutura ou explosão no custo de APIs de IA antes que afetem financeiramente o projeto. Modelos preditivos simples serão usados para antecipar esgotamento de *budgets* ou falhas de disco.
+  - **Critérios de Aceite:**
+    - [ ] Coletar métricas agregadas de Prometheus ou Datadog referentes a CPU, Memória e custo por token de IA.
+    - [ ] Estabelecer baselines de consumo normal baseados em dados de 7/14 dias (Análise de Séries Temporais básica).
+    - [ ] Disparar alertas (Telegram/Slack) quando a previsão matemática indicar estouro de cota financeira em menos de 48 horas.
+    - [ ] Adicionar um mecanismo de *Circuit Breaker* que pause os cronjobs pesados caso uma anomalia severa seja confirmada.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Relatórios de FinOps e Budget Mensal".
+
+- [ ] **Feature: Geração Autônoma de Relatórios de FinOps e Budget Mensal**
+  - **Descrição:** A responsabilidade financeira do projeto precisa ser transparente. O P.O. autônomo irá atuar como gestor financeiro, gerando relatórios de fechamento mensal que discriminam os custos dos recursos provisionados e as economias geradas (por cache, scale-to-zero, etc) em formato acessível aos stakeholders.
+  - **Critérios de Aceite:**
+    - [ ] Criar uma rotina agendada (Cron) rodando no primeiro dia útil de cada mês.
+    - [ ] Consolidar os dados do Painel de Métricas de Economia de Tokens e as estatísticas do Scale-to-Zero.
+    - [ ] Compilar um relatório em PDF ou mensagem longa e rica informando: Custo total estimado, Economia Gerada e RoI de eficiência do Orquestrador.
+    - [ ] Notificar de forma sumária o canal gerencial via webhook.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de APIs de Provedores de Cloud para Faturamento Dinâmico no Relatório".
+
+---
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
