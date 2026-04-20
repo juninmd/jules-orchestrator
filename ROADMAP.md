@@ -405,6 +405,27 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Notificar de forma sumária o canal gerencial via webhook.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de APIs de Provedores de Cloud para Faturamento Dinâmico no Relatório".
 
+### ÉPICO 9: Integração de LLMs Open-Source e Edge Computing
+*Focado em reduzir dependência de APIs proprietárias (como OpenAI/Anthropic) e permitir a execução do orquestrador em ambientes isolados.*
+
+- [ ] **Feature: Suporte Nativo a Modelos Locais via Ollama/vLLM**
+  - **Descrição:** Integrar de forma profunda e resiliente a capacidade de inferir usando modelos locais hospedados no próprio cluster, garantindo que repositórios com dados sensíveis possam ser analisados sem que o código saia da rede corporativa.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver a interface de provedor `LocalAIProvider` estendendo a infraestrutura atual para conectar com a API do Ollama e vLLM.
+    - [ ] Implementar verificação de *health check* do modelo local antes de despachar jobs pesados, com fallback configurável.
+    - [ ] Atualizar o `AIRouterService` para priorizar o modelo local caso o nível de confidencialidade do repositório seja marcado como alto.
+    - [ ] Escrever testes unitários para a classe `LocalAIProvider` cobrindo cenários de timeout e resposta incompleta.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Monitoramento de Performance de Inferência Local".
+
+- [ ] **Feature: Cache Híbrido de Embeddings na Edge**
+  - **Descrição:** Para acelerar ainda mais o fluxo de P.O. e Self-Healing, implementar um mecanismo de cache na *edge* (como no Cloudflare Workers ou Redis no cluster local) que faça a correspondência de similaridade semântica antes de acionar modelos maiores, otimizando o tempo de resposta drasticamente.
+  - **Critérios de Aceite:**
+    - [ ] Configurar conexão com um banco Redis com módulo Redisearch habilitado no manifesto do k3s.
+    - [ ] Implementar o serviço de cache que gera e armazena embeddings de prompts comuns e resultados de heurística.
+    - [ ] Garantir que chamadas ao modelo sejam interceptadas e respondidas via cache se a similaridade for superior a 95%.
+    - [ ] Criar log de auditoria explícito informando quando uma resposta foi originada do cache na Edge.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Invalidação Autônoma de Cache Semântico por Contexto".
+
 ---
 
 ## 📝 Gestão do Documento e Próximos Passos
