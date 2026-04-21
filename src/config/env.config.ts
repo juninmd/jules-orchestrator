@@ -5,6 +5,8 @@ dotenv.config();
 const envSchema = z.object({
   OLLAMA_HOST: z.string().url().optional(),
   OLLAMA_MODEL: z.string().optional(),
+  OLLAMA_TIMEOUT_MS: z.coerce.number().default(300_000),
+  ORCHESTRATOR_STATE_DIR: z.string().optional(),
   GITHUB_TOKEN: z.string().optional(),
   JULES_API_URL: z.union([z.string().url(), z.literal('')]).optional(),
   JULES_API_KEY: z.string().optional(),
@@ -20,6 +22,8 @@ function parseTargetRepositories(targetRepo: string | undefined): string[] {
 export interface RuntimeEnv {
   OLLAMA_HOST: string;
   OLLAMA_MODEL: string;
+  OLLAMA_TIMEOUT_MS: number;
+  ORCHESTRATOR_STATE_DIR: string;
   GITHUB_TOKEN: string;
   JULES_API_URL: string;
   JULES_API_KEY: string;
@@ -35,6 +39,8 @@ function readEnv(source: NodeJS.ProcessEnv): RuntimeEnv {
   return {
     OLLAMA_HOST: parsed.OLLAMA_HOST || 'http://localhost:11434',
     OLLAMA_MODEL: parsed.OLLAMA_MODEL || 'gemma2',
+    OLLAMA_TIMEOUT_MS: parsed.OLLAMA_TIMEOUT_MS,
+    ORCHESTRATOR_STATE_DIR: parsed.ORCHESTRATOR_STATE_DIR?.trim() || '.orchestrator-state',
     GITHUB_TOKEN: parsed.GITHUB_TOKEN?.trim() || '',
     JULES_API_URL: parsed.JULES_API_URL?.trim() || '',
     JULES_API_KEY: parsed.JULES_API_KEY?.trim() || '',

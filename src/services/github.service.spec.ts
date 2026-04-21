@@ -9,6 +9,7 @@ const {
   mockPullsCreate,
   mockCreateComment,
   mockListForRepo,
+  mockCreateIssue,
   mockAddLabels,
   mockRemoveLabel,
   mockGetContent,
@@ -24,6 +25,7 @@ const {
   mockPullsCreate: vi.fn().mockResolvedValue({ data: { number: 99 } }),
   mockCreateComment: vi.fn(),
   mockListForRepo: vi.fn().mockResolvedValue({ data: [] }),
+  mockCreateIssue: vi.fn().mockResolvedValue({ data: { number: 321 } }),
   mockAddLabels: vi.fn(),
   mockRemoveLabel: vi.fn().mockResolvedValue(undefined),
   mockGetContent: vi.fn(),
@@ -47,6 +49,7 @@ vi.mock('@octokit/rest', () => ({
     };
     issues = {
       createComment: mockCreateComment,
+      create: mockCreateIssue,
       listComments: mockListComments,
       listForRepo: mockListForRepo,
       addLabels: mockAddLabels,
@@ -190,6 +193,41 @@ describe('GithubService', () => {
     it('returns PR number', async () => {
       const num = await service.createPullRequest('juninmd/api', 'Title', 'Body', 'feat/x');
       expect(num).toBe(99);
+    });
+  });
+
+  describe('createIssueFromFeature', () => {
+    it('creates a feature issue when no duplicate exists', async () => {
+      mockListForRepo.mockResolvedValue({ data: [] });
+
+      const result = await service.createIssueFromFeature('juninmd/api', {
+        title: 'Feature: Dashboard',
+        body: 'body',
+        labels: ['enhancement']
+      });
+
+      expect(result).toEqual({ number: 321, created: true });
+      expect(mockCreateIssue).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'Feature: Dashboard',
+          labels: ['enhancement']
+        })
+      );
+    });
+
+    it('reuses an open issue with the same title', async () => {
+      mockListForRepo.mockResolvedValue({
+        data: [{ number: 7, title: 'Feature: Dashboard', body: '', pull_request: undefined }]
+      });
+
+      const result = await service.createIssueFromFeature('juninmd/api', {
+        title: 'Feature: Dashboard',
+        body: 'body',
+        labels: ['enhancement']
+      });
+
+      expect(result).toEqual({ number: 7, created: false });
+      expect(mockCreateIssue).not.toHaveBeenCalled();
     });
   });
 

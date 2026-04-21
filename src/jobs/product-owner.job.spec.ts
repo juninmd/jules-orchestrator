@@ -6,6 +6,7 @@ const {
   mockCreateBranch,
   mockCreateOrUpdateFile,
   mockCreatePullRequest,
+  mockCreateIssueFromFeature,
   mockSendMessage,
   mockExtractTasks,
   mockGenerateNewFeature
@@ -15,6 +16,7 @@ const {
   mockCreateBranch: vi.fn(),
   mockCreateOrUpdateFile: vi.fn(),
   mockCreatePullRequest: vi.fn().mockResolvedValue(42),
+  mockCreateIssueFromFeature: vi.fn().mockResolvedValue({ number: 77, created: true }),
   mockSendMessage: vi.fn(),
   mockExtractTasks: vi.fn().mockReturnValue([]),
   mockGenerateNewFeature: vi.fn().mockResolvedValue('## New Feature')
@@ -27,6 +29,7 @@ vi.mock('../services/github.service.js', () => {
     this.createBranch = mockCreateBranch;
     this.createOrUpdateFile = mockCreateOrUpdateFile;
     this.createPullRequest = mockCreatePullRequest;
+    this.createIssueFromFeature = mockCreateIssueFromFeature;
   }
   return { GithubService };
 });
@@ -82,6 +85,10 @@ describe('runProductOwnerJob', () => {
     await runProductOwnerJob();
 
     expect(mockGenerateNewFeature).toHaveBeenCalledWith('CI/CD Setup', 'Pipeline', 'Deploy automático');
+    expect(mockCreateIssueFromFeature).toHaveBeenCalledWith(
+      'juninmd/api',
+      expect.objectContaining({ title: 'Feature: Deploy automático' })
+    );
     expect(mockCreateBranch).toHaveBeenCalledWith('juninmd/api', expect.stringContaining('feat/roadmap-'));
     expect(mockCreatePullRequest).toHaveBeenCalled();
     expect(mockSendMessage).toHaveBeenCalledWith(expect.stringContaining('PR #42'));

@@ -4,13 +4,31 @@ import { GithubService } from '../services/github.service.js';
 import { TelegramService } from '../services/telegram.service.js';
 import { env } from '../config/env.config.js';
 import { logger } from '../services/logger.service.js';
+import { RoadmapFeatureIssue } from '../contracts/orchestration.js';
 
 const ROADMAP_FILE = 'ROADMAP.md';
+const ROADMAP_ISSUE_LABELS = ['enhancement', 'AI-generated', 'autocreated'];
+
+function toRoadmapFeatureIssue(task: RoadmapTask, generatedFeatureMarkdown: string): RoadmapFeatureIssue {
+  return {
+    title: `Feature: ${task.trigger}`,
+    body: [
+      'Feature gerada automaticamente pelo P.O. autônomo a partir de um gatilho concluído no ROADMAP.',
+      '',
+      `Tarefa concluída: ${task.title}`,
+      '',
+      generatedFeatureMarkdown
+    ].join('\n'),
+    labels: ROADMAP_ISSUE_LABELS
+  };
+}
 
 async function processTaskAndInjectFeature(
   task: RoadmapTask,
   roadmapContent: string,
-  poService: POService
+  poService: POService,
+  githubService: GithubService,
+  repository: string
 ): Promise<{ modifiedContent: string; modificationsMade: boolean }> {
   const taskAlreadyExists = roadmapContent.includes(`**Feature: ${task.trigger}**`);
   if (taskAlreadyExists) return { modifiedContent: roadmapContent, modificationsMade: false };
@@ -23,6 +41,11 @@ async function processTaskAndInjectFeature(
       task.description,
       task.trigger!
     );
+    const issue = await githubService.createIssueFromFeature(
+      repository,
+      toRoadmapFeatureIssue(task, newFeatureMarkdown)
+    );
+    logger.info('PO', `Issue #${issue.number} ${issue.created ? 'criada' : 'reutilizada'} para '${task.trigger}'`);
 
     let updatedContent = roadmapContent;
     const injectionPoint = '## 📝 Gestão do Documento e Próximos Passos';
@@ -68,7 +91,13 @@ export async function runProductOwnerJob() {
 
       for (const task of tasks) {
         if (task.completed && task.trigger) {
-          const { modifiedContent, modificationsMade } = await processTaskAndInjectFeature(task, roadmapContent, poService);
+          const { modifiedContent, modificationsMade } = await processTaskAndInjectFeature(
+            task,
+            roadmapContent,
+            poService,
+            githubService,
+            repo
+          );
           roadmapContent = modifiedContent;
           if (modificationsMade) hasModifications = true;
         }

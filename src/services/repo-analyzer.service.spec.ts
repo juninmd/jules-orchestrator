@@ -46,7 +46,8 @@ vi.mock('../config/env.config.js', () => ({
   env: {
     GITHUB_TOKEN: 'fake-token',
     OLLAMA_HOST: 'http://ollama:11434',
-    OLLAMA_MODEL: 'gemma2'
+    OLLAMA_MODEL: 'gemma2',
+    OLLAMA_TIMEOUT_MS: 300_000
   }
 }));
 

@@ -8,6 +8,7 @@ import { GithubService } from './github.service.js';
 import { createWorkspacePath } from './workspace-path.service.js';
 import { safeGitClone } from './git-helper.service.js';
 import { logger } from './logger.service.js';
+import { StaticAnalysisService } from './static-analysis.service.js';
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.js', '.tsx', '.jsx', '.py', '.go', '.java', '.cs', '.rb', '.php']);
 const IGNORE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next', 'vendor', '__pycache__', 'coverage']);
@@ -41,9 +42,11 @@ async function collectSourceFiles(dir: string, maxChars = 6000): Promise<string>
 
 export class RepoAnalyzerService {
   private githubService: GithubService;
+  private staticAnalysisService: StaticAnalysisService;
 
   constructor() {
     this.githubService = new GithubService();
+    this.staticAnalysisService = new StaticAnalysisService();
   }
 
   async analyzeRepoAndGeneratePrompt(repository: string): Promise<string | null> {
@@ -78,9 +81,15 @@ ${prTitles}
 
       logger.info(repoName, 'Lendo arquivos fonte...');
       const sourceCode = await collectSourceFiles(clonePath);
+      const staticReport = await this.staticAnalysisService.analyzeRepository(repository, clonePath);
+      const staticContext = this.staticAnalysisService.formatForPrompt(staticReport);
 
       const prompt = `Você é um engenheiro sênior revisando o código abaixo em busca de oportunidades de refatoração.
 ${prMemoryContext}
+--- RELATÓRIO ESTÁTICO DETERMINÍSTICO ---
+${staticContext}
+--- FIM DO RELATÓRIO ---
+
 --- CÓDIGO FONTE ---
 ${sourceCode}
 --- FIM DO CÓDIGO ---
@@ -94,7 +103,7 @@ Se estiver tudo perfeito ou tudo já coberto pelos PRs, responda EXATAMENTE: 'NE
         model: ollama(env.OLLAMA_MODEL) as Parameters<typeof generateText>[0]['model'],
         prompt,
         maxRetries: 0,
-        abortSignal: AbortSignal.timeout(180_000)
+        abortSignal: AbortSignal.timeout(env.OLLAMA_TIMEOUT_MS)
       });
 
       await fs.rm(clonePath, { recursive: true, force: true });

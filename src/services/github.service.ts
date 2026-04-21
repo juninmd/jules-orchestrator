@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { env } from '../config/env.config.js';
+import { RoadmapFeatureIssue } from '../contracts/orchestration.js';
 
 export class GithubService {
   private octokit: Octokit;
@@ -15,6 +16,22 @@ export class GithubService {
   private splitRepo(repository: string) {
     const [owner, repo] = repository.split('/');
     return { owner, repo };
+  }
+
+  private async findOpenIssueByTitle(repository: string, title: string): Promise<number | null> {
+    const { owner, repo } = this.splitRepo(repository);
+    const { data } = await this.octokit.issues.listForRepo({
+      owner,
+      repo,
+      state: 'open',
+      per_page: 100
+    });
+
+    const normalizedTitle = title.trim().toLowerCase();
+    const existing = data.find(issue =>
+      !issue.pull_request && issue.title.trim().toLowerCase() === normalizedTitle
+    );
+    return existing?.number ?? null;
   }
 
   async getOpenPullRequests(repository: string): Promise<{ number: number; title: string, body: string }[]> {
@@ -218,5 +235,23 @@ export class GithubService {
     const { owner, repo } = this.splitRepo(repository);
     const { data } = await this.octokit.pulls.create({ owner, repo, title, body, head, base });
     return data.number;
+  }
+
+  async createIssueFromFeature(repository: string, feature: RoadmapFeatureIssue): Promise<{ number: number; created: boolean }> {
+    const existingIssueNumber = await this.findOpenIssueByTitle(repository, feature.title);
+    if (existingIssueNumber) {
+      return { number: existingIssueNumber, created: false };
+    }
+
+    const { owner, repo } = this.splitRepo(repository);
+    const { data } = await this.octokit.issues.create({
+      owner,
+      repo,
+      title: feature.title,
+      body: feature.body,
+      labels: feature.labels
+    });
+
+    return { number: data.number, created: true };
   }
 }

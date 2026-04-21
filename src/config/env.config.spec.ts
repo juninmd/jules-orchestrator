@@ -9,6 +9,8 @@ describe('parseEnv', () => {
 
     expect(parsed.OLLAMA_HOST).toBe('http://localhost:11434');
     expect(parsed.OLLAMA_MODEL).toBe('gemma2');
+    expect(parsed.OLLAMA_TIMEOUT_MS).toBe(300_000);
+    expect(parsed.ORCHESTRATOR_STATE_DIR).toBe('.orchestrator-state');
     expect(parsed.JULES_API_URL).toBe('');
     expect(parsed.JULES_API_KEY).toBe('');
     expect(parsed.TARGET_REPOSITORIES).toEqual([]);
@@ -33,5 +35,16 @@ describe('parseEnv', () => {
       'juninmd/api',
       'juninmd/web'
     ]);
+  });
+
+  it('parses operational runtime knobs', () => {
+    const parsed = parseEnv({
+      GITHUB_TOKEN: 'gh-token',
+      OLLAMA_TIMEOUT_MS: '120000',
+      ORCHESTRATOR_STATE_DIR: 'data/orchestrator'
+    });
+
+    expect(parsed.OLLAMA_TIMEOUT_MS).toBe(120_000);
+    expect(parsed.ORCHESTRATOR_STATE_DIR).toBe('data/orchestrator');
   });
 });
