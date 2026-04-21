@@ -426,6 +426,18 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Criar log de auditoria explícito informando quando uma resposta foi originada do cache na Edge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Invalidação Autônoma de Cache Semântico por Contexto".
 
+### ÉPICO 10: Governança, Compliance e Auditoria de Ações de IA
+*Focado em garantir rastreabilidade irrefutável, responsabilidade e conformidade legal sobre todas as decisões autônomas tomadas pelo orquestrador no código e infraestrutura.*
+
+- [ ] **Feature: Trilha de Auditoria Imutável de Decisões de IA (AI Audit Trail)**
+  - **Descrição:** À medida que o orquestrador toma decisões autônomas críticas (como aplicar self-healing em produção, aprovar PRs ou gerar código novo), é imperativo que exista um registro imutável do raciocínio da IA (prompt, contexto, e inferência resultante) para auditorias de segurança e compliance (ex: SOC2, ISO 27001). Esta feature implementa um registro estruturado, assinado e persistente que pode atestar "o porquê" de cada ação.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `AIAuditLogService` para registrar sistematicamente o timestamp, ID da sessão, prompt original, modelo utilizado e resposta gerada.
+    - [ ] Armazenar os logs em um datastore *append-only* ou banco de dados com versionamento estrito.
+    - [ ] Assinar criptograficamente cada entrada de log para garantir que o histórico de decisões não foi adulterado pós-incidente.
+    - [ ] Fornecer um endpoint `/api/audit` que permita exportar logs de decisões por repositório ou por job, filtrando por nível de criticidade de ação (ex: "Critical: Self-Healing", "Low: Code Review").
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Compliance e Revisão Humana de Auditoria".
+
 ---
 
 ## 📝 Gestão do Documento e Próximos Passos
