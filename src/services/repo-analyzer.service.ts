@@ -11,6 +11,7 @@ import { logger } from './logger.service.js';
 import { StaticAnalysisService } from './static-analysis.service.js';
 
 const SOURCE_EXTENSIONS = new Set(['.ts', '.js', '.tsx', '.jsx', '.py', '.go', '.java', '.cs', '.rb', '.php']);
+const PRODUCT_CONTEXT_FILES = new Set(['README.md', 'ROADMAP.md', 'package.json', 'pyproject.toml', 'go.mod', 'Dockerfile']);
 const IGNORE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next', 'vendor', '__pycache__', 'coverage']);
 
 async function collectSourceFiles(dir: string, maxChars = 6000): Promise<string> {
@@ -26,7 +27,7 @@ async function collectSourceFiles(dir: string, maxChars = 6000): Promise<string>
       const full = path.join(current, entry.name);
       if (entry.isDirectory()) {
         await walk(full);
-      } else if (SOURCE_EXTENSIONS.has(path.extname(entry.name))) {
+      } else if (SOURCE_EXTENSIONS.has(path.extname(entry.name)) || PRODUCT_CONTEXT_FILES.has(entry.name)) {
         const content = await fs.readFile(full, 'utf-8').catch(() => '');
         const relative = path.relative(dir, full);
         const snippet = `\n--- ${relative} ---\n${content}`;
@@ -84,7 +85,7 @@ ${prTitles}
       const staticReport = await this.staticAnalysisService.analyzeRepository(repository, clonePath);
       const staticContext = this.staticAnalysisService.formatForPrompt(staticReport);
 
-      const prompt = `Você é um engenheiro sênior revisando o código abaixo em busca de oportunidades de refatoração.
+      const prompt = `Você é um staff engineer e product strategist montando a próxima sessão de trabalho para um time de desenvolvimento autônomo coordenado pelo Jules da Google.
 ${prMemoryContext}
 --- RELATÓRIO ESTÁTICO DETERMINÍSTICO ---
 ${staticContext}
@@ -94,8 +95,13 @@ ${staticContext}
 ${sourceCode}
 --- FIM DO CÓDIGO ---
 
-Retorne UNICAMENTE UM parágrafo descrevendo a principal refatoração de Clean Code (SOLID/DRY/KISS) a ser feita e em qual arquivo, que ainda não esteja coberta pelos PRs ignorados acima.
-Se estiver tudo perfeito ou tudo já coberto pelos PRs, responda EXATAMENTE: 'NENHUMA AÇÃO NECESSÁRIA' e nada mais.`;
+Decida a próxima sessão como um roadmap coerente com a ideia do projeto:
+1. Primeiro, identifique bloqueios que impedem o projeto de ficar funcional.
+2. Depois, escolha débito técnico real que atrapalha evolução, manutenção ou deploy.
+3. Por fim, proponha evolução de produto alinhada ao README/ROADMAP/código.
+
+Retorne UNICAMENTE UM parágrafo em português descrevendo a sessão que o Jules deve executar, incluindo objetivo, arquivos/áreas prováveis e critérios de aceite. A sessão precisa estar fora dos PRs ignorados acima.
+Se não houver uma próxima ação útil, ou tudo já estiver coberto pelos PRs, responda EXATAMENTE: 'NENHUMA AÇÃO NECESSÁRIA' e nada mais.`;
 
       logger.info(repoName, 'Analisando via Ollama...');
       const ollama = createOllama({ baseURL: env.OLLAMA_HOST + '/api' });

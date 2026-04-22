@@ -1,4 +1,5 @@
 import { env } from '../config/env.config.js';
+import { composeJulesDevelopmentPrompt } from './development-team.service.js';
 
 export interface JulesInvokePayload {
   issueUrl?: string; // Optional: we might just pass the github issue URL
@@ -9,6 +10,7 @@ export interface JulesInvokePayload {
 export class JulesService {
   public async invokeSession(payload: JulesInvokePayload): Promise<void> {
     const url = env.JULES_API_URL;
+    const prompt = composeJulesDevelopmentPrompt(payload.repository, payload.prompt);
     
     if (!url) {
       console.log(`[JulesService] Monitor: Sessão do Jules simulada com sucesso para ${payload.repository}. (URL não configurada)`);
@@ -25,14 +27,14 @@ export class JulesService {
           'X-Goog-Api-Key': env.JULES_API_KEY
         },
         body: JSON.stringify({
-          prompt: payload.prompt,
+          prompt,
           sourceContext: {
             source: `sources/github/${payload.repository}`,
             githubRepoContext: {
               startingBranch: "master"
             }
           },
-          title: "Melhoria Automática - Jules Orchestrator"
+          title: "Jules Orchestrator - Autonomous Development Session"
         })
       });
 

@@ -36,6 +36,21 @@ describe('JulesService', () => {
     );
   });
 
+  it('wraps every session with autonomous development team contract', async () => {
+    mockFetch.mockResolvedValue({ ok: true } as Response);
+
+    await service.invokeSession({
+      repository: 'juninmd/api',
+      prompt: 'Fix the bug'
+    });
+
+    const body = JSON.parse((mockFetch.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.prompt).toContain('time de desenvolvimento autônomo');
+    expect(body.prompt).toContain('roadmap');
+    expect(body.prompt).toContain('Fix the bug');
+    expect(body.title).toContain('Autonomous Development Session');
+  });
+
   it('throws on non-ok response', async () => {
     mockFetch.mockResolvedValue({ ok: false, statusText: 'Bad Request' } as Response);
 

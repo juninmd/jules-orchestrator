@@ -15,15 +15,21 @@ export class AIRouterService {
     try {
       const result = await generateText({
         model: this.ollama(env.OLLAMA_MODEL) as Parameters<typeof generateText>[0]['model'],
-        prompt: `Analise as necessidades de melhoria do projeto e execute os comandos mais eficientes.
+        prompt: `Você é o coordenador técnico de um time de desenvolvimento autônomo.
+Analise a necessidade abaixo e decida se ela deve virar uma sessão real do Jules da Google.
+
 CONTEXTO: ${context}
-Se precisar de código no github, crie uma issue.
-Se precisar acordar o agente Jules para já resolver, chame o agente.`,
+
+Critérios:
+- Chame o agente Jules quando houver incremento implementável no repositório.
+- A instrução deve ser um plano de sessão completo: objetivo, motivo no roadmap, áreas prováveis, critérios de aceite e validação esperada.
+- Priorize deixar o projeto funcional, eliminar débito técnico que bloqueia evolução e avançar o produto de forma coerente.
+- Não chame o Jules para temas já cobertos por PRs pendentes ou para mudanças vagas sem critério de aceite.`,
         tools: {
           requestJulesAgent: tool({
-            description: 'Instrui a inteligência artificial corporativa (Agente Jules da Google) a implementar uma refatoração em um repositório.',
+            description: 'Instrui o Jules da Google a executar uma sessão autônoma de desenvolvimento em um repositório.',
             parameters: z.object({
-              instruction: z.string().describe('Instrução extremamente detalhada focada no problema com regras SOLID e Arquiteturais.')
+              instruction: z.string().describe('Plano de sessão detalhado com objetivo, coerência de roadmap, arquivos/áreas, critérios de aceite e validação.')
             }),
             execute: async ({ instruction }: { instruction: string }) => {
               await this.julesService.invokeSession({

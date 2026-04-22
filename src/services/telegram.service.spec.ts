@@ -20,8 +20,18 @@ describe('TelegramService', () => {
     await service.sendMessage('Hello');
     expect(fetchSpy).toHaveBeenCalledWith(
       expect.stringContaining('api.telegram.org/bottok/sendMessage'),
-      expect.objectContaining({ method: 'POST' })
+      expect.objectContaining({
+        method: 'POST',
+        body: expect.stringContaining('[jules-orchestrator]')
+      })
     );
+  });
+
+  it('does not duplicate report tag', async () => {
+    fetchSpy.mockResolvedValue({ ok: true } as Response);
+    await service.sendMessage('[jules-orchestrator]\nHello');
+    const body = JSON.parse((fetchSpy.mock.calls[0][1] as RequestInit).body as string);
+    expect(body.text.match(/\[jules-orchestrator\]/g)).toHaveLength(1);
   });
 
   it('does not throw on fetch error', async () => {

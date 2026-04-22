@@ -94,6 +94,15 @@ describe('RepoAnalyzerService.analyzeRepoAndGeneratePrompt', () => {
     );
   });
 
+  it('orienta a análise para roadmap coerente e sessão do Jules', async () => {
+    await service.analyzeRepoAndGeneratePrompt('juninmd/some-repo');
+
+    const call = mockGenerateText.mock.calls[0][0];
+    expect(call.prompt).toContain('Jules da Google');
+    expect(call.prompt).toContain('roadmap coerente');
+    expect(call.prompt).toContain('critérios de aceite');
+  });
+
   it('inclui títulos de PRs abertos no prompt (anti-spam)', async () => {
     mockGetOpenPullRequests.mockResolvedValue([
       { number: 42, title: 'refactor: extract auth logic', body: '' }
