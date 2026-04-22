@@ -438,6 +438,36 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Fornecer um endpoint `/api/audit` que permita exportar logs de decisões por repositório ou por job, filtrando por nível de criticidade de ação (ex: "Critical: Self-Healing", "Low: Code Review").
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Compliance e Revisão Humana de Auditoria".
 
+### ÉPICO 11: Integração de Pipelines de CD Avançados e Deploy Autônomo
+*Focado em conectar o orquestrador ao ciclo de Continuous Deployment, permitindo aprovações de deploy autônomas e rollbacks preditivos baseados em heurísticas e testes.*
+
+- [ ] **Feature: Análise Autônoma de Risco de Deploy (Deploy Risk Assessment)**
+  - **Descrição:** Antes de um deploy ser promovido para produção, o orquestrador deve analisar as métricas do PR, o histórico de falhas dos arquivos modificados e a cobertura de testes para calcular um "Score de Risco". Se o risco for baixo, o orquestrador pode aprovar automaticamente o deploy no ArgoCD/Flux.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `DeployRiskService` para agregar dados do SonarQube, histórico do Git e resultados de testes E2E.
+    - [ ] Implementar uma matriz de peso onde mudanças em configurações de infraestrutura (Terraform/Helm) aumentam o risco exponencialmente.
+    - [ ] Integrar via Webhook com o CI/CD pipeline (ex: GitHub Actions) para injetar o "Score de Risco" como um status check.
+    - [ ] Se o Risco for "A" (muito baixo), aprovar automaticamente a release; caso contrário, requerer aprovação humana.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Direta com ArgoCD para Automação de Sync e Rollback".
+
+- [ ] **Feature: Integração Direta com ArgoCD para Automação de Sync e Rollback**
+  - **Descrição:** O orquestrador não deve apenas avaliar, mas também executar ações no CD. Esta feature introduz a capacidade do agente atuar como operador do ArgoCD, disparando `syncs` de aplicações e observando o status de *health* pós-deploy. Se a aplicação degradar após o sync, o agente realiza o rollback automaticamente.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver `ArgoCDOperatorProvider` utilizando as APIs REST do ArgoCD.
+    - [ ] Escutar eventos de `ApplicationSync` e monitorar a saúde dos pods nos primeiros 10 minutos após o deploy.
+    - [ ] Caso as métricas de latência ou taxa de erro subam no Prometheus/Datadog após o deploy, acionar a reversão para a revisão do Git anterior.
+    - [ ] Notificar a equipe no Slack/Telegram com o detalhamento do motivo do rollback autônomo.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Gestão de Releases e Decisões de CD pelo P.O. Autônomo".
+
+- [ ] **Feature: Dashboard de Gestão de Releases e Decisões de CD pelo P.O. Autônomo**
+  - **Descrição:** Para dar visibilidade às ações de deploy e rollbacks autônomos, o orquestrador deve fornecer um dashboard centralizado ou comentários agregados (Release Notes gerados por IA) nas releases do GitHub.
+  - **Critérios de Aceite:**
+    - [ ] Automatizar a criação de "Release Notes" ricos via LLM sempre que uma nova tag semântica for gerada.
+    - [ ] O Release Note deve destacar não apenas o que mudou, mas também o "Score de Risco" calculado e o tempo de deploy aprovado autônoma ou manualmente.
+    - [ ] Construir endpoint `/api/releases` para consumo de uma futura UI.
+    - [ ] Gerar gráficos simples via markdown das taxas de sucesso/rollback da última sprint.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação de Feature Flags Dinâmicas Controladas por IA".
+
 ---
 
 ## 📝 Gestão do Documento e Próximos Passos
