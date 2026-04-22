@@ -1,4 +1,5 @@
 export const SUPPORTED_JOB_NAMES = [
+  'autopilot',
   'create-sessions',
   'product-owner',
   'resolve-questions',

@@ -1,3 +1,4 @@
+import { runAutopilotJob } from './autopilot.job.js';
 import { runCreateSessionsJob } from './create-sessions.job.js';
 import { runProductOwnerJob } from './product-owner.job.js';
 import { runResolveQuestionsJob } from './resolve-questions.job.js';
@@ -8,6 +9,7 @@ import { SUPPORTED_JOB_NAMES, SupportedJobName } from '../contracts/orchestratio
 import { OrchestratorRuntimeService } from '../services/orchestrator-runtime.service.js';
 
 const jobHandlers = {
+  autopilot: runAutopilotJob,
   'create-sessions': runCreateSessionsJob,
   'product-owner': runProductOwnerJob,
   'resolve-questions': runResolveQuestionsJob,
@@ -17,7 +19,7 @@ const jobHandlers = {
 } as const;
 
 export async function runConfiguredJob(jobName: string | undefined): Promise<SupportedJobName> {
-  const selectedJob = (jobName && SUPPORTED_JOB_NAMES.includes(jobName as SupportedJobName) ? jobName : 'review-prs') as SupportedJobName;
+  const selectedJob = (jobName && SUPPORTED_JOB_NAMES.includes(jobName as SupportedJobName) ? jobName : 'autopilot') as SupportedJobName;
 
   if (!jobName || selectedJob !== jobName) {
     console.warn(`[AVISO] JOB_NAME inválido ou ausente. Executando ${selectedJob} por padrão.`);

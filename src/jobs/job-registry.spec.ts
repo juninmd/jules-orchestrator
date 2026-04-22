@@ -1,6 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
+  runAutopilotJob,
   runCreateSessionsJob,
   runProductOwnerJob,
   runResolveQuestionsJob,
@@ -9,6 +10,7 @@ const {
   runOpsReportJob,
   mockRunJob
 } = vi.hoisted(() => ({
+  runAutopilotJob: vi.fn(),
   runCreateSessionsJob: vi.fn(),
   runProductOwnerJob: vi.fn(),
   runResolveQuestionsJob: vi.fn(),
@@ -20,6 +22,7 @@ const {
   })
 }));
 
+vi.mock('./autopilot.job.js', () => ({ runAutopilotJob }));
 vi.mock('./create-sessions.job.js', () => ({ runCreateSessionsJob }));
 vi.mock('./product-owner.job.js', () => ({ runProductOwnerJob }));
 vi.mock('./resolve-questions.job.js', () => ({ runResolveQuestionsJob }));
@@ -35,6 +38,16 @@ vi.mock('../services/orchestrator-runtime.service.js', () => ({
 import { runConfiguredJob } from './job-registry.js';
 
 describe('runConfiguredJob', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('dispatches the autopilot job', async () => {
+    await runConfiguredJob('autopilot');
+
+    expect(runAutopilotJob).toHaveBeenCalledOnce();
+  });
+
   it('dispatches the resolve-questions job', async () => {
     await runConfiguredJob('resolve-questions');
 
@@ -59,10 +72,10 @@ describe('runConfiguredJob', () => {
     expect(runOpsReportJob).toHaveBeenCalledOnce();
   });
 
-  it('falls back to review-prs for unknown jobs', async () => {
+  it('falls back to autopilot for unknown jobs', async () => {
     await runConfiguredJob('inventei-essa');
 
-    expect(runReviewPrsJob).toHaveBeenCalledOnce();
+    expect(runAutopilotJob).toHaveBeenCalledOnce();
   });
 
   it('wraps the selected job with runtime auditing', async () => {
