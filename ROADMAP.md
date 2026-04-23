@@ -70,6 +70,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Escrever testes unitários que garantam o comportamento compatível multi-OS.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mapeamento Seguro de Workspaces Efêmeros em Clusters Kubernetes".
 
+- [ ] **Feature: Mapeamento Seguro de Workspaces Efêmeros em Clusters Kubernetes**
+  - **Descrição:** Após consolidar o suporte a múltiplos SOs, é fundamental garantir que workspaces sejam efêmeros e mapeados corretamente usando as melhores práticas em ambientes Kubernetes, prevenindo vazamentos de dados, inodes órfãos, e otimizando I/O. Esta feature introduz o conceito de Persistent Volume Claims efêmeros ou emptyDirs montados como volumes na memória (tmpfs) no job runner do orquestrador.
+  - **Critérios de Aceite:**
+    - [ ] Criar a implementação `KubernetesFileSystemManager` da interface `IFileSystemManager`, substituindo chamadas do FS local pela abstração de volumes Kubernetes efêmeros usando a lib `@kubernetes/client-node`.
+    - [ ] Configurar os manifestos e Helm charts para suportar volumes `emptyDir` do tipo `Memory` se o repositório exceder certos limites de segurança/confidencialidade.
+    - [ ] Adicionar suporte a limpeza atrelada ao ciclo de vida do Pod (preStop hooks), garantindo que workspaces de repositórios terminados sejam purgáveis instântaneamente.
+    - [ ] Atualizar o runtime para que o workspace local atue apenas como fallback de desenvolvimento quando a execução ocorrer fora do cluster.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Isolamento de Redes em Workspaces Efêmeros com NetworkPolicies".
+
 - [x] **Feature: Controle de Repetição no Revisor de PRs**
   - **Descrição:** Evitar comentários duplicados para o mesmo diff quando o cron de revisão rodar várias vezes sem alteração no PR.
   - **Critérios de Aceite:**
