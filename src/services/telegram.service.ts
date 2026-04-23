@@ -13,9 +13,15 @@ export class TelegramService {
     }
 
     try {
-      const taggedMessage = message.includes(REPORT_TAG)
-        ? message
-        : `${REPORT_TAG}\n${message}`;
+      const isTagged = message.includes(REPORT_TAG);
+      const cleanMessage = isTagged ? message.replace(REPORT_TAG, '').trim() : message;
+      
+      const taggedMessage = [
+        `🤖 <b>JULES ORCHESTRATOR</b>`,
+        `──────────────────────`,
+        cleanMessage
+      ].join('\n');
+
       const url = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`;
       const response = await fetch(url, {
         method: 'POST',
