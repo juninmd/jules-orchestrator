@@ -22,7 +22,7 @@ describe('TelegramService', () => {
       expect.stringContaining('api.telegram.org/bottok/sendMessage'),
       expect.objectContaining({
         method: 'POST',
-        body: expect.stringContaining('[jules-orchestrator]')
+        body: expect.stringContaining('🤖 <b>JULES ORCHESTRATOR</b>')
       })
     );
   });
@@ -31,7 +31,7 @@ describe('TelegramService', () => {
     fetchSpy.mockResolvedValue({ ok: true } as Response);
     await service.sendMessage('[jules-orchestrator]\nHello');
     const body = JSON.parse((fetchSpy.mock.calls[0][1] as RequestInit).body as string);
-    expect(body.text.match(/\[jules-orchestrator\]/g)).toHaveLength(1);
+    expect(body.text.match(/JULES ORCHESTRATOR/g)).toHaveLength(1);
   });
 
   it('does not throw on fetch error', async () => {
