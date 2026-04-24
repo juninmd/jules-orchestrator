@@ -136,13 +136,13 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] O alerta só deve disparar uma vez por detecção e apenas se o status do débito não for resolvido em um prazo configurável (ex: 2 dias).
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Métricas de Qualidade em Comentários Automáticos de Pull Requests".
 
-- [ ] **Feature: Otimização no Roteamento de IA (AI Router)**
+- [x] **Feature: Otimização no Roteamento de IA (AI Router)**
   - **Descrição:** Melhorar o `AIRouterService` para selecionar o modelo de IA (ex: Claude, GPT-4, Llama) baseado na complexidade do problema detectado.
   - **Critérios de Aceite:**
-    - [ ] Criar enumeração/tabela de pesos para diferentes tipos de débito técnico.
-    - [ ] Implementar fallback caso o modelo primário falhe ou retorne timeout.
-    - [ ] Registrar telemetria das escolhas do modelo no console/log.
-    - [ ] Testes de integração simulando falha do provedor de IA.
+    - [x] Criar enumeração/tabela de pesos para diferentes tipos de débito técnico.
+    - [x] Implementar fallback caso o modelo primário falhe ou retorne timeout.
+    - [x] Registrar telemetria das escolhas do modelo no console/log.
+    - [x] Testes de integração simulando falha do provedor de IA.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Monitoramento de Custos e Roteamento de IA".
 
 ### ÉPICO 2: Evolução do Revisor de Pull Requests (`review-prs`)
@@ -214,13 +214,13 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Reportar evolução da métrica de aceitação vs. rejeição dos patches propostos.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Testes Unitários de Regressão após Aplicação de Self-Healing".
 
-- [ ] **Feature: Integração com Monitoramento de Kubernetes**
+- [x] **Feature: Integração com Monitoramento de Kubernetes**
   - **Descrição:** Expandir a funcionalidade de self-healing utilizando o `@kubernetes/client-node` já presente no `package.json` para reiniciar pods travados ou reverter deploys que disparam muitos erros 500.
   - **Critérios de Aceite:**
-    - [ ] Configurar conexão segura com o cluster via KubeConfig/ServiceAccount.
-    - [ ] Ler logs de pods que entraram no estado CrashLoopBackOff.
-    - [ ] Disparar alerta via `TelegramService` com a análise da causa raiz gerada por IA.
-    - [ ] Criar opção de "Revert Autônomo" baseado em limiares configuráveis.
+    - [x] Configurar conexão segura com o cluster via KubeConfig/ServiceAccount.
+    - [x] Ler logs de pods que entraram no estado CrashLoopBackOff.
+    - [x] Disparar alerta via `TelegramService` com a análise da causa raiz gerada por IA.
+    - [x] Criar opção de "Revert Autônomo" baseado em limiares configuráveis.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Eventos de Self-Healing e Resiliência do Cluster".
 
 - [ ] **Feature: Dashboard de Eventos de Self-Healing e Resiliência do Cluster**
@@ -311,6 +311,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Fornecer interface de invalidação manual de entradas de cache problemáticas ou desatualizadas.
     - [ ] Notificar via Slack quando os tokens consumidos pela plataforma alcançarem cotas financeiras de orçamento definidas.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Políticas de Retenção e Expiração Inteligente de Embeddings no Cache Vetorial".
+
+- [ ] **Feature: Dashboard de Monitoramento de Custos e Roteamento de IA**
+  - **Descrição:** Para maximizar a visibilidade da economia de FinOps (epic 8) e das decisões tomadas pelo AI Router, um dashboard em tempo real deverá ser construído. Ele mostrará qual provedor de IA (Ollama, OpenAI, Anthropic) foi escolhido para cada tarefa, quantificando o custo de tokens e destacando o RoI das escolhas mais eficientes no cluster.
+  - **Critérios de Aceite:**
+    - [ ] Criar endpoint de telemetria consolidando histórico de roteamento.
+    - [ ] Apresentar dados analíticos de consumo de budget por provedor e modelo.
+    - [ ] Criar visualização de falhas de timeout e acionamentos de fallback.
+    - [ ] Permitir simulação preditiva de custos para próximas sprints baseando-se no comportamento passado.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Recomendação Preditiva de Troca de Provedor Baseada em Eficiência Histórica".
 
 ### ÉPICO 6: Conhecimento Institucional e Documentação Autônoma
 *Focado em garantir que o conhecimento técnico sobre a aplicação seja perene, acessível e sempre atualizado pelo próprio orquestrador de forma autônoma, dispensando a documentação manual massiva.*
