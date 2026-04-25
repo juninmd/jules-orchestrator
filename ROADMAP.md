@@ -105,6 +105,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar política de alerta no Alertmanager para interrupções sucessivas nos jobs (ex: "Job self-healing falhando mais de 3 vezes em 1h").
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Visualização Centralizada de Custo e Performance de Agentes IA".
 
+- [ ] **Feature: Visualização Centralizada de Custo e Performance de Agentes IA**
+  - **Descrição:** Criação de um painel integrado para acompanhamento do consumo de infraestrutura (CPU/Memória) e da performance dos agentes IA. Este painel trará visibilidade gerencial sobre os custos operacionais.
+  - **Critérios de Aceite:**
+    - [ ] Criar a interface visual do painel com gráficos de tendências de consumo de recursos.
+    - [ ] Integrar fontes de dados do Prometheus ou APM configurado no cluster.
+    - [ ] Permitir filtragem por agente, job ou repositório alvo.
+    - [ ] Exportar relatórios diários ou semanais em PDF ou CSV com resumo de custos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração do Painel de Custos com Sistemas de Faturamento Externos".
+
 ### ÉPICO 1: Aprimoramento da Análise de Repositórios e Criação de Sessões
 *Focado na inteligência de como o orquestrador vasculha os repositórios à procura de débitos técnicos.*
 
@@ -145,6 +154,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Testes de integração simulando falha do provedor de IA.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Monitoramento de Custos e Roteamento de IA".
 
+- [ ] **Feature: Dashboard de Monitoramento de Custos e Roteamento de IA**
+  - **Descrição:** Desenvolver uma visão unificada para monitorar o roteamento de tarefas entre os diferentes provedores de IA, bem como a alocação de custos por modelo, permitindo a gestão orçamentária preditiva.
+  - **Critérios de Aceite:**
+    - [ ] Coletar e consolidar métricas de roteamento no `AIRouterService`.
+    - [ ] Criar a interface front-end ou painel CLI para exibir a proporção de uso (ex: GPT-4 vs Llama).
+    - [ ] Adicionar cálculo estimado de custo em tempo real, baseando-se no número de tokens e tarifa por modelo.
+    - [ ] Implementar sistema de alertas orçamentários (ex: disparar evento via webhook ao atingir 80% da quota).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação de Quotas Dinâmicas de Tokens por Projeto/Repo".
+
 ### ÉPICO 2: Evolução do Revisor de Pull Requests (`review-prs`)
 *Focado na assertividade, contexto e didática dos Code Reviews feitos pelo bot.*
 
@@ -182,6 +200,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Se houver breaking changes, aplicar diffs de atualização no código do repositório para contornar a quebra de compatibilidade.
     - [ ] Aguardar resultados da CI; se a CI falhar, tentar uma auto-correção iterativa.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Gestão de Risco e Saúde de Dependências de Terceiros".
+
+- [ ] **Feature: Dashboard de Gestão de Risco e Saúde de Dependências de Terceiros**
+  - **Descrição:** Criação de um painel focado em segurança da informação (SecOps) para reportar o status e a saúde de todas as bibliotecas de terceiros gerenciadas nos repositórios, consolidando o risco das dependências.
+  - **Critérios de Aceite:**
+    - [ ] Mapear as vulnerabilidades detectadas nas esteiras de Code Review (PRs) para uma base de dados centralizada.
+    - [ ] Implementar interface visual que exibe as dependências desatualizadas, classificadas por severidade (Baixa, Média, Alta, Crítica).
+    - [ ] Adicionar um Score de Saúde de Dependências por repositório.
+    - [ ] Expor opções na interface para forçar um "auto-update PR" gerado pelo orquestrador nas dependências mais críticas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração do Dashboard de Risco com Plataformas de SIEM".
 
 ### ÉPICO 3: Capacidades de Self-Healing (Autocura)
 *Foco na resiliência e correção autônoma de falhas em produção ou durante pipelines.*
@@ -231,6 +258,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Listar o log de anomalia, o prompt enviado ao modelo de IA e a conclusão recebida.
     - [ ] Incluir filtros por namespace, label de deployment e tipo de intervenção.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agendamento Inteligente de Manutenção Preventiva baseado em Histórico de Anomalias".
+
+- [ ] **Feature: Agendamento Inteligente de Manutenção Preventiva baseado em Histórico de Anomalias**
+  - **Descrição:** Evoluir a capacidade reativa de Self-Healing para um modelo proativo. O orquestrador analisará o padrão temporal das anomalias passadas (ex: sobrecarga de memória aos finais de semana) e agendará janelas de manutenção preventivas ou scale-ups antecipados.
+  - **Critérios de Aceite:**
+    - [ ] Processar o histórico de anomalias do Dashboard de Self-Healing para extrair sazonalidades e padrões de degradação.
+    - [ ] Criar um mecanismo de CRON dinâmico (`MaintenanceScheduler`) que propõe e agenda ações preventivas.
+    - [ ] Implementar integração com o Slack/Teams para notificar o time sobre a janela de manutenção planejada de forma autônoma.
+    - [ ] Medir e reportar o impacto das manutenções preventivas na redução de indisponibilidades repentinas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Autônoma de Chaos Engineering Controlado".
 
 ### ÉPICO 4: Automação do Papel de Product Owner (P.O. Autônomo)
 *Foco na gestão contínua de roadmap, priorização de backlog e criação dinâmica de novas tarefas a partir do progresso do desenvolvimento.*
@@ -291,6 +327,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Exportação do relatório visual (Sprint Review em PDF) utilizando IA generativa para sumarizar as maiores entregas em uma linguagem executiva.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Criação de Dailies Assíncronas Automáticas com Resumos de Gargalos".
 
+- [ ] **Feature: Criação de Dailies Assíncronas Automáticas com Resumos de Gargalos**
+  - **Descrição:** Como P.O., o orquestrador deve compilar o status de andamento das tarefas ativas e identificar desenvolvedores possivelmente bloqueados. O sistema publicará resumos diários ("Dailies") assíncronos nos canais de comunicação com insights para destravar gargalos.
+  - **Critérios de Aceite:**
+    - [ ] Mapear tempo de inatividade das branches e status das issues vinculadas ao ROADMAP atual.
+    - [ ] Compilar um resumo em linguagem natural usando LLM sobre o andamento e os prováveis bloqueadores.
+    - [ ] Publicar a "Daily Assíncrona" via integração com Slack ou Discord no início do dia útil.
+    - [ ] Permitir que engenheiros interajam com a mensagem para solicitar sessões de pairing ou IA para destravamento.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Retrospectiva de Sprint Autônoma e Sugestão de Melhoria Contínua".
+
 ### ÉPICO 5: Engenharia de Prompt e Otimização de Custos de IA
 *Foco em tornar as chamadas de LLMs mais baratas, rápidas e consistentes.*
 
@@ -311,6 +356,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Fornecer interface de invalidação manual de entradas de cache problemáticas ou desatualizadas.
     - [ ] Notificar via Slack quando os tokens consumidos pela plataforma alcançarem cotas financeiras de orçamento definidas.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Políticas de Retenção e Expiração Inteligente de Embeddings no Cache Vetorial".
+
+- [ ] **Feature: Políticas de Retenção e Expiração Inteligente de Embeddings no Cache Vetorial**
+  - **Descrição:** Para manter o cache vetorial limpo e relevante ao longo do tempo sem custos de armazenamento excessivos, implementar um sistema de "Time-To-Live" (TTL) baseado na frequência de acesso e relevância de cada entrada.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar um timestamp de "último acesso" em cada embedding armazenado.
+    - [ ] Criar um cron job que identifique e purgue embeddings não acessados há mais de 30 dias (configurável).
+    - [ ] Garantir que embeddings associados a resoluções de Self-Healing marcadas como críticas nunca sejam expirados.
+    - [ ] Registrar métricas de espaço liberado e economia de armazenamento gerada pela purga.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria Constante e Limpeza de Contexto de IA".
 
 ### ÉPICO 6: Conhecimento Institucional e Documentação Autônoma
 *Focado em garantir que o conhecimento técnico sobre a aplicação seja perene, acessível e sempre atualizado pelo próprio orquestrador de forma autônoma, dispensando a documentação manual massiva.*
@@ -341,6 +395,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] As respostas fornecidas pelo Chatbot devem ser sempre concisas e conter links para a documentação ou linhas de código (referências da fonte) de onde a informação foi extraída, aumentando a confiabilidade (RAG com citações).
     - [ ] Monitorar perguntas não respondidas ou onde o Chatbot demonstrou incerteza. Isso deve gerar alertas para o P.O. ou desenvolvedores mais experientes enriquecerem a documentação.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração de Vídeos Explicativos (Screen-cast) via IA para Novas Features Documentadas".
+
+- [ ] **Feature: Geração de Vídeos Explicativos (Screen-cast) via IA para Novas Features Documentadas**
+  - **Descrição:** Elevar a documentação institucional para além do texto. Utilizando provedores de síntese de voz (TTS) e geração de vídeo/slides por IA, o orquestrador criará pequenos vídeos explicativos sempre que uma nova feature complexa for marcada como "concluída".
+  - **Critérios de Aceite:**
+    - [ ] Integrar com APIs de TTS (Text-to-Speech) para narração da descrição técnica.
+    - [ ] Automatizar a captura de telas (screenshots) dos diagramas de arquitetura (PlantUML/Mermaid) via Playwright.
+    - [ ] Usar uma biblioteca de renderização (ex: FFmpeg via node) para juntar o áudio com as imagens.
+    - [ ] Publicar automaticamente o vídeo gerado como anexo em uma Wiki interna ou repositório de documentos do GitHub.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Tradução Automática Dinâmica de Documentação e Vídeos (I18N Autônomo)".
 
 ---
 
@@ -375,6 +438,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Opcionalmente, o agente de IA P.O. pode sugerir PRs com novos testes reforçados para cobrir mutantes sobreviventes.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Consolidado de Saúde do QA Autônomo e Confiabilidade de Testes".
 
+- [ ] **Feature: Dashboard Consolidado de Saúde do QA Autônomo e Confiabilidade de Testes**
+  - **Descrição:** Oferecer uma visão agregada da qualidade e confiança das suítes de teste, centralizando métricas de E2E, Regressão Visual e Testes de Mutação.
+  - **Critérios de Aceite:**
+    - [ ] Integrar os relatórios de todas as execuções de testes do Playwright e do Stryker em um dashboard comum.
+    - [ ] Criar gráficos exibindo a evolução da cobertura de código e a taxa de falha dos testes ao longo do tempo.
+    - [ ] Identificar testes "flaky" (que falham de forma intermitente) utilizando heurística de histórico de execuções.
+    - [ ] Implementar mecanismo de alerta (Slack/Email) quando o "Mutation Score" cair abaixo de um limiar crítico.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Correção Autônoma de Testes Flaky via IA".
+
 ### ÉPICO 8: Observabilidade e FinOps Autônomo
 *Foco no gerenciamento inteligente da infraestrutura e otimização de custos e recursos.*
 
@@ -405,6 +477,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Notificar de forma sumária o canal gerencial via webhook.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de APIs de Provedores de Cloud para Faturamento Dinâmico no Relatório".
 
+- [ ] **Feature: Integração de APIs de Provedores de Cloud para Faturamento Dinâmico no Relatório**
+  - **Descrição:** Expandir os relatórios mensais de FinOps para integrar diretamente com as APIs de billing da AWS, GCP ou Azure. Isso permitirá relatórios que combinam custos da camada de IA com a fatura real dos clusters Kubernetes.
+  - **Critérios de Aceite:**
+    - [ ] Criar módulos conectores de billing para os principais Cloud Providers utilizando os SDKs oficiais.
+    - [ ] Agregar os dados dos pods e volumes do orquestrador via tags ou labels do Kubernetes na nuvem.
+    - [ ] Refatorar a geração do PDF mensal para incluir os custos reais da fatura da nuvem de forma consolidada com os custos da IA.
+    - [ ] Estabelecer limite de budget unificado (Cloud + IA) que bloqueia ações pesadas caso o limite seja atingido.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Modelo Preditivo Avançado de Despesas e Planejamento Anual de Capacidade".
+
 ### ÉPICO 9: Integração de LLMs Open-Source e Edge Computing
 *Focado em reduzir dependência de APIs proprietárias (como OpenAI/Anthropic) e permitir a execução do orquestrador em ambientes isolados.*
 
@@ -426,6 +507,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Criar log de auditoria explícito informando quando uma resposta foi originada do cache na Edge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Invalidação Autônoma de Cache Semântico por Contexto".
 
+- [ ] **Feature: Mecanismo de Invalidação Autônoma de Cache Semântico por Contexto**
+  - **Descrição:** Resolver problemas de dados obsoletos no cache da Edge. O orquestrador detectará automaticamente grandes refatorações no repositório (baseando-se no diff do Git) e invalidará de forma cirúrgica as chaves de cache que perderam o contexto.
+  - **Critérios de Aceite:**
+    - [ ] Escutar eventos de push na branch `main`.
+    - [ ] Mapear arquivos modificados nos commits em relação aos metadados dos embeddings no cache.
+    - [ ] Realizar invalidação seletiva via Redis/Workers apenas nas respostas impactadas pelas mudanças.
+    - [ ] Escrever suíte de testes de regressão que simule o ciclo completo de hit-cache, alteração de código, miss-cache e renovação.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Descoberta Dinâmica de Nós Locais de Edge para Escalonamento de Cache".
+
 ### ÉPICO 10: Governança, Compliance e Auditoria de Ações de IA
 *Focado em garantir rastreabilidade irrefutável, responsabilidade e conformidade legal sobre todas as decisões autônomas tomadas pelo orquestrador no código e infraestrutura.*
 
@@ -437,6 +527,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Assinar criptograficamente cada entrada de log para garantir que o histórico de decisões não foi adulterado pós-incidente.
     - [ ] Fornecer um endpoint `/api/audit` que permita exportar logs de decisões por repositório ou por job, filtrando por nível de criticidade de ação (ex: "Critical: Self-Healing", "Low: Code Review").
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Compliance e Revisão Humana de Auditoria".
+
+- [ ] **Feature: Dashboard de Compliance e Revisão Humana de Auditoria**
+  - **Descrição:** Uma interface Web dedicada a auditores e security officers. Ela servirá como um portal de governança onde cada decisão do modelo de IA (auditada anteriormente) pode ser revisada manualmente, endossada ou marcada para investigação de viés algorítmico.
+  - **Critérios de Aceite:**
+    - [ ] Criar a página do Dashboard conectada à API `/api/audit`.
+    - [ ] Implementar ferramentas de busca avançada no registro de eventos de IA por data, severidade, ou palavras-chave de vulnerabilidade.
+    - [ ] Adicionar botão de "Certificar Conformidade", gerando um selo no registro.
+    - [ ] Fornecer exportação de "Dossiê de Conformidade" nos padrões de relatórios ISO.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Análise Autônoma de Viés (Bias) nos Logs de Revisão de PRs".
 
 ### ÉPICO 11: Integração de Pipelines de CD Avançados e Deploy Autônomo
 *Focado em conectar o orquestrador ao ciclo de Continuous Deployment, permitindo aprovações de deploy autônomas e rollbacks preditivos baseados em heurísticas e testes.*
@@ -467,6 +566,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Construir endpoint `/api/releases` para consumo de uma futura UI.
     - [ ] Gerar gráficos simples via markdown das taxas de sucesso/rollback da última sprint.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação de Feature Flags Dinâmicas Controladas por IA".
+
+- [ ] **Feature: Implementação de Feature Flags Dinâmicas Controladas por IA**
+  - **Descrição:** Além de aprovar deploys e fazer rollbacks, o orquestrador poderá atuar diretamente sobre *Feature Flags* em produção, desligando módulos não-críticos em momentos de alto estresse de infraestrutura e reativando-os quando o sistema se estabilizar.
+  - **Critérios de Aceite:**
+    - [ ] Integrar biblioteca de Feature Flags (ex: Unleash ou LaunchDarkly).
+    - [ ] Criar no orquestrador regras de decisão baseadas nas métricas de performance (latência, timeout).
+    - [ ] Desligar autônoma e temporariamente flags vinculadas a cargas de trabalho intensivas ("Circuit Breaker via Flag").
+    - [ ] Notificar de imediato o canal de engenharia informando qual flag foi desabilitada e o motivo da degradação.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Testes de Degradação Suave (Graceful Degradation) via Injeção de Falhas".
 
 ---
 
