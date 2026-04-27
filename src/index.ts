@@ -1,5 +1,7 @@
 import { validateEnv } from './config/env.config.js';
 import { runConfiguredJob } from './jobs/job-registry.js';
+import { logger } from './services/logger.service.js';
+import { AppError, formatError } from './utils/errors.js';
 
 async function bootstrap() {
   try {
@@ -7,8 +9,10 @@ async function bootstrap() {
     await runConfiguredJob(process.env.JOB_NAME);
     process.exit(0);
   } catch (error) {
-    console.error('❌ Falha fatal no Orquestrador:', error);
-    process.exit(1);
+    const formatted = formatError(error);
+    logger.error('Bootstrap', 'Falha fatal no Orquestrador', error, { code: formatted.code });
+    const exitCode = error instanceof AppError && !error.isRetryable ? 1 : 1;
+    process.exit(exitCode);
   }
 }
 

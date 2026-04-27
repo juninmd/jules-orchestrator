@@ -1,51 +1,65 @@
 import { env } from '../config/env.config.js';
 import { composeJulesDevelopmentPrompt } from './development-team.service.js';
+import { logger } from './logger.service.js';
+import { ExternalServiceError } from '../utils/errors.js';
+import { withRetry } from '../utils/retry.js';
 
 export interface JulesInvokePayload {
-  issueUrl?: string; // Optional: we might just pass the github issue URL
-  prompt: string;    // The actual raw instruction
-  repository: string; // "owner/repo"
+  issueUrl?: string;
+  prompt: string;
+  repository: string;
 }
 
 export class JulesService {
   public async invokeSession(payload: JulesInvokePayload): Promise<void> {
     const url = env.JULES_API_URL;
     const prompt = composeJulesDevelopmentPrompt(payload.repository, payload.prompt);
-    
+
     if (!url) {
-      console.log(`[JulesService] Monitor: Sessão do Jules simulada com sucesso para ${payload.repository}. (URL não configurada)`);
+      logger.info('JulesService', `Monitor: Sessão do Jules simulada com sucesso para ${payload.repository}. (URL não configurada)`);
       return;
     }
 
     try {
-      console.log(`[JulesService] Invocando API do Jules em ${url}...`);
-      
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Goog-Api-Key': env.JULES_API_KEY
+      await withRetry(
+        () => this.doInvoke(url, prompt, payload.repository),
+        {
+          maxAttempts: 3,
+          initialDelayMs: 2000,
+          maxDelayMs: 15000
         },
-        body: JSON.stringify({
-          prompt,
-          sourceContext: {
-            source: `sources/github/${payload.repository}`,
-            githubRepoContext: {
-              startingBranch: "master"
-            }
-          },
-          title: "Jules Orchestrator - Autonomous Development Session"
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`[JulesService] Retorno inválido da API do Jules: ${response.statusText}`);
-      }
-
-      console.log(`[JulesService] Sessão iniciada com sucesso. Jules está processando ${payload.repository}!`);
+        'JulesService.invokeSession'
+      );
     } catch (error) {
-      console.error('[JulesService] Falha ao invocar sessão.', error);
-      throw error;
+      throw new ExternalServiceError('Jules API invocation failed', 'Jules', { repository: payload.repository, url });
     }
+  }
+
+  private async doInvoke(url: string, prompt: string, repository: string): Promise<void> {
+    logger.info('JulesService', `Invocando API do Jules em ${url}...`);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': env.JULES_API_KEY
+      },
+      body: JSON.stringify({
+        prompt,
+        sourceContext: {
+          source: `sources/github/${repository}`,
+          githubRepoContext: {
+            startingBranch: "master"
+          }
+        },
+        title: "Jules Orchestrator - Autonomous Development Session"
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Jules API returned ${response.status}: ${response.statusText}`);
+    }
+
+    logger.info('JulesService', `Sessão iniciada com sucesso. Jules está processando ${repository}!`);
   }
 }

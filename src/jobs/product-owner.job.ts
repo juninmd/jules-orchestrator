@@ -5,6 +5,7 @@ import { TelegramService } from '../services/telegram.service.js';
 import { env } from '../config/env.config.js';
 import { logger } from '../services/logger.service.js';
 import { RoadmapFeatureIssue } from '../contracts/orchestration.js';
+import { AppError } from '../utils/errors.js';
 
 const ROADMAP_FILE = 'ROADMAP.md';
 const ROADMAP_ISSUE_LABELS = ['enhancement', 'AI-generated', 'autocreated'];
@@ -75,6 +76,13 @@ export async function runProductOwnerJob() {
     ? env.TARGET_REPOSITORIES
     : await githubService.getActiveRepositories(5);
 
+  if (!repos.length) {
+    logger.info('PO', 'Zero repositórios encontrados.');
+    return;
+  }
+
+  logger.info('PO', `Processando ${repos.length} repositórios.`);
+
   for (const repo of repos) {
     try {
       let fileData: { content: string; sha: string };
@@ -127,7 +135,11 @@ export async function runProductOwnerJob() {
       );
       logger.info(repo, `PR #${prNumber} criado com novas features do ROADMAP.`);
     } catch (error) {
-      logger.error(repo, 'Falha no job PRODUCT_OWNER', error);
+      if (error instanceof AppError) {
+        logger.error(repo, `Falha no job PRODUCT_OWNER [${error.code}]: ${error.message}`, error);
+      } else {
+        logger.error(repo, 'Falha no job PRODUCT_OWNER', error);
+      }
     }
   }
 

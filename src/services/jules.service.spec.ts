@@ -1,6 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-const mockFetch = vi.spyOn(globalThis, 'fetch');
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 vi.mock('../config/env.config.js', () => ({
   env: {
@@ -8,6 +6,13 @@ vi.mock('../config/env.config.js', () => ({
     JULES_API_KEY: 'test-key'
   }
 }));
+
+vi.mock('../utils/retry.js', () => ({
+  withRetry: async <T>(fn: () => Promise<T>) => fn()
+}));
+
+const mockFetch = vi.fn();
+vi.stubGlobal('fetch', mockFetch);
 
 import { JulesService } from './jules.service.js';
 
@@ -17,6 +22,10 @@ describe('JulesService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     service = new JulesService();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('invokes Jules API with correct payload', async () => {
@@ -52,12 +61,12 @@ describe('JulesService', () => {
   });
 
   it('throws on non-ok response', async () => {
-    mockFetch.mockResolvedValue({ ok: false, statusText: 'Bad Request' } as Response);
+    mockFetch.mockResolvedValue({ ok: false, statusText: 'Bad Request', status: 400 } as Response);
 
     await expect(service.invokeSession({
       repository: 'juninmd/api',
       prompt: 'Test'
-    })).rejects.toThrow('Retorno inválido');
+    })).rejects.toThrow('Jules API invocation failed');
   });
 
   it('includes API key header', async () => {

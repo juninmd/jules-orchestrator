@@ -7,6 +7,8 @@ import { runSelfHealingJob } from './self-healing.job.js';
 import { runOpsReportJob } from './ops-report.job.js';
 import { SUPPORTED_JOB_NAMES, SupportedJobName } from '../contracts/orchestration.js';
 import { OrchestratorRuntimeService } from '../services/orchestrator-runtime.service.js';
+import { logger } from '../services/logger.service.js';
+import { AppError, formatError, isRetryable } from '../utils/errors.js';
 
 const jobHandlers = {
   autopilot: runAutopilotJob,
@@ -22,9 +24,26 @@ export async function runConfiguredJob(jobName: string | undefined): Promise<Sup
   const selectedJob = (jobName && SUPPORTED_JOB_NAMES.includes(jobName as SupportedJobName) ? jobName : 'autopilot') as SupportedJobName;
 
   if (!jobName || selectedJob !== jobName) {
-    console.warn(`[AVISO] JOB_NAME inválido ou ausente. Executando ${selectedJob} por padrão.`);
+    logger.warn('JobRegistry', `JOB_NAME inválido ou ausente. Executando ${selectedJob} por padrão.`);
   }
 
-  await new OrchestratorRuntimeService().runJob(selectedJob, jobHandlers[selectedJob]);
-  return selectedJob;
+  try {
+    await new OrchestratorRuntimeService().runJob(selectedJob, jobHandlers[selectedJob]);
+    return selectedJob;
+  } catch (error) {
+    const formatted = formatError(error);
+    const appError = error instanceof AppError ? error : new AppError(
+      formatted.message,
+      'JOB_EXECUTION_ERROR',
+      { jobName: selectedJob },
+      isRetryable(error)
+    );
+
+    logger.error('JobRegistry', `Job ${selectedJob} falhou`, error, {
+      code: formatted.code,
+      retryable: appError.isRetryable
+    });
+
+    throw appError;
+  }
 }

@@ -33,10 +33,10 @@ export interface RuntimeEnv {
   TELEGRAM_CHAT_ID: string;
 }
 
-function readEnv(source: NodeJS.ProcessEnv): RuntimeEnv {
+export function parseEnv(source: NodeJS.ProcessEnv): RuntimeEnv {
   const parsed = envSchema.parse(source);
 
-  return {
+  const runtimeEnv: RuntimeEnv = {
     OLLAMA_HOST: parsed.OLLAMA_HOST || 'http://localhost:11434',
     OLLAMA_MODEL: parsed.OLLAMA_MODEL || 'gemma2',
     OLLAMA_TIMEOUT_MS: parsed.OLLAMA_TIMEOUT_MS,
@@ -49,14 +49,6 @@ function readEnv(source: NodeJS.ProcessEnv): RuntimeEnv {
     TELEGRAM_BOT_TOKEN: parsed.TELEGRAM_BOT_TOKEN?.trim() || '',
     TELEGRAM_CHAT_ID: parsed.TELEGRAM_CHAT_ID?.trim() || ''
   };
-}
-
-export function parseEnv(source: NodeJS.ProcessEnv): RuntimeEnv {
-  const runtimeEnv = readEnv(source);
-
-  if (!runtimeEnv.GITHUB_TOKEN) {
-    throw new Error('GITHUB_TOKEN é obrigatório');
-  }
 
   if (runtimeEnv.JULES_API_URL && !runtimeEnv.JULES_API_KEY) {
     throw new Error('JULES_API_KEY é obrigatório quando JULES_API_URL estiver configurado');
@@ -65,12 +57,14 @@ export function parseEnv(source: NodeJS.ProcessEnv): RuntimeEnv {
   return runtimeEnv;
 }
 
-export const env = readEnv(process.env);
+export const env = parseEnv(process.env);
 
 export const validateEnv = (): void => {
-  parseEnv(process.env);
+  if (!env.GITHUB_TOKEN) {
+    throw new Error('GITHUB_TOKEN é obrigatório');
+  }
 
-  if (!env.JULES_API_URL) {
-    console.warn('[AVISO] JULES_API_URL não configurado. O orquestrador seguirá sem abrir sessões no Jules.');
+  if (env.OLLAMA_TIMEOUT_MS < 5000) {
+    throw new Error('OLLAMA_TIMEOUT_MS deve ser pelo menos 5000ms');
   }
 };
