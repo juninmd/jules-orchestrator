@@ -578,6 +578,33 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
 
 ---
 
+- [ ] **Feature: Mapeamento Seguro de Workspaces Efêmeros em Clusters Kubernetes**
+  - **Descrição:** Evoluir a abstração do File System para suportar ambientes nativos de nuvem com alta resiliência. A feature tem como objetivo gerenciar as montagens de volumes transitórios em namespaces efêmeros do Kubernetes para armazenar dados e clones do repositório em execução durante um job de IA. Essa abstração protegerá os hosts subjacentes contra vazamento de dados confidenciais e esgotamento de inodes.
+  - **Critérios de Aceite:**
+    - [ ] Integrar `k8s.service.ts` para criar PersistentVolumeClaims efêmeros atrelados ao clico de vida da sessão da IA.
+    - [ ] Modificar a implementação `IFileSystemManager` com uma classe `K8sVolumeFileSystemManager` que trate o pathing no ambiente distribuído.
+    - [ ] Prover sanitização pesada de nomes de diretórios e validação profunda de symlinks para evitar directory traversal.
+    - [ ] Testar cenários de OOM (Out Of Memory) ou preempção do nó para confirmar que os PersistentVolumes são destruídos adequadamente e não deixam rastros.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Monitoramento Dinâmico de Espaço Efêmero em Workspaces da IA".
+
+- [ ] **Feature: Interface de Administração do Conhecimento P.O.**
+  - **Descrição:** Providenciar um painel de controle (Backoffice) acessível aos administradores de produto. O painel deve permitir visualizar o banco vetorial de contexto armazenado, realizar CRUD nas "lições aprendidas", treinar heurísticas manualmente e monitorar a assertividade das features geradas pelo P.O autônomo (LLM). O objetivo de negócio é garantir controle humano sobre o direcionamento de evolução autônoma do produto.
+  - **Critérios de Aceite:**
+    - [ ] Criar frontend usando React ou Vue.js integrado a nova API do orquestrador, renderizando tabelas ricas e componentes de busca de similaridade do banco vetorial.
+    - [ ] Desenvolver endpoints para Inserção, Atualização e Deleção de entradas de conhecimento de P.O. em formato textual, convertendo-os automaticamente para embeddings no Milvus/Qdrant.
+    - [ ] Possibilitar um modo de "Simulação" no painel, onde o P.O. digita o título de uma task que supostamente foi concluída, e visualiza a feature e o gatilho previstos pela IA sem realizar commits no ROADMAP.md.
+    - [ ] Adicionar um log visual de auditoria atestando qual usuário humano modificou as heurísticas de treinamento da base vetorial.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Aprovação Humana de Features em Massa no Backoffice".
+
+- [ ] **Feature: Criação de Tech Talks Dinâmicos com base em Débitos Frequentes**
+  - **Descrição:** Aproveitando os dados sumarizados diários dos revisores autônomos e as estatísticas de pull requests, o sistema P.O. autônomo montará escopos, apresentações (slides/markdown) e rascunhos de roteiro para "Tech Talks" da engenharia. A IA servirá como facilitadora de evolução contínua das equipes, focando nas áreas do código que demonstraram ser os maiores gargalos de entendimento.
+  - **Critérios de Aceite:**
+    - [ ] Construir o `TechTalkGeneratorService`, que agrega os 3 débitos técnicos mais citados no trimestre atual a partir dos logs de PRs e PR comments do banco relacional.
+    - [ ] Enviar o contexto agregado para o serviço da IA (`POService`), requerendo a geração de um roteiro de apresentação didática focado em ensinar a equipe a evitar o débito técnico.
+    - [ ] Publicar automaticamente os roteiros num repositório centralizado de wiki ou em threads no GitHub Discussions/Notion.
+    - [ ] Gerar uma pauta automática agendando as Tech Talks (via API do Google Calendar ou equivalente) e notificando no canal de Engenharia no Telegram.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Material Didático Interativo (Testes) para Engenheiros".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
