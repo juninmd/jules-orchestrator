@@ -605,6 +605,181 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Gerar uma pauta automática agendando as Tech Talks (via API do Google Calendar ou equivalente) e notificando no canal de Engenharia no Telegram.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Material Didático Interativo (Testes) para Engenheiros".
 
+### ÉPICO 12: Expansão de Capacidades Contínuas
+*Foco em abraçar os resultados gerados por automações anteriores, expandindo integrações, escalabilidade e qualidade didática.*
+
+- [ ] **Feature: Integração do Painel de Custos com Sistemas de Faturamento Externos**
+  - **Descrição:** Conectar o painel de visualização de custos e performance de agentes de IA diretamente a plataformas de ERP/Faturamento (como SAP, TOTVS ou QuickBooks), permitindo conciliação automática e geração de centros de custos dinâmicos.
+  - **Critérios de Aceite:**
+    - [ ] Mapear APIs de no mínimo dois sistemas de faturamento externos populares.
+    - [ ] Desenvolver serviço de exportação de *billing* que cruze os dados de consumo do Prometheus com os centros de custo cadastrados.
+    - [ ] Criar interface para definir regras de rateio de custos entre times (ex: time de Backend vs. Frontend).
+    - [ ] Validar a precisão da conciliação financeira através de testes automatizados com mocks de API.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Alertas de Anomalias Financeiras e Sugestões de Otimização de Budget via IA".
+
+- [ ] **Feature: Integração de Métricas de Qualidade em Comentários Automáticos de Pull Requests**
+  - **Descrição:** Evoluir os alertas automáticos de degradação inserindo essas métricas cirurgicamente em Pull Requests. O P.O. autônomo passará a bloquear ou alertar severamente se um PR diminuir o score global de qualidade abaixo do limiar estipulado.
+  - **Critérios de Aceite:**
+    - [ ] Modificar o serviço `GithubService` para injetar os "Quality Gates" estáticos diretamente nos reviews.
+    - [ ] Criar tabelas comparativas (markdown) no comentário do PR exibindo o "Antes" e "Depois" da complexidade ciclomática e SRP.
+    - [ ] Implementar regra de fail-fast no CI acionado pelo orquestrador caso a degradação ultrapasse 15% em um único PR.
+    - [ ] Integrar feedback humano (botões no comentário) para forçar aprovação de exceções.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Badges de Qualidade de Código para Repositórios".
+
+- [ ] **Feature: Implementação de Quotas Dinâmicas de Tokens por Projeto/Repo**
+  - **Descrição:** Utilizando os dados do dashboard de custos e roteamento, implementar um sistema de controle rígido (quotas) de consumo de LLM. Projetos menos críticos terão *hard limits* mensais, enquanto projetos *core* terão auto-scaling de budget condicionado a aprovações.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o `QuotaManagerService` que intercepta todas as chamadas no `AIRouterService`.
+    - [ ] Criar arquivo de configuração YAML (ou tabela de banco) definindo limites mensais de tokens (input/output) por repositório.
+    - [ ] Implementar degradação suave: quando o budget estourar, fazer fallback automático para um modelo local (ex: Ollama) caso disponível, antes de falhar o job.
+    - [ ] Enviar notificação gerencial quando o consumo atingir 75%, 90% e 100% da quota.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Gestão de Quotas e Previsão de Esgotamento Mensal".
+
+- [ ] **Feature: Execução Automática em Sandbox das Sugestões de Refatoração**
+  - **Descrição:** Elevar a confiabilidade das sugestões autônomas de refatoração garantindo que o código sugerido realmente compila e passa nos testes existentes. A IA criará um ambiente efêmero ("Sandbox"), aplicará a sugestão e reportará o sucesso ou falha antes de postar o comentário no PR.
+  - **Critérios de Aceite:**
+    - [ ] Integrar o motor de orquestração de containers temporários (Docker/K8s efêmero) ao pipeline de sugestão de código.
+    - [ ] Aplicar o diff gerado pela IA no código baixado no workspace efêmero.
+    - [ ] Executar os comandos de build e testes unitários definidos no repositório.
+    - [ ] Apenas enviar sugestões no PR que passarem na validação do Sandbox; registrar internamente sugestões falhas para retreino do prompt.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Autocorreção Iterativa de Sugestões Falhas no Sandbox (Agentic Loop)".
+
+- [ ] **Feature: Integração do Dashboard de Risco com Plataformas de SIEM**
+  - **Descrição:** Ampliar a gestão de risco e saúde de dependências enviando todos os logs e eventos de segurança detectados nos repositórios para plataformas SIEM (Security Information and Event Management) corporativas, como Splunk ou Datadog Security.
+  - **Critérios de Aceite:**
+    - [ ] Implementar cliente padrão de syslog e HTTP *event forwarding* configurável via variáveis de ambiente.
+    - [ ] Mapear a taxonomia de vulnerabilidades (CVEs, severidade, repositório) para o padrão de logs do SIEM escolhido.
+    - [ ] Validar a entrega e o parse correto de eventos de segurança simulados usando testes E2E com um *mock server*.
+    - [ ] Desenvolver documentação autônoma orientando os times de DevSecOps sobre como construir dashboards no Splunk/Datadog baseados nestes logs.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Autônoma de Resposta a Incidentes de Segurança (IR)".
+
+- [ ] **Feature: Geração Autônoma de Testes Unitários de Regressão após Aplicação de Self-Healing**
+  - **Descrição:** Após o sistema aplicar um patch bem-sucedido via Self-Healing (e obter feedback/aceitação), o P.O. autônomo acionará um job gerador de testes unitários. A IA analisará a causa raiz original e criará testes específicos em Jest/Vitest/Pytest para garantir que a falha não ocorra novamente.
+  - **Critérios de Aceite:**
+    - [ ] Extrair o contexto da "Lição Aprendida" e o patch definitivo validado no banco vetorial.
+    - [ ] Utilizar LLM para gerar código de teste unitário focado no edge-case que causou a falha de CI/CD ou indisponibilidade.
+    - [ ] Realizar um PR automatizado contra o repositório principal injetando o novo arquivo de teste (ex: `bugfix-123.spec.ts`).
+    - [ ] Validar que o novo teste passa contra a base de código corrigida (Dry-run no workspace efêmero).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor de Identificação de Lacunas em Cobertura de Código Histórica".
+
+- [ ] **Feature: Orquestração Autônoma de Chaos Engineering Controlado**
+  - **Descrição:** Usar a inteligência preditiva de anomalias e agendamento de manutenção para ir além da reação: o orquestrador passará a injetar falhas simuladas (Chaos Engineering) em horários de baixa carga para testar e aprimorar continuamente a eficácia dos seus próprios módulos de Self-Healing.
+  - **Critérios de Aceite:**
+    - [ ] Integrar ferramentas de Chaos Engineering (ex: Chaos Mesh ou LitmusChaos) aos manifests K8s administrados pelo orquestrador.
+    - [ ] Desenvolver o `ChaosExperimentScheduler` que determina as janelas seguras e os componentes-alvo baseando-se em métricas históricas.
+    - [ ] Injetar falhas controladas (ex: latência de rede, kill de pods) e monitorar a reação autônoma de Self-Healing e os tempos de recuperação (MTTR).
+    - [ ] Interromper (abortar) automaticamente os experimentos de Chaos se a degradação de serviço exceder os SLAs permitidos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Executivo de Resiliência de Arquitetura e Chaos Score".
+
+- [ ] **Feature: Retrospectiva de Sprint Autônoma e Sugestão de Melhoria Contínua**
+  - **Descrição:** Consolidar os dados das dailies assíncronas, gargalos e fechamento de issues do roadmap para conduzir, no final do ciclo, uma retrospectiva totalmente autônoma. O sistema levantará o que funcionou, o que não funcionou e listará "Action Items" de processo.
+  - **Critérios de Aceite:**
+    - [ ] Criar o job `SprintRetrospectiveService` que compila as emoções/sentimentos extraídos de comentários de PR e tempo médio de bloqueios na sprint.
+    - [ ] Gerar relatório formatado (Markdown/PDF) dividido nas clássicas seções: "Went Well", "Needs Improvement", "Action Items".
+    - [ ] Injetar automaticamente os "Action Items" operacionais detectados como novas issues ou subtarefas no ROADMAP.md para a próxima sprint.
+    - [ ] Publicar a Retrospectiva no canal principal de comunicação da equipe no encerramento da Sprint (sexta-feira, por exemplo).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema Dinâmico de OKRs Autônomos baseados na Velocidade da Equipe".
+
+- [ ] **Feature: Auditoria Constante e Limpeza de Contexto de IA**
+  - **Descrição:** Acompanhar a expiração inteligente de embeddings limpando continuamente informações defasadas, e garantir que nenhum dado sensível (PII, tokens vazados) sobreviva em bancos vetoriais de cache. Esta feature assegura higiene de dados contínua para o ÉPICO de otimização de IA.
+  - **Critérios de Aceite:**
+    - [ ] Criar analisador semântico rodando em background (Cron) sobre os embeddings recém-cacheados procurando por padrões de chaves sensíveis/PII não filtradas anteriormente.
+    - [ ] Se detectado, invalidar a entrada do cache e emitir alerta de vazamento de dados pontual.
+    - [ ] Implementar mecanismo heurístico de "obsolescência de regra de negócio": varrer o código atual para garantir que caches vetoriais antigos não contradigam a lógica do `main` atual.
+    - [ ] Exportar relatórios mensais de "Saúde e Privacidade da Base de Conhecimento Vetorial".
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Ferramenta de Anonimização On-the-fly para Prompts de LLM".
+
+- [ ] **Feature: Tradução Automática Dinâmica de Documentação e Vídeos (I18N Autônomo)**
+  - **Descrição:** Permitir a internacionalização de todo o ecossistema documentado. O orquestrador detectará o idioma principal da equipe e gerará as wikis e vídeos (TTS/Legendas) de Arquitetura e ROADMAP automaticamente em múltiplos idiomas configuráveis (ex: EN/PT/ES).
+  - **Critérios de Aceite:**
+    - [ ] Modificar o pipeline de geração de documentação e vídeos para aceitar um array de locais/idiomas (`locales`).
+    - [ ] Usar IA para traduzir textos e legendas (SRT) preservando terminologias técnicas específicas de engenharia de software (glossário).
+    - [ ] Publicar variações do documento `ARCHITECTURE.md` (ex: `ARCHITECTURE.en.md`) através de PRs sincronizados.
+    - [ ] Garantir sincronia fonética/tempo de legendas para vídeos de screencasts exportados.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Suporte a Localização de Comentários de Code Review no GitHub".
+
+- [ ] **Feature: Correção Autônoma de Testes Flaky via IA**
+  - **Descrição:** Testes *flaky* (intermitentes) destroem a confiança no QA. Ao consolidar essas métricas no Dashboard de QA Autônomo, a IA assumirá o papel de investigar ativamente o motivo da intermitência (ex: race conditions, tempos de espera rígidos) e criará PRs isolados para corrigir a estabilidade dos testes.
+  - **Critérios de Aceite:**
+    - [ ] Identificar testes classificados como *flaky* no dashboard através do histórico do CI.
+    - [ ] Baixar o código e executar o teste repetidas vezes no Workspace Efêmero, extraindo logs detalhados quando ocorrer falha.
+    - [ ] Promptar a IA com as diferenças entre a execução que passou e a que falhou para sugerir melhorias de sincronização/wait (Playwright) ou mocks (Jest).
+    - [ ] Gerar PR automatizado focado exclusivamente em estabilizar o teste, contendo validação de "Executado 100 vezes sem falha".
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Dados de Teste Sintéticos em Massa (Mocking Inteligente)".
+
+- [ ] **Feature: Modelo Preditivo Avançado de Despesas e Planejamento Anual de Capacidade**
+  - **Descrição:** Evoluir os dados faturados do cloud provider (FinOps) utilizando algoritmos avançados de machine learning para projetar cenários de custos em prazos de 12 meses (Capacity Planning).
+  - **Critérios de Aceite:**
+    - [ ] Treinar um modelo simples de regressão temporal em cima da base histórica de consumo unificada.
+    - [ ] Injetar dados sobre crescimento esperado de repositórios e usuários (Growth Rate) como variável no modelo preditivo.
+    - [ ] Gerar um Dashboard interativo de "What-If" onde o P.O. humano pode simular o impacto financeiro de aumentar os jobs autônomos em 50%.
+    - [ ] Exportar propostas anuais de budget de infraestrutura em formato compatível para os C-Levels e stakeholders financeiros.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Recomendador Autônomo de Instâncias Reservadas (Savings Plans) de Cloud".
+
+- [ ] **Feature: Dashboard de Monitoramento de Performance de Inferência Local**
+  - **Descrição:** Ao implementar o Ollama/vLLM, é crítico medir a latência e throughput dos GPUs/CPUs locais. Este dashboard vai oferecer visibilidade sobre as métricas do LLM rodando na edge corporativa, identificando gargalos.
+  - **Critérios de Aceite:**
+    - [ ] Coletar métricas do vLLM/Ollama, como `Time-To-First-Token` (TTFT), tokens/segundo e consumo de VRAM das GPUs via Prometheus/NVIDIA DCGM exporter.
+    - [ ] Exibir gráficos em tempo real da saúde da inferência e da fila de requisições pendentes.
+    - [ ] Configurar alertas para quando a latência de inferência ultrapassar o limite aceitável de UX para automações bloqueantes.
+    - [ ] Permitir a gestão manual (Restart/Clear Cache) dos processos do modelo via interface administrativa.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auto-scaling Dinâmico de Pods de GPU Baseado no Comprimento de Fila de Inferência".
+
+- [ ] **Feature: Descoberta Dinâmica de Nós Locais de Edge para Escalonamento de Cache**
+  - **Descrição:** Em vez de depender de uma instância Redis centralizada, o orquestrador buscará ativamente nós distribuídos de *Edge* no cluster que tenham espaço ocioso para armazenar parcelas (shards) do cache vetorial híbrido. Isso aumenta a escalabilidade em grandes operações.
+  - **Critérios de Aceite:**
+    - [ ] Implementar mecanismo de *Service Discovery* utilizando APIs do Kubernetes para localizar pods ociosos marcados para Edge Cache.
+    - [ ] Integrar biblioteca de DHT (Distributed Hash Table) ou *sharding* dinâmico do Redis Cluster.
+    - [ ] Assegurar replicação mínima e rebalanceamento automático caso um nó de Edge seja removido ou caia (preempção).
+    - [ ] Medir a melhoria em latência global na recuperação de cache de contexto de IA após a distribuição geográfica/zonal no cluster.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Autogestão Preditiva de Replicação de Dados de Edge Baseada em Tráfego de Leitura".
+
+- [ ] **Feature: Análise Autônoma de Viés (Bias) nos Logs de Revisão de PRs**
+  - **Descrição:** Validar os dados gerados pelo painel de compliance e auditoria. O sistema rodará periodicamente uma análise sobre todo o histórico de feedback dado pelo orquestrador em PRs para identificar padrões de comportamento repetitivo ou excessivamente rígido contra determinados tipos de código, padrões de projeto ou equipes específicas.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `BiasAnalyzerJob` que consome as entradas criptografadas e validadas da trilha de auditoria.
+    - [ ] Utilizar técnicas de NLP (Natural Language Processing) e extração de tópicos para cruzar o tom e a rigidez do feedback com o repositório ou tecnologia-alvo.
+    - [ ] Produzir um relatório confidencial sinalizando possíveis desvios de "temperamento" da IA (ex: excesso de rejeições em PRs de frontend vs backend).
+    - [ ] Criar um mecanismo de calibração automática ("Prompt Tuning") que ajusta sutilmente as diretrizes do prompt principal de Code Review baseado neste viés.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Publicação de ScoreCards Trimestrais de Neutralidade e Diversidade de Soluções da IA".
+
+- [ ] **Feature: Testes de Degradação Suave (Graceful Degradation) via Injeção de Falhas**
+  - **Descrição:** Validar as Feature Flags dinâmicas induzindo picos simulados de latência e consumo de CPU. O orquestrador se auto-testará para certificar que os módulos não-críticos são efetivamente desativados e que a funcionalidade central permanece operativa.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver suíte automatizada de carga (Stress Test) que emule falha/lentidão em integrações de baixo nível.
+    - [ ] O `FeatureFlagManager` deve atuar em menos de 60 segundos após o início da degradação simulada.
+    - [ ] Validar via assertions em testes E2E se as partes core da aplicação continuam respondendo (ex: 200 OK em endpoints essenciais) durante a tempestade.
+    - [ ] Publicar log detalhado demonstrando o comportamento do Circuit Breaker em modo relatório.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação de Políticas de Retry Dinâmico Sensível ao Contexto da Carga".
+
+- [ ] **Feature: Monitoramento Dinâmico de Espaço Efêmero em Workspaces da IA**
+  - **Descrição:** Complementando o mapeamento seguro de montagens no K8s, esta feature irá inspecionar continuamente o consumo de disco (I/O e inodes) dos workspaces, prevenindo falhas de OOM Kill e esgotamento de *ephemeral-storage* causados por builds inesperadamente grandes de repositórios massivos.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar sidecars (ex: `node-exporter` adaptado ou daemon nativo) para coletar métricas de volume efêmero em cada pod de workspace.
+    - [ ] Implementar regra de fail-fast: abortar jobs imediatamente caso o workspace alcance 95% do espaço alocado, antes de afetar o nó Kubernetes subjacente.
+    - [ ] Em caso de aborto por disco, enviar feedback para o Pull Request sugerindo que a IA opere apenas em modo diff ou ignorando dependências muito densas.
+    - [ ] Exportar métricas agregadas de uso de disco por repositório para o Dashboard de Observabilidade e FinOps.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Compressão Autônoma e Garbage Collection Agressivo em Workspaces Massivos".
+
+- [ ] **Feature: Mecanismo de Aprovação Humana de Features em Massa no Backoffice**
+  - **Descrição:** Para gerenciar o volume gigantesco de novas tasks idealizadas via gatilhos de evolução, a Interface de Administração precisa prover fluxos de trabalho eficientes para que o P.O. humano faça o "triage" e o *bulk approve/reject* das features na fase de planejamento.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar funcionalidade na interface React/Vue listando todas as "Propostas de Features" geradas que ainda não foram comitadas no `ROADMAP.md`.
+    - [ ] Permitir selecionar múltiplos itens (checkboxes em massa) para aplicar ações como "Aprovar e Injetar no Roadmap", "Rejeitar", ou "Editar Prompt".
+    - [ ] Garantir que ações em massa disparem commits consolidados (apenas um PR ou Commit) para evitar flutuações e spam de versionamento.
+    - [ ] Registrar logs de auditoria para cada feature deferida em lote, atrelando ao usuário autenticado (SSO/OAuth).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor de Priorização de Backlog Baseado em Matriz RICE Automática".
+
+- [ ] **Feature: Geração Autônoma de Material Didático Interativo (Testes) para Engenheiros**
+  - **Descrição:** Avançando além dos slides dos Tech Talks, a IA irá criar avaliações curtas, quizzes interativos e exercícios práticos no estilo "Katas" direcionados aos times de engenharia. Isso reforçará ativamente as políticas contra débitos técnicos detectados, transformando aprendizado passivo em prático.
+  - **Critérios de Aceite:**
+    - [ ] Analisar os "Tech Talks" recentemente gerados sobre débitos técnicos recorrentes para extrair os pontos-chave de aprendizado.
+    - [ ] Utilizar a API do LLM para gerar quizzes de múltipla escolha ou pequenos desafios de refatoração de código via web.
+    - [ ] Integrar com LMS (Learning Management System) interno ou publicar na intranet (Wiki) através de formato SCORM ou markdown suportado.
+    - [ ] Estabelecer webhook para registrar se os desenvolvedores completaram os quizzes e cruzar (anonimamente) com o declínio do débito técnico abordado no repositório correspondente.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Gamificação Dinâmica e Scoreboard de Qualidade Individual/Times".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
