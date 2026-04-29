@@ -406,7 +406,28 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Tradução Automática Dinâmica de Documentação e Vídeos (I18N Autônomo)".
 
 ---
+### ÉPICO 13: Melhoria Contínua e Endurecimento do Repositório (Engenharia Interna)
+*Foco na modernização do código base, performance do repositório, qualidade estática extrema e pipelines de CI/CD para tornar o ciclo de desenvolvimento (Developer Experience) mais eficiente e resiliente.*
 
+- [ ] **Feature: Implementação de Verificações Estáticas de Qualidade (Linting/Formatting Avançado)**
+  - **Descrição:** Para aprimorar os repositórios internamente e garantir a padronização do código base do Jules Orchestrator, o sistema deve adotar e aplicar regras estritas de linting (ESLint) e formatação de código (Prettier), acopladas nativamente ao ciclo de CI. Isso garantirá uma melhor legibilidade do repositório e evitará "code smells" básicos, servindo como uma primeira camada de defesa antes do Code Review autônomo.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar e configurar o pacote `eslint` com os plugins essenciais para TypeScript, Jest e boas práticas de Node.js, configurando regras estritas para coesão (ex: `@typescript-eslint/no-explicit-any`).
+    - [ ] Adicionar e configurar o pacote `prettier` para padronizar aspas, tamanhos de tabulação e largura de colunas.
+    - [ ] Integrar a execução dos scripts `lint` e `format:check` no pipeline do GitHub Actions para bloquar commits ou PRs que violem a padronização, com *fail-fast*.
+    - [ ] Utilizar o orquestrador para consertar retrospectivamente todos os arquivos com `eslint --fix` numa branch temporária, aplicando um PR inicial.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Git Hooks Automáticos com Husky e Lint-Staged".
+
+- [ ] **Feature: Otimização Drástica de Build e Testes em CI/CD**
+  - **Descrição:** Como o projeto escalou, o tempo de execução no repositório aumentou. Precisamos otimizar a velocidade da pipeline de Continuous Integration (CI), aplicando cache de dependências eficientemente, separando testes unitários dos testes de integração, e paralelizando jobs no GitHub Actions. Esta ação aprimora o repositório por prover feedback rápido (Developer Experience) que acelera as validações dos Pull Requests gerados tanto por humanos quanto por agentes IA.
+  - **Critérios de Aceite:**
+    - [ ] Dividir os testes em suítes "unitárias" rápidas e suítes "e2e/integration" mais lentas dentro do Vitest.
+    - [ ] Configurar um cache rigoroso da pasta `node_modules` e `.pnpm-store` no GitHub Actions, garantindo que instalações de dependências ocorram em milissegundos.
+    - [ ] Implementar a execução paralela de testes de linting e unit tests (Matrix strategy) para diminuir o tempo global do CI.
+    - [ ] Medir e validar que o pipeline de CI do branch principal foi reduzido em pelo menos 40% do tempo médio atual.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Monitoramento de Tempo de Build e CI/CD Experience".
+
+---
 
 ### ÉPICO 7: Expansão do Ecossistema de Testes (QA Autônomo)
 *Foco na automação avançada de testes, garantindo qualidade extrema e ausência de regressões em fluxos complexos.*
