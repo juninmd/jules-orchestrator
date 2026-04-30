@@ -298,14 +298,14 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Testar a consistência dos resultados gerados (com IA usando temperatura baixa) e criar suite de testes isolada para o novo método enriquecido do `POService`.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Interface de Administração do Conhecimento P.O.".
 
-- [ ] **Feature: Integração do Parser de Roadmap com o Gerenciador de Issues do GitHub**
+- [x] **Feature: Integração do Parser de Roadmap com o Gerenciador de Issues do GitHub**
   - **Descrição:** Uma vez que o parser detectou mudanças e gerou uma nova task, o sistema precisa integrar-se diretamente com o GitHub para criar uma nova Issue oficial no repositório. Isso garante rastreabilidade e visibilidade para todos os desenvolvedores. A nova funcionalidade deve ser robusta o suficiente para mapear o conteúdo Markdown da feature para o formato suportado pelo GitHub, incluindo labels automáticos e designação de milestones se aplicável.
   - **Critérios de Aceite:**
-    - [ ] Criar um método `createIssueFromFeature` no serviço `GithubService` usando o `@octokit/rest` configurado no projeto.
-    - [ ] A Issue gerada deve conter a descrição detalhada e o checklist de critérios de aceite extraídos da geração via IA no corpo (`body`) da Issue.
-    - [ ] O título da Issue deve seguir um padrão claro (e.g., "Feature: [Nome da Feature]").
-    - [ ] Adicionar labels apropriados de forma automática, como `enhancement`, `AI-generated` e `autocreated`.
-    - [ ] Antes de criar a Issue, consultar se já existe uma issue com título similar no repositório para evitar a duplicação de tarefas (`idempotência`).
+    - [x] Criar um método `createIssueFromFeature` no serviço `GithubService` usando o `@octokit/rest` configurado no projeto.
+    - [x] A Issue gerada deve conter a descrição detalhada e o checklist de critérios de aceite extraídos da geração via IA no corpo (`body`) da Issue.
+    - [x] O título da Issue deve seguir um padrão claro (e.g., "Feature: [Nome da Feature]").
+    - [x] Adicionar labels apropriados de forma automática, como `enhancement`, `AI-generated` e `autocreated`.
+    - [x] Antes de criar a Issue, consultar se já existe uma issue com título similar no repositório para evitar a duplicação de tarefas (`idempotência`).
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Bidirecional: Sincronização de Status de Issues com o ROADMAP".
 
 - [ ] **Feature: Integração Bidirecional: Sincronização de Status de Issues com o ROADMAP**
@@ -799,6 +799,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Integrar com LMS (Learning Management System) interno ou publicar na intranet (Wiki) através de formato SCORM ou markdown suportado.
     - [ ] Estabelecer webhook para registrar se os desenvolvedores completaram os quizzes e cruzar (anonimamente) com o declínio do débito técnico abordado no repositório correspondente.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Gamificação Dinâmica e Scoreboard de Qualidade Individual/Times".
+
+- [ ] **Feature: Gamificação Dinâmica e Scoreboard de Qualidade Individual/Times**
+  - **Descrição:** Para engajar ativamente os engenheiros de software na adoção das melhores práticas e redução do débito técnico abordado nas avaliações e no Code Review, introduziremos uma camada de gamificação ao orquestrador. A IA coletará métricas de performance (como PRs aprovados sem intervenção, bugs resolvidos preemptivamente, e quizzes interativos completados) e os traduzirá em "Pontos de XP" e Conquistas (Badges). Esse sistema promoverá uma cultura de qualidade focada na celebração, visibilidade e aprendizado contínuo através de placares de líderes acessíveis tanto via plataforma web quanto bots no Telegram/Slack.
+  - **Critérios de Aceite:**
+    - [ ] Criar o serviço de backend `GamificationEngineService` capaz de ouvir eventos de pull requests aprovados, testes unitários estabilizados e avaliações do módulo de material didático concluídas, e atribuir pontuações baseadas na complexidade do evento (definida por heurística do LLM).
+    - [ ] Desenvolver a infraestrutura de banco de dados (esquema SQL ou NoSQL) para rastrear de forma auditável e idempotente os pontos, níveis de XP e badges acumulados por cada desenvolvedor.
+    - [ ] Implementar a geração e emissão autônoma de insígnias visuais (ex: "Arquitetura Limpa", "Mestre dos Testes", "Refatorador Resiliente") quando certos marcos e combo-streaks de qualidade forem alcançados.
+    - [ ] Construir o painel web responsivo (Dashboard) `Leaderboard & Achievements` onde as equipes poderão ver o ranking geral e interagir com o histórico detalhado do porquê de cada desenvolvedor ter recebido XP (ex: "Corrigiu memory leak crítico na Branch X").
+    - [ ] Configurar integrações de anúncio em canais públicos (Slack/Teams/Telegram) onde um bot "Herald" comemorará automaticamente quando um engenheiro subir de nível ou desbloquear uma conquista Rara, estimulando a colaboração positiva.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema Dinâmico de Recompensas e Bonificações (Integration with HR Tools)".
 
 
 ## 📝 Gestão do Documento e Próximos Passos
