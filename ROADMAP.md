@@ -811,6 +811,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema Dinâmico de Recompensas e Bonificações (Integration with HR Tools)".
 
 
+
+- [ ] **Feature: Sistema Dinâmico de Recompensas e Bonificações (Integration with HR Tools)**
+  - **Descrição:** Dando continuidade à gamificação do ecossistema, esta feature criará uma ponte direta entre a qualidade do código entregue pelos times de engenharia e os sistemas de Recursos Humanos. A ideia é converter os "Pontos de XP" e as métricas de excelência técnica (como redução proativa de débito técnico, aprovações rápidas e seguras em Code Review, e ausência de regressões) em recompensas tangíveis (como bônus, brindes corporativos, ou dias de folga) de forma automatizada e transparente, estimulando ativamente uma cultura de alta performance.
+  - **Critérios de Aceite:**
+    - [ ] Mapear as APIs de integração com plataformas de RH mais utilizadas (ex: BambooHR, Workday, ou soluções internas) para envio de badges e pontuações de mérito de forma segura (mTLS/OAuth2).
+    - [ ] Criar uma interface administrativa no backoffice (Dashboard de Qualidade) para que gestores de engenharia possam calibrar o peso do "XP" em relação às recompensas oferecidas.
+    - [ ] Implementar um motor de liquidação cíclica (ex: fechamento trimestral), que compila o placar de líderes e emite relatórios automatizados de destaque individual e de equipes.
+    - [ ] Garantir salvaguardas e limites ("caps") para evitar o "gaming the system" (tentativas de gerar pontuações artificiais criando PRs inúteis).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Executivo de Retorno sobre Investimento em Qualidade de Código (ROI)".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
