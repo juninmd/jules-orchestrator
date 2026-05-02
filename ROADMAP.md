@@ -427,6 +427,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Medir e validar que o pipeline de CI do branch principal foi reduzido em pelo menos 40% do tempo médio atual.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Monitoramento de Tempo de Build e CI/CD Experience".
 
+- [ ] **Feature: Automação de Atualização de Dependências Críticas**
+  - **Descrição:** Para aprimorar os repositórios internamente, o sistema deve integrar uma ferramenta para gerenciar e automatizar atualizações de pacotes e dependências (como Renovate ou Dependabot). Isso garante a segurança e estabilidade do repositório, mitigando riscos associados a pacotes desatualizados ou vulneráveis.
+  - **Critérios de Aceite:**
+    - [ ] Configurar a ferramenta de automação para varrer arquivos de dependências (`package.json`) semanalmente.
+    - [ ] Estabelecer políticas de auto-merge para atualizações de versões *patch* (correções menores).
+    - [ ] Integrar alertas de segurança diretamente nas Issues do repositório alvo para intervenção humana rápida.
+    - [ ] Criar testes e-2e em sandbox para verificar se a atualização quebra o build antes do merge automático.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Conformidade e Saúde de Dependências".
+
 ---
 
 ### ÉPICO 7: Expansão do Ecossistema de Testes (QA Autônomo)
