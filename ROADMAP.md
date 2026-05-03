@@ -831,6 +831,38 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Executivo de Retorno sobre Investimento em Qualidade de Código (ROI)".
 
 
+
+### ÉPICO 14: Ecossistema Multi-Agentes e Swarm Architecture
+*Foco na orquestração simultânea e colaborativa de múltiplos agentes de IA especializados (Swarm), que se comunicam para resolver débitos complexos, quebrar silos de arquitetura e planejar grandes refatorações com aprovação mínima.*
+
+- [ ] **Feature: Infraestrutura Base de Mensageria Multi-Agente**
+  - **Descrição:** Desenvolver o barramento de comunicação e a infraestrutura de mensageria que permitirá a diferentes perfis de IA (Agente Arquitetônico, Agente QA, Agente de Segurança, etc) trocarem mensagens e dados estruturados entre si de forma isolada, em um contexto ("Sessão de Swarm"), antes de proporem um Pull Request ou alteração no repositório.
+  - **Critérios de Aceite:**
+    - [ ] Criar a interface e a infraestrutura do barramento de comunicação interna `SwarmBusService` (usando emissores de evento nativos, Redis Pub/Sub ou similar) no repositório do `jules-orchestrator`.
+    - [ ] Mapear payloads padrão (DTOs) que os agentes utilizarão para conversar, contemplando `Origem`, `Destino`, `Contexto do Problema` e `Proposta de Solução Parcial`.
+    - [ ] Escrever testes unitários verificando a transmissão e recepção de mensagens simuladas entre dois agentes "Mock".
+    - [ ] Adicionar suporte a logging de auditoria persistindo todo o histórico de conversas da sessão no banco de dados para futura rastreabilidade de decisões.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação do Agente Especializado de Arquitetura de Software (Architect AI)".
+
+- [ ] **Feature: Implementação do Agente Especializado de Arquitetura de Software (Architect AI)**
+  - **Descrição:** Baseado na fundação de mensageria, criar um novo perfil de inteligência focado unicamente na revisão de alto nível. O Agente Arquitetônico não corrige typos, mas analisa se as propostas ferem os princípios do C4 Model gerados e as heurísticas do SOLID. Ele será responsável por vetar decisões do Agente de Review comum (P.R. Reviewer).
+  - **Critérios de Aceite:**
+    - [ ] Adicionar prompt base especializado em design de software e arquitetura limpa (Clean Architecture / Hexagonal).
+    - [ ] Integrar o Agente ao `SwarmBusService` para que ele receba propostas geradas pelos P.R. Reviewers antes que elas virem um comentário público.
+    - [ ] Se a proposta for ruim arquiteturalmente, o agente deve responder no barramento interno rejeitando a ideia e exigindo do Reviewer uma nova abordagem.
+    - [ ] Expor o log de deliberação entre os agentes dentro dos relatórios de PR gerados, fornecendo contexto profundo para o desenvolvedor humano.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Coordenação de Refatoração em Lote Orquestrada (Swarm Refactoring)".
+
+- [ ] **Feature: Coordenação de Refatoração em Lote Orquestrada (Swarm Refactoring)**
+  - **Descrição:** Com os agentes conversando, a IA não precisa apenas revisar código pontual. O Orquestrador deverá ser capaz de criar "Megas Refatorações" que tocam dezenas de arquivos com precisão matemática. Ex: Mudar um contrato de API globalmente de SOAP para REST, ou substituir um ORM.
+  - **Critérios de Aceite:**
+    - [ ] O Agente P.O. identificará grandes dívidas no ROADMAP e criará uma "Sessão de Refatoração em Lote".
+    - [ ] O `SwarmBusService` fará broadcast para múltiplos Agentes de Desenvolvimento (Dev AIs), alocando para cada um uma fatia dos arquivos do repositório alvo.
+    - [ ] Cada agente gerará suas modificações e fará commit em uma branch conjunta (`feature/swarm-refactor`).
+    - [ ] O Agente QA, escutando a finalização dos outros agentes, agirá gerando os testes para a branch.
+    - [ ] A pipeline só deve ser submetida e notificada aos humanos quando todos os agentes concluírem suas fatias, emitindo um Pull Request completo e testado.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Avaliação de Segurança Contínua no Swarm (SecOps AI)".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
