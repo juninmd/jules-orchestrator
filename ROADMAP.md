@@ -1070,6 +1070,36 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Garantir o log dessas inspeções no Datastore do Dashboard de Compliance, enriquecendo o Épico de Auditoria.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automatização de Threat Modeling Dinâmico por Componentes em Modificação".
 
+### ÉPICO 16: Extensibilidade e Marketplace de Plugins para o Orquestrador
+*Foco na abertura do ecossistema do Jules Orchestrator, permitindo que a comunidade e empresas desenvolvam plugins customizados de Inteligência Artificial, ferramentas de análise estática de nicho e fluxos de automação proprietários, consolidando a plataforma como o hub central de engenharia autônoma.*
+
+- [ ] **Feature: Arquitetura de Plugins Dinâmicos (Core Extensibility)**
+  - **Descrição:** O orquestrador atualmente opera com um conjunto fechado de jobs e serviços. Para escalar, precisamos de um sistema de extensibilidade robusto onde desenvolvedores externos possam injetar módulos de execução sem precisar realizar forks do repositório principal ou alterar o código-fonte original. Essa funcionalidade construirá o motor (Core) para carregar plugins dinamicamente no ciclo de vida da orquestração.
+  - **Critérios de Aceite:**
+    - [ ] Criar a interface padrão `IJulesPlugin` definindo métodos de ciclo de vida como `onInit`, `onJobStart`, `onJobComplete` e `onError`.
+    - [ ] Implementar o `PluginLoaderService` responsável por ler manifestos de plugins em diretórios configurados (ex: `./plugins`) ou módulos npm globais dinamicamente.
+    - [ ] Desenvolver um sistema de injeção de dependências modular, permitindo que plugins estendam ou subscrevam eventos internos do barramento (`SwarmBusService`).
+    - [ ] Escrever suíte de testes de integração validando que um plugin corrompido não derruba o runtime do orquestrador (sandbox/fail-safe básico).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sandboxing Seguro e Restrição de Permissões para Plugins de Terceiros".
+
+- [ ] **Feature: Sandboxing Seguro e Restrição de Permissões para Plugins de Terceiros**
+  - **Descrição:** Com a arquitetura de plugins carregando código dinâmico, é vital garantir que plugins desenvolvidos pela comunidade não possuam acesso irrestrito ao FileSystem do host, tokens de API, ou a capacidade de vazar dados proprietários do repositório alvo. Esta feature implementará um ambiente de sandbox isolado para a execução desses módulos.
+  - **Critérios de Aceite:**
+    - [ ] Utilizar tecnologias nativas como Node.js `vm` module ou `worker_threads` com isolamento de contexto para rodar os plugins.
+    - [ ] Criar um modelo de permissões baseado em manifesto (`plugin.json`), onde o plugin deve declarar explicitamente o que precisa acessar (ex: `fs.read`, `github.issues.write`).
+    - [ ] Implementar o `SecurityProxy` que intercepta chamadas nativas feitas pelo plugin, bloqueando ações não autorizadas (ex: acessar a rede para IPs externos não permitidos).
+    - [ ] Realizar testes automatizados de injeção de código malicioso para validar se o sandbox conteve a ameaça e impediu vazamento de dados.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Interface de Gerenciamento de Plugins e Registry Público".
+
+- [ ] **Feature: Interface de Gerenciamento de Plugins e Registry Público**
+  - **Descrição:** Tendo a fundação técnica e de segurança estabelecida, os administradores necessitam de uma maneira amigável para instalar, atualizar e visualizar os plugins instalados no orquestrador. Além disso, criaremos o alicerce para um Registry público onde a comunidade poderá publicar suas próprias inovações e integrações para o Jules Orchestrator.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar um módulo de gerenciamento de plugins ao CLI do Jules e ao backoffice visual (Dashboard), suportando comandos/ações como `install`, `remove`, `update`, `list`.
+    - [ ] Criar especificações e endpoints para um "Plugin Registry" público (semelhante ao registry do npm ou VS Code Marketplace), permitindo descoberta e busca de módulos.
+    - [ ] Exibir o status de saúde e métricas de consumo de recursos por cada plugin ativo no dashboard de observabilidade.
+    - [ ] Construir mecanismo de validação e verificação de assinatura (checksums) durante o download do plugin para mitigar ataques de Supply Chain e man-in-the-middle.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Criação do Plugin Template Generator e Ferramentas de Desenvolvimento para a Comunidade".
+
 
 ## 📝 Gestão do Documento e Próximos Passos
 
