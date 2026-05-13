@@ -31,7 +31,8 @@ export class JulesService {
         'JulesService.invokeSession'
       );
     } catch (error) {
-      throw new ExternalServiceError('Jules API invocation failed', 'Jules', { repository: payload.repository, url });
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new ExternalServiceError(`Jules API invocation failed: ${detail}`, 'Jules', { repository: payload.repository, url });
     }
   }
 

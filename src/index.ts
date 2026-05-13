@@ -11,7 +11,7 @@ async function bootstrap() {
   } catch (error) {
     const formatted = formatError(error);
     logger.error('Bootstrap', 'Falha fatal no Orquestrador', error, { code: formatted.code });
-    const exitCode = error instanceof AppError && !error.isRetryable ? 1 : 1;
+    const exitCode = error instanceof AppError && error.isRetryable ? 2 : 1;
     process.exit(exitCode);
   }
 }
