@@ -40,7 +40,7 @@ describe('JulesService', () => {
       'https://jules.api/v1/sessions',
       expect.objectContaining({
         method: 'POST',
-        body: expect.stringContaining('juninmd/api')
+        body: expect.stringContaining('juninmd-api')
       })
     );
   });

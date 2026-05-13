@@ -47,7 +47,7 @@ export class JulesService {
       body: JSON.stringify({
         prompt,
         sourceContext: {
-          source: `sources/github/${repository}`,
+          source: `sources/github-${repository.replace('/', '-')}`,
           githubRepoContext: {
             startingBranch: "master"
           }
