@@ -308,14 +308,14 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [x] Antes de criar a Issue, consultar se já existe uma issue com título similar no repositório para evitar a duplicação de tarefas (`idempotência`).
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Bidirecional: Sincronização de Status de Issues com o ROADMAP".
 
-- [ ] **Feature: Integração Bidirecional: Sincronização de Status de Issues com o ROADMAP**
+- [x] **Feature: Integração Bidirecional: Sincronização de Status de Issues com o ROADMAP**
   - **Descrição:** Fazer com que o `ROADMAP.md` e o GitHub Issues operem em perfeita sincronia bidirecional. Quando uma Issue vinculada ao ROADMAP for fechada (via PR ou manualmente), o item do ROADMAP correspondente deve ter seu checklist automaticamente marcado como `[x]`, alimentando o ciclo sem necessidade de commit manual do desenvolvedor no arquivo Markdown.
   - **Critérios de Aceite:**
-    - [ ] Criar listener de webhooks do GitHub escutando o evento `issues.closed` e `pull_request.closed` (merged).
-    - [ ] Mapear o ID/Título da Issue fechada com a sua respectiva feature detalhada dentro do `ROADMAP.md`.
-    - [ ] Modificar programaticamente o arquivo `ROADMAP.md`, alterando o `[ ]` para `[x]` na respectiva subtask ou feature principal.
-    - [ ] Realizar o commit automático de atualização do ROADMAP via GitHub API de forma silenciosa e performática.
-    - [ ] Testar cenários de edge cases (Issue reaberta, texto levemente alterado, falha na API de commit) e implementar tratamento de erros adequado.
+    - [x] Criar listener de webhooks do GitHub escutando o evento `issues.closed` e `pull_request.closed` (merged).
+    - [x] Mapear o ID/Título da Issue fechada com a sua respectiva feature detalhada dentro do `ROADMAP.md`.
+    - [x] Modificar programaticamente o arquivo `ROADMAP.md`, alterando o `[ ]` para `[x]` na respectiva subtask ou feature principal.
+    - [x] Realizar o commit automático de atualização do ROADMAP via GitHub API de forma silenciosa e performática.
+    - [x] Testar cenários de edge cases (Issue reaberta, texto levemente alterado, falha na API de commit) e implementar tratamento de erros adequado.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel P.O. Visual: Geração de Relatório de Progresso de Sprint".
 
 - [ ] **Feature: Painel P.O. Visual: Geração de Relatório de Progresso de Sprint**
@@ -1091,14 +1091,23 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Realizar testes automatizados de injeção de código malicioso para validar se o sandbox conteve a ameaça e impediu vazamento de dados.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Interface de Gerenciamento de Plugins e Registry Público".
 
-- [ ] **Feature: Interface de Gerenciamento de Plugins e Registry Público**
+- [x] **Feature: Interface de Gerenciamento de Plugins e Registry Público**
   - **Descrição:** Tendo a fundação técnica e de segurança estabelecida, os administradores necessitam de uma maneira amigável para instalar, atualizar e visualizar os plugins instalados no orquestrador. Além disso, criaremos o alicerce para um Registry público onde a comunidade poderá publicar suas próprias inovações e integrações para o Jules Orchestrator.
   - **Critérios de Aceite:**
-    - [ ] Adicionar um módulo de gerenciamento de plugins ao CLI do Jules e ao backoffice visual (Dashboard), suportando comandos/ações como `install`, `remove`, `update`, `list`.
-    - [ ] Criar especificações e endpoints para um "Plugin Registry" público (semelhante ao registry do npm ou VS Code Marketplace), permitindo descoberta e busca de módulos.
-    - [ ] Exibir o status de saúde e métricas de consumo de recursos por cada plugin ativo no dashboard de observabilidade.
-    - [ ] Construir mecanismo de validação e verificação de assinatura (checksums) durante o download do plugin para mitigar ataques de Supply Chain e man-in-the-middle.
+    - [x] Adicionar um módulo de gerenciamento de plugins ao CLI do Jules e ao backoffice visual (Dashboard), suportando comandos/ações como `install`, `remove`, `update`, `list`.
+    - [x] Criar especificações e endpoints para um "Plugin Registry" público (semelhante ao registry do npm ou VS Code Marketplace), permitindo descoberta e busca de módulos.
+    - [x] Exibir o status de saúde e métricas de consumo de recursos por cada plugin ativo no dashboard de observabilidade.
+    - [x] Construir mecanismo de validação e verificação de assinatura (checksums) durante o download do plugin para mitigar ataques de Supply Chain e man-in-the-middle.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Criação do Plugin Template Generator e Ferramentas de Desenvolvimento para a Comunidade".
+
+- [ ] **Feature: Criação do Plugin Template Generator e Ferramentas de Desenvolvimento para a Comunidade**
+  - **Descrição:** Com a plataforma do orquestrador madura e suportando plugins e tendo um marketplace/Registry público operante, é fundamental engajar e capacitar desenvolvedores terceiros a criarem suas próprias extensões. O objetivo desta funcionalidade é fornecer um kit de desenvolvimento de software (SDK) rico, CLI com geradores de templates scaffolding (como `create-jules-plugin`) e documentação interativa para democratizar e escalar a contribuição open-source e B2B no ecossistema do Jules.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver no CLI a ação `create-jules-plugin` que faça o bootstrap de um novo repositório com TypeScript configurado, linter, vitest e os pacotes básicos (SDK) do Jules.
+    - [ ] Criar o pacote NPM oficial `@jules/plugin-sdk` exportando as interfaces e tipos necessários (`IJulesPlugin`, `ISwarmMessage`, mocks do `SwarmBusService`) para que os devs desenvolvam sem depender do monorepo principal do orquestrador.
+    - [ ] Disponibilizar documentação gerada via RAG/LLM do Épico de Documentação Institucional orientada especificamente à construção de Plugins (Plugin Developer Guide) hospedada num subdomínio da plataforma.
+    - [ ] Implementar uma suíte de testes de contrato automatizada (Contract Testing Simulator) no SDK para que desenvolvedores validem que seus plugins não quebrarão os protocolos de comunicação ao serem enviados para o Registry Público.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Monitoramento e Telemetria Integrada para Plugins de Terceiros".
 
 
 ## 📝 Gestão do Documento e Próximos Passos
