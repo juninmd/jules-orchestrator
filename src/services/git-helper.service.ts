@@ -20,6 +20,7 @@ export async function safeGitClone(
   const gitUrl = `https://x-access-token@github.com/${repository}.git`;
 
   try {
+    fs.mkdirSync(path.dirname(askpassScript), { recursive: true });
     fs.writeFileSync(askpassScript, `#!/bin/sh\necho "${token}"`, { mode: 0o700 });
 
     await execAsync(

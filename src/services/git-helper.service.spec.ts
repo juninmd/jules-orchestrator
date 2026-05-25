@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { mockExecAsync, mockWriteFileSync, mockExistsSync, mockUnlinkSync } = vi.hoisted(() => ({
+const { mockExecAsync, mockMkdirSync, mockWriteFileSync, mockExistsSync, mockUnlinkSync } = vi.hoisted(() => ({
   mockExecAsync: vi.fn().mockResolvedValue({ stdout: '', stderr: '' }),
+  mockMkdirSync: vi.fn(),
   mockWriteFileSync: vi.fn(),
   mockExistsSync: vi.fn().mockReturnValue(true),
   mockUnlinkSync: vi.fn()
@@ -11,6 +12,7 @@ vi.mock('node:child_process', () => ({ exec: vi.fn() }));
 vi.mock('node:util', () => ({ promisify: () => mockExecAsync }));
 vi.mock('node:fs', () => ({
   default: {
+    mkdirSync: mockMkdirSync,
     writeFileSync: mockWriteFileSync,
     existsSync: mockExistsSync,
     unlinkSync: mockUnlinkSync
@@ -24,6 +26,7 @@ describe('safeGitClone', () => {
 
   it('creates askpass script and clones', async () => {
     await safeGitClone('juninmd/api', 'tok123', '/tmp/clone');
+    expect(mockMkdirSync).toHaveBeenCalledWith(expect.stringMatching(/[\\/]tmp$/), { recursive: true });
     expect(mockWriteFileSync).toHaveBeenCalledWith(
       expect.stringContaining('askpass'),
       expect.stringContaining('tok123'),
