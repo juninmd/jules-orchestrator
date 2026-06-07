@@ -15,7 +15,7 @@
     "start:ops-report": "cross-env JOB_NAME=ops-report tsx src/index.ts",
     "test": "vitest run src",
     "test:coverage": "vitest run src --coverage",
-    "build": "tsc"
+    "build": "node -e \"import('child_process').then(({ execSync }) => execSync('tsc', { stdio: 'inherit' }))\""
   },
   "keywords": [],
   "author": "",
