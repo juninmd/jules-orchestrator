@@ -1,7 +1,7 @@
 FROM node:26-alpine AS build
 
-# Habilitar pnpm nativo do Node.js
-RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
+# Instala pnpm via npm (corepack foi removido das imagens node 25+)
+RUN npm install -g pnpm@10.32.1
 
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
@@ -13,7 +13,7 @@ RUN pnpm build
 FROM node:26-alpine AS production
 
 ENV NODE_ENV=production
-RUN corepack enable && corepack prepare pnpm@10.32.1 --activate && apk add --no-cache git
+RUN npm install -g pnpm@10.32.1 && apk add --no-cache git
 
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
