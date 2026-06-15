@@ -1,5 +1,5 @@
 import { generateText } from 'ai';
-import { createOllama } from 'ollama-ai-provider';
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { GithubService } from '../services/github.service.js';
 import { TelegramService } from '../services/telegram.service.js';
 import { env } from '../config/env.config.js';
@@ -15,7 +15,7 @@ export async function runResolveQuestionsJob() {
 
   const githubService = new GithubService();
   const telegramService = new TelegramService();
-  const ollama = createOllama({ baseURL: env.OLLAMA_HOST + '/api' });
+  const ollama = createOpenAICompatible({ name: 'litellm', baseURL: env.OLLAMA_HOST, apiKey: env.OLLAMA_API_KEY });
   const model = ollama(env.OLLAMA_MODEL);
 
   const repos = await githubService.getAllRepositories();

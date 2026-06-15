@@ -14,8 +14,8 @@ vi.mock('node:util', async (importOriginal) => {
 
 vi.mock('ai', () => ({ generateText: mockGenerateText }));
 
-vi.mock('ollama-ai-provider', () => ({
-  createOllama: () => () => 'mock-model'
+vi.mock('@ai-sdk/openai-compatible', () => ({
+  createOpenAICompatible: () => () => 'mock-model'
 }));
 
 vi.mock('../services/github.service.js', () => {

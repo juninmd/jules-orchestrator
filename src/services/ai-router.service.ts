@@ -1,6 +1,6 @@
 import { env } from '../config/env.config.js';
 import { generateText, tool } from 'ai';
-import { createOllama } from 'ollama-ai-provider';
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { z } from 'zod';
 import { JulesService } from './jules.service.js';
 import { logger } from './logger.service.js';
@@ -8,7 +8,7 @@ import { AIProviderError } from '../utils/errors.js';
 import { withTimeout } from '../utils/retry.js';
 
 export class AIRouterService {
-  private ollama = createOllama({ baseURL: `${env.OLLAMA_HOST}/api` });
+  private ollama = createOpenAICompatible({ name: 'litellm', baseURL: env.OLLAMA_HOST, apiKey: env.OLLAMA_API_KEY });
   private julesService = new JulesService();
 
   public async routeImprovement(repository: string, context: string): Promise<void> {

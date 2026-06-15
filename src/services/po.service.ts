@@ -1,10 +1,10 @@
 import { generateText } from 'ai';
-import { createOllama } from 'ollama-ai-provider';
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { env } from '../config/env.config.js';
 import { logger } from './logger.service.js';
 
 export class POService {
-  private ollama = createOllama({ baseURL: `${env.OLLAMA_HOST}/api` });
+  private ollama = createOpenAICompatible({ name: 'litellm', baseURL: env.OLLAMA_HOST, apiKey: env.OLLAMA_API_KEY });
 
   public async generateNewFeature(completedTaskTitle: string, completedTaskContext: string, newFeatureTitle: string): Promise<string> {
     logger.info('PO', `Gerando nova feature: "${newFeatureTitle}" baseada em "${completedTaskTitle}"`);

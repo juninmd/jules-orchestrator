@@ -5,7 +5,7 @@ const { mockGenerateText } = vi.hoisted(() => ({
 }));
 
 vi.mock('ai', () => ({ generateText: mockGenerateText }));
-vi.mock('ollama-ai-provider', () => ({ createOllama: () => () => 'mock-model' }));
+vi.mock('@ai-sdk/openai-compatible', () => ({ createOpenAICompatible: () => () => 'mock-model' }));
 vi.mock('../config/env.config.js', () => ({
   env: { OLLAMA_HOST: 'http://localhost:11434', OLLAMA_MODEL: 'gemma2' }
 }));

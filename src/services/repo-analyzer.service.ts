@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import fsSync from 'node:fs';
 import path from 'node:path';
 import { generateText } from 'ai';
-import { createOllama } from 'ollama-ai-provider';
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { env } from '../config/env.config.js';
 import { GithubService } from './github.service.js';
 import { createWorkspacePath } from './workspace-path.service.js';
@@ -104,7 +104,7 @@ Retorne UNICAMENTE UM parágrafo em português descrevendo a sessão que o Jules
 Se não houver uma próxima ação útil, ou tudo já estiver coberto pelos PRs, responda EXATAMENTE: 'NENHUMA AÇÃO NECESSÁRIA' e nada mais.`;
 
       logger.info(repoName, 'Analisando via Ollama...');
-      const ollama = createOllama({ baseURL: env.OLLAMA_HOST + '/api' });
+      const ollama = createOpenAICompatible({ name: 'litellm', baseURL: env.OLLAMA_HOST, apiKey: env.OLLAMA_API_KEY });
       const { text } = await generateText({
         model: ollama(env.OLLAMA_MODEL) as Parameters<typeof generateText>[0]['model'],
         prompt,

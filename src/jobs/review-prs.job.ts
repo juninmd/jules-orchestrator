@@ -1,5 +1,5 @@
 import { generateText } from 'ai';
-import { createOllama } from 'ollama-ai-provider';
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import fsSync from 'node:fs';
@@ -23,7 +23,7 @@ export async function runReviewPrsJob() {
 
   const githubService = new GithubService();
   const telegramService = new TelegramService();
-  const ollama = createOllama({ baseURL: env.OLLAMA_HOST + '/api' });
+  const ollama = createOpenAICompatible({ name: 'litellm', baseURL: env.OLLAMA_HOST, apiKey: env.OLLAMA_API_KEY });
   const model = ollama(env.OLLAMA_MODEL);
 
   const repos = await githubService.getAllRepositories();
