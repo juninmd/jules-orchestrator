@@ -22,7 +22,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.32.1",
   "dependencies": {
-    "@ai-sdk/openai-compatible": "^0.2.16",
+    "@ai-sdk/openai-compatible": "^2.0.51",
     "@kubernetes/client-node": "^1.4.0",
     "@octokit/rest": "^22.0.1",
     "ai": "^4.3.19",
