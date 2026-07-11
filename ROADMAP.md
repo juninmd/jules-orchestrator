@@ -1110,15 +1110,25 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Monitoramento e Telemetria Integrada para Plugins de Terceiros".
 
 
-- [ ] **Feature: Monitoramento e Telemetria Integrada para Plugins de Terceiros**
+- [x] **Feature: Monitoramento e Telemetria Integrada para Plugins de Terceiros**
   - **Descrição:** À medida que a comunidade e as empresas desenvolvem plugins para o orquestrador usando o novo SDK, precisamos garantir a estabilidade e a segurança do ecossistema principal. Esta feature implementará um sistema de telemetria isolado para cada plugin instalado, monitorando ativamente o consumo de recursos (CPU, RAM, E/S de Disco, requisições de rede) e o tempo de execução no cluster Kubernetes. O objetivo é prevenir preventivamente que um plugin mal otimizado cause vazamento de memória ou sobrecarga nos nós do cluster (Noisy Neighbor). Além disso, os dados servirão como base para métricas de auditoria de performance.
   - **Critérios de Aceite:**
-    - [ ] Integrar um coletor de telemetria focado no ciclo de execução do `PluginLoaderService`, interceptando a inicialização e o processamento de todos os plugins carregados no runtime.
-    - [ ] Coletar métricas granulares (com auxílio do Node.js Worker Threads ou Cgroups no K8s) expondo limites de tempo de execução e memória no endpoint `/metrics`.
-    - [ ] Criar um mecanismo de proteção "Circuit Breaker de Plugin" que pausa ou descarrega sumariamente módulos de terceiros que extrapolem limites máximos de RAM (configuráveis) por mais de 3 minutos consecutivos.
-    - [ ] Desenvolver uma aba no Dashboard Administrativo que mostre gráficos em tempo real de saúde, falhas de execução e uso percentual de cada plugin do Registry Público ativo na plataforma.
-    - [ ] Emitir alertas de criticidade (via Slack/Telegram ou Webhook) informando administradores sempre que a ação de bloqueio do Circuit Breaker for acionada sobre um plugin.
+    - [x] Integrar um coletor de telemetria focado no ciclo de execução do `PluginLoaderService`, interceptando a inicialização e o processamento de todos os plugins carregados no runtime.
+    - [x] Coletar métricas granulares (com auxílio do Node.js Worker Threads ou Cgroups no K8s) expondo limites de tempo de execução e memória no endpoint `/metrics`.
+    - [x] Criar um mecanismo de proteção "Circuit Breaker de Plugin" que pausa ou descarrega sumariamente módulos de terceiros que extrapolem limites máximos de RAM (configuráveis) por mais de 3 minutos consecutivos.
+    - [x] Desenvolver uma aba no Dashboard Administrativo que mostre gráficos em tempo real de saúde, falhas de execução e uso percentual de cada plugin do Registry Público ativo na plataforma.
+    - [x] Emitir alertas de criticidade (via Slack/Telegram ou Webhook) informando administradores sempre que a ação de bloqueio do Circuit Breaker for acionada sobre um plugin.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Avaliação e Certificação Automática de Qualidade de Plugins Públicos".
+
+- [ ] **Feature: Sistema de Avaliação e Certificação Automática de Qualidade de Plugins Públicos**
+  - **Descrição:** Para manter a integridade e a confiança no ecossistema de plugins do Jules Orchestrator, é essencial validar a qualidade técnica de plugins submetidos pela comunidade no Registry Público. Esta funcionalidade cria uma esteira autônoma de homologação (Certification Pipeline) que analisa estaticamente o código do plugin em busca de más práticas, dependências perigosas e quebras de contrato. Apenas plugins que atingirem a pontuação necessária receberão o selo de "Certificado" no marketplace, orientando os usuários sobre módulos seguros e performáticos para uso corporativo.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver um robô validador (`PluginCertifierService`) que fará um pull do código do plugin recém-publicado e executará verificações estáticas (ESLint, SonarQube).
+    - [ ] Implementar a validação estrita do arquivo `plugin.json` (manifesto), rejeitando plugins que solicitem permissões abusivas ao Sandbox (ex: acesso a `/etc` ou rede aberta).
+    - [ ] Criar um mecanismo de testes dinâmicos isolados que faz mock do `SwarmBusService` e garante que o plugin não trava (deadlock) ou causa leaks de memória em uma execução de 5 minutos.
+    - [ ] Adicionar lógica visual ao Registry Público e CLI para exibir a badge oficial "Certified by Jules" para os plugins aprovados, além do score de segurança e performance.
+    - [ ] Configurar notificações automáticas de feedback (via GitHub Issue ou E-mail) para o autor do plugin contendo o relatório de certificação, com os motivos da reprovação ou os parabéns pela certificação.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Quarentena e Rollback Autônomo para Plugins Certificados Comprometidos".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
