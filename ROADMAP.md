@@ -1110,6 +1110,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Monitoramento e Telemetria Integrada para Plugins de Terceiros".
 
 
+- [ ] **Feature: Monitoramento e Telemetria Integrada para Plugins de Terceiros**
+  - **Descrição:** À medida que a comunidade e as empresas desenvolvem plugins para o orquestrador usando o novo SDK, precisamos garantir a estabilidade e a segurança do ecossistema principal. Esta feature implementará um sistema de telemetria isolado para cada plugin instalado, monitorando ativamente o consumo de recursos (CPU, RAM, E/S de Disco, requisições de rede) e o tempo de execução no cluster Kubernetes. O objetivo é prevenir preventivamente que um plugin mal otimizado cause vazamento de memória ou sobrecarga nos nós do cluster (Noisy Neighbor). Além disso, os dados servirão como base para métricas de auditoria de performance.
+  - **Critérios de Aceite:**
+    - [ ] Integrar um coletor de telemetria focado no ciclo de execução do `PluginLoaderService`, interceptando a inicialização e o processamento de todos os plugins carregados no runtime.
+    - [ ] Coletar métricas granulares (com auxílio do Node.js Worker Threads ou Cgroups no K8s) expondo limites de tempo de execução e memória no endpoint `/metrics`.
+    - [ ] Criar um mecanismo de proteção "Circuit Breaker de Plugin" que pausa ou descarrega sumariamente módulos de terceiros que extrapolem limites máximos de RAM (configuráveis) por mais de 3 minutos consecutivos.
+    - [ ] Desenvolver uma aba no Dashboard Administrativo que mostre gráficos em tempo real de saúde, falhas de execução e uso percentual de cada plugin do Registry Público ativo na plataforma.
+    - [ ] Emitir alertas de criticidade (via Slack/Telegram ou Webhook) informando administradores sempre que a ação de bloqueio do Circuit Breaker for acionada sobre um plugin.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Avaliação e Certificação Automática de Qualidade de Plugins Públicos".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
