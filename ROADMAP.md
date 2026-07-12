@@ -1130,6 +1130,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Configurar notificações automáticas de feedback (via GitHub Issue ou E-mail) para o autor do plugin contendo o relatório de certificação, com os motivos da reprovação ou os parabéns pela certificação.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Quarentena e Rollback Autônomo para Plugins Certificados Comprometidos".
 
+- [ ] **Feature: Mecanismo de Quarentena e Rollback Autônomo para Plugins Certificados Comprometidos**
+  - **Descrição:** Mesmo após a certificação inicial, plugins podem ser atualizados com dependências comprometidas (ataques de supply chain) ou apresentar falhas tardias de execução devido a casos de uso imprevistos. Esta funcionalidade visa criar uma rede de segurança dinâmica (fail-safe) que monitora continuamente o comportamento dos plugins aprovados em produção. Quando um comportamento anômalo ou malicioso for detectado (como tentativas de acesso a redes não declaradas ou vazamento de memória pós-certificação), o orquestrador isolará automaticamente o plugin em uma "Quarentena" e executará um rollback seguro para a última versão estável conhecida, garantindo que o runtime principal e os dados dos repositórios não sejam impactados.
+  - **Critérios de Aceite:**
+    - [ ] Implementar um daemon de observabilidade de segurança (`SecurityWatchdogService`) que escuta eventos de violação do sandbox de plugins em tempo real no cluster.
+    - [ ] Desenvolver a lógica de estado de "Quarentena", onde o plugin afetado é desativado do barramento interno (`SwarmBusService`) e todas as suas permissões de I/O são imediatamente revogadas.
+    - [ ] Criar o mecanismo automatizado de Rollback Autônomo, capaz de recuperar o último artefato certificado estável do Plugin Registry e substituir a versão comprometida de forma transparente (Zero-Downtime).
+    - [ ] Adicionar fluxos de notificação emergenciais (Alertas Críticos P0) via Slack, Telegram ou Webhook informando os administradores da plataforma e o autor do plugin sobre a quarentena, anexando relatórios de violação.
+    - [ ] Construir testes de injeção de falhas sintéticas (Chaos Engineering) para validar a eficácia e a rapidez de resposta do mecanismo de contenção na sandbox.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel de Resolução de Conflitos e Auditoria de Plugins em Quarentena".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
