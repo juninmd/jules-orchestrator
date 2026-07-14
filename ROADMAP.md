@@ -1130,15 +1130,25 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Configurar notificações automáticas de feedback (via GitHub Issue ou E-mail) para o autor do plugin contendo o relatório de certificação, com os motivos da reprovação ou os parabéns pela certificação.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Quarentena e Rollback Autônomo para Plugins Certificados Comprometidos".
 
-- [ ] **Feature: Mecanismo de Quarentena e Rollback Autônomo para Plugins Certificados Comprometidos**
+- [x] **Feature: Mecanismo de Quarentena e Rollback Autônomo para Plugins Certificados Comprometidos**
   - **Descrição:** Mesmo após a certificação inicial, plugins podem ser atualizados com dependências comprometidas (ataques de supply chain) ou apresentar falhas tardias de execução devido a casos de uso imprevistos. Esta funcionalidade visa criar uma rede de segurança dinâmica (fail-safe) que monitora continuamente o comportamento dos plugins aprovados em produção. Quando um comportamento anômalo ou malicioso for detectado (como tentativas de acesso a redes não declaradas ou vazamento de memória pós-certificação), o orquestrador isolará automaticamente o plugin em uma "Quarentena" e executará um rollback seguro para a última versão estável conhecida, garantindo que o runtime principal e os dados dos repositórios não sejam impactados.
   - **Critérios de Aceite:**
-    - [ ] Implementar um daemon de observabilidade de segurança (`SecurityWatchdogService`) que escuta eventos de violação do sandbox de plugins em tempo real no cluster.
-    - [ ] Desenvolver a lógica de estado de "Quarentena", onde o plugin afetado é desativado do barramento interno (`SwarmBusService`) e todas as suas permissões de I/O são imediatamente revogadas.
-    - [ ] Criar o mecanismo automatizado de Rollback Autônomo, capaz de recuperar o último artefato certificado estável do Plugin Registry e substituir a versão comprometida de forma transparente (Zero-Downtime).
-    - [ ] Adicionar fluxos de notificação emergenciais (Alertas Críticos P0) via Slack, Telegram ou Webhook informando os administradores da plataforma e o autor do plugin sobre a quarentena, anexando relatórios de violação.
-    - [ ] Construir testes de injeção de falhas sintéticas (Chaos Engineering) para validar a eficácia e a rapidez de resposta do mecanismo de contenção na sandbox.
+    - [x] Implementar um daemon de observabilidade de segurança (`SecurityWatchdogService`) que escuta eventos de violação do sandbox de plugins em tempo real no cluster.
+    - [x] Desenvolver a lógica de estado de "Quarentena", onde o plugin afetado é desativado do barramento interno (`SwarmBusService`) e todas as suas permissões de I/O são imediatamente revogadas.
+    - [x] Criar o mecanismo automatizado de Rollback Autônomo, capaz de recuperar o último artefato certificado estável do Plugin Registry e substituir a versão comprometida de forma transparente (Zero-Downtime).
+    - [x] Adicionar fluxos de notificação emergenciais (Alertas Críticos P0) via Slack, Telegram ou Webhook informando os administradores da plataforma e o autor do plugin sobre a quarentena, anexando relatórios de violação.
+    - [x] Construir testes de injeção de falhas sintéticas (Chaos Engineering) para validar a eficácia e a rapidez de resposta do mecanismo de contenção na sandbox.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel de Resolução de Conflitos e Auditoria de Plugins em Quarentena".
+
+- [ ] **Feature: Painel de Resolução de Conflitos e Auditoria de Plugins em Quarentena**
+  - **Descrição:** Uma interface administrativa dedicada para gerenciar o ciclo de vida de plugins que foram colocados em quarentena pelo mecanismo de segurança. Este painel fornecerá ferramentas para auditar os logs de execução, visualizar os motivos do bloqueio, comparar as alterações de código e decidir de forma colaborativa se o plugin deve ser bloqueado permanentemente, corrigido ou liberado para uso. Essa funcionalidade garante a transparência das ações tomadas pelo sistema de segurança e facilita a comunicação entre os administradores e a comunidade de desenvolvimento.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver a interface web para listar todos os plugins em quarentena, incluindo métricas de risco e a razão exata do isolamento gerada pelo `SecurityWatchdogService`.
+    - [ ] Integrar a visualização de diff (comparação de código) para facilitar a análise da versão corrompida em relação à versão segura anterior.
+    - [ ] Implementar um sistema de comentários colaborativos e marcação de status (Aprovado, Rejeitado, Sob Investigação) permitindo que os auditores debatam a situação do plugin.
+    - [ ] Criar endpoint e ação no painel para forçar a remoção permanente do plugin corrompido do Registry e do cluster, limpando todos os dados em cache e `volumes` correspondentes.
+    - [ ] Adicionar funcionalidade de notificação interativa com o desenvolvedor do plugin, integrando os comentários diretamente a uma Issue pública no repositório do autor.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Sandbox Analítico para Execução Segura e Investigação de Plugins Maliciosos".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
