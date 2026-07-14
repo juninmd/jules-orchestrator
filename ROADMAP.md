@@ -1150,6 +1150,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Adicionar funcionalidade de notificação interativa com o desenvolvedor do plugin, integrando os comentários diretamente a uma Issue pública no repositório do autor.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Sandbox Analítico para Execução Segura e Investigação de Plugins Maliciosos".
 
+- [ ] **Feature: Integração de Sandbox Analítico para Execução Segura e Investigação de Plugins Maliciosos**
+  - **Descrição:** Uma vez que os plugins corrompidos são isolados em quarentena, é necessário um ambiente seguro para estudá-los e diagnosticar o comportamento malicioso sem expor o orquestrador. Esta feature implementará um "Sandbox Analítico" totalmente desconectado, com recursos de inspeção de memória e instrumentação de rede em nível de sistema, permitindo que a equipe de DevSecOps conduza engenharia reversa e análise forense nos plugins rejeitados de forma 100% segura.
+  - **Critérios de Aceite:**
+    - [ ] Criar e provisionar instâncias de contêineres e pods no Kubernetes com o perfil de segurança máximo (`seccomp`, `AppArmor` no modo restrito).
+    - [ ] Configurar redes "air-gapped" para o Sandbox, onde conexões de saída são direcionadas para ferramentas de simulação de rede e captura de pacotes (ex: `tcpdump`, Wireshark headless).
+    - [ ] Integrar ferramentas de diagnóstico de memória (como inspeções de `heap dumps` e Flamegraphs de CPU via Node.js clinic.js) no ambiente isolado.
+    - [ ] Desenvolver um robô ou serviço autônomo que interage repetidamente com os endpoints e o barramento do plugin malicioso para "fuzzing" e extração de padrões de ataque.
+    - [ ] Gerar e exportar relatórios forenses estruturados para o painel de quarentena, detalhando o comportamento exato que disparou o alarme no `SecurityWatchdogService`.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Assinaturas de Ameaças Baseadas em Análise Comportamental".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
