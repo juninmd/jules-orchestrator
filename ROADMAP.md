@@ -1150,15 +1150,35 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Adicionar funcionalidade de notificação interativa com o desenvolvedor do plugin, integrando os comentários diretamente a uma Issue pública no repositório do autor.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Sandbox Analítico para Execução Segura e Investigação de Plugins Maliciosos".
 
-- [ ] **Feature: Integração de Sandbox Analítico para Execução Segura e Investigação de Plugins Maliciosos**
+- [x] **Feature: Integração de Sandbox Analítico para Execução Segura e Investigação de Plugins Maliciosos**
   - **Descrição:** Uma vez que os plugins corrompidos são isolados em quarentena, é necessário um ambiente seguro para estudá-los e diagnosticar o comportamento malicioso sem expor o orquestrador. Esta feature implementará um "Sandbox Analítico" totalmente desconectado, com recursos de inspeção de memória e instrumentação de rede em nível de sistema, permitindo que a equipe de DevSecOps conduza engenharia reversa e análise forense nos plugins rejeitados de forma 100% segura.
   - **Critérios de Aceite:**
-    - [ ] Criar e provisionar instâncias de contêineres e pods no Kubernetes com o perfil de segurança máximo (`seccomp`, `AppArmor` no modo restrito).
-    - [ ] Configurar redes "air-gapped" para o Sandbox, onde conexões de saída são direcionadas para ferramentas de simulação de rede e captura de pacotes (ex: `tcpdump`, Wireshark headless).
-    - [ ] Integrar ferramentas de diagnóstico de memória (como inspeções de `heap dumps` e Flamegraphs de CPU via Node.js clinic.js) no ambiente isolado.
-    - [ ] Desenvolver um robô ou serviço autônomo que interage repetidamente com os endpoints e o barramento do plugin malicioso para "fuzzing" e extração de padrões de ataque.
-    - [ ] Gerar e exportar relatórios forenses estruturados para o painel de quarentena, detalhando o comportamento exato que disparou o alarme no `SecurityWatchdogService`.
+    - [x] Criar e provisionar instâncias de contêineres e pods no Kubernetes com o perfil de segurança máximo (`seccomp`, `AppArmor` no modo restrito).
+    - [x] Configurar redes "air-gapped" para o Sandbox, onde conexões de saída são direcionadas para ferramentas de simulação de rede e captura de pacotes (ex: `tcpdump`, Wireshark headless).
+    - [x] Integrar ferramentas de diagnóstico de memória (como inspeções de `heap dumps` e Flamegraphs de CPU via Node.js clinic.js) no ambiente isolado.
+    - [x] Desenvolver um robô ou serviço autônomo que interage repetidamente com os endpoints e o barramento do plugin malicioso para "fuzzing" e extração de padrões de ataque.
+    - [x] Gerar e exportar relatórios forenses estruturados para o painel de quarentena, detalhando o comportamento exato que disparou o alarme no `SecurityWatchdogService`.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Assinaturas de Ameaças Baseadas em Análise Comportamental".
+
+- [ ] **Feature: Geração Autônoma de Assinaturas de Ameaças Baseadas em Análise Comportamental**
+  - **Descrição:** Tendo estruturado um Sandbox Analítico no passo anterior, o próximo gargalo de segurança é escalar a descoberta e bloqueio de ameaças de forma escalável em múltiplos clusters. Esta feature visa criar um módulo inteligente de Inteligência de Ameaças (Threat Intelligence) dentro do orquestrador. Quando o Sandbox Analítico identifica padrões de rede suspeitos ou alocação excessiva e atípica de memória (via fuzzing), o orquestrador deve compilar automaticamente esses comportamentos em "Assinaturas de Ameaça" digitais (Fingerprints). Estas assinaturas são então compartilhadas com o mecanismo de observabilidade principal do cluster, criando uma espécie de sistema imunológico digital de aprendizado contínuo que barra proativamente novos plugins ou scripts com o mesmo perfil malicioso.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o serviço `ThreatSignatureGenerator` capaz de traduzir os relatórios de pcap e logs do sandbox em regras compatíveis com motores de detecção open-source (e.g. regras Suricata ou políticas Kyverno).
+    - [ ] Criar uma base de dados (em memória ou no Redis) para o cluster armazenar e ler rapidamente as assinaturas das ameaças emergentes sem overhead.
+    - [ ] Implementar uma arquitetura de sincronização onde o orquestrador publica a nova assinatura num tópico do `SwarmBusService` imediatamente após a análise do Sandbox ser concluída.
+    - [ ] Configurar um módulo de testes de regressão de falsos-positivos: novas assinaturas devem passar por um teste em pacotes seguros conhecidos antes de serem ativadas no runtime de produção.
+    - [ ] Adicionar métricas (Prometheus) para monitorar quantas vezes uma assinatura recém-criada interceptou uma tentativa de execução maliciosa no último mês.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema Global de Propagação de Vacinas contra Ameaças em Clusters Distribuídos".
+
+- [ ] **Feature: Sistema Global de Propagação de Vacinas contra Ameaças em Clusters Distribuídos**
+  - **Descrição:** Uma vez que as assinaturas de ameaça baseadas em comportamento são geradas autonomamente em nível local, o orquestrador precisará disseminar estas proteções ("vacinas") não apenas no cluster atual, mas através de uma rede de instâncias interligadas do Jules (Federation). Essa funcionalidade cria um protocolo seguro e resiliente P2P (Peer-to-Peer) ou via hub centralizado para garantir que, se o orquestrador em um repositório ou workspace detectar uma ameaça, todos os outros orquestradores vinculados à mesma organização recebam instantaneamente a atualização de segurança (Zero-Day Protection Distribuída). Isso evolui a proteção de um agente reativo local para um ecossistema autoimune distribuído.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o protocolo de comunicação `ThreatVaccineFederationProtocol` (sobre gRPC ou WebSockets) com suporte a TLS mútuo e autenticação forte entre clusters Jules.
+    - [ ] Criar o componente `GlobalImmunityHubService` que agrega, filtra e redistribui assinaturas comportamentais para todas as instâncias do `SecurityWatchdogService` ativas globalmente.
+    - [ ] Implementar a funcionalidade de auditoria global: os administradores poderão acessar um painel consolidado ("Global Threat Landscape") detalhando as vacinas propagadas, seus clusters de origem e taxas de sucesso global de bloqueio.
+    - [ ] Desenvolver um mecanismo de resolução de conflitos e revogação autônoma, caso uma vacina global seja reportada com uma taxa elevada de falsos positivos pela maioria dos nós.
+    - [ ] Realizar testes de carga e simulações de cenários de rede degradada (split-brain) provando que o sistema P2P de segurança é resiliente e garante a consistência eventual das políticas de ameaça.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo Avançado de Decepção Ativa (Honeypots) Injetados Dinamicamente em Repositórios".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
