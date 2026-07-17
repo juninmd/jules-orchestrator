@@ -1190,6 +1190,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver um dashboard analítico exclusivo para a equipe de DevSecOps contendo as estatísticas de acionamento das armadilhas, tempo médio de resposta para mitigação ("Time-To-Mitigate") e rastreabilidade visual do vetor de ataque capturado pelos *honeypots*.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Red-Teaming Autônomo e Simulações de Ataque Constantes".
 
+- [ ] **Feature: Integração Contínua de Red-Teaming Autônomo e Simulações de Ataque Constantes**
+  - **Descrição:** Dando seguimento ao desenvolvimento de armadilhas para defesa autônoma, esta funcionalidade cria a capacidade do orquestrador simular táticas e técnicas de invasores avançados (Red-Teaming) constantemente, utilizando frameworks consolidados como o MITRE ATT&CK. A IA assumirá um papel ofensivo em sandboxes ou repositórios efêmeros, executando fuzzing e injeções, testando a eficácia dos pipelines de CI/CD e as políticas de controle de acesso (IAM) com intenção de reportar e bloquear vetores antes de serem explorados por agentes reais.
+  - **Critérios de Aceite:**
+    - [ ] Integrar agentes IA com frameworks open-source de emulação ofensiva (ex: Caldera ou Stratus Red Team) focados em Kubernetes e CI/CD.
+    - [ ] Criar o job periódico `AutonomousRedTeamService` que tenta descobrir chaves fracas, movimentação lateral ou exploração de API endpoints via fuzzing agressivo no ambiente de sandbox clone.
+    - [ ] Desenvolver pipeline de submissão de relatórios detalhados ao Dashboard DevSecOps sempre que o Red-Team autônomo descobrir uma rota de ataque efetiva que resultaria em escalonamento de privilégio.
+    - [ ] Criar PRs autônomos sugerindo patches específicos (Auto-Remediation) após a exploração bem-sucedida, utilizando a base de conhecimento vetorial e heurística LLM para deduzir o patch de defesa.
+    - [ ] Monitorar a resposta do módulo de defesa autônoma e emitir relatórios comparativos entre a evasão feita pelo Red-Team e a eficácia de bloqueio da vacina e Honeypots instanciados.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Módulo de Treinamento Contínuo de Blue-Team Autônomo contra Novas CVEs Zero-Day".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
