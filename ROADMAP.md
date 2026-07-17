@@ -1180,6 +1180,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Realizar testes de carga e simulações de cenários de rede degradada (split-brain) provando que o sistema P2P de segurança é resiliente e garante a consistência eventual das políticas de ameaça.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo Avançado de Decepção Ativa (Honeypots) Injetados Dinamicamente em Repositórios".
 
+- [ ] **Feature: Mecanismo Avançado de Decepção Ativa (Honeypots) Injetados Dinamicamente em Repositórios**
+  - **Descrição:** Tendo em vista o avanço no ecossistema de detecção e defesa com o Sistema Global de Propagação de Vacinas, esta feature irá introduzir uma camada proativa de segurança ofensiva focada em decepção (Deception Technology). O orquestrador injetará componentes de infraestrutura falsos (honeypots), chaves de API descartáveis ("honeytokens") rastreáveis e repositórios "armadilha" (shadow-repos) de forma invisível para desenvolvedores reais, mas atrativa para invasores ou scripts automatizados maliciosos buscando escalar privilégios. Qualquer interação não autorizada com essas iscas disparará alertas imediatos e automáticos de altíssima fidelidade ao `SecurityWatchdogService`, bloqueando ataques nos estágios mais embrionários, engajando quarentena e melhorando substancialmente o Threat Intelligence sem necessitar de assinaturas comportamentais prévias.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o serviço `HoneypotInjectorService` responsável por injetar *honeytokens* (ex: credenciais falsas da AWS ou tokens GitHub) no código fonte ou variáveis de ambiente de forma sutil durante processos de build ou setups de workspace efêmero.
+    - [ ] Criar e configurar um gateway de monitoramento que atue como destino aparente ("sinkhole") para esses tokens, registrando detalhadamente tentativas de uso, IP de origem, e *payloads* tentados, enviando imediatamente os dados de volta ao orquestrador.
+    - [ ] Desenvolver um módulo para criar "Shadow-Repos" dinâmicos e privados no registry, com nomes atrativos (ex: `core-auth-plugin`), contendo plugins aparentemente valiosos, mas que, na verdade, atuam como armadilhas instrumentadas que analisam as táticas de exploração do ofensor em sandbox e o isolam permanentemente da rede.
+    - [ ] Implementar integração com o `GlobalImmunityHubService` para que, assim que um honeytoken for tocado ou um shadow-repo clonado por uma entidade mal-intencionada, uma vacina profilática e regras rigorosas de bloqueio de rede (Kyverno/Cilium) sejam automaticamente propagadas globalmente em resposta à intrusão.
+    - [ ] Desenvolver um dashboard analítico exclusivo para a equipe de DevSecOps contendo as estatísticas de acionamento das armadilhas, tempo médio de resposta para mitigação ("Time-To-Mitigate") e rastreabilidade visual do vetor de ataque capturado pelos *honeypots*.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Red-Teaming Autônomo e Simulações de Ataque Constantes".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
