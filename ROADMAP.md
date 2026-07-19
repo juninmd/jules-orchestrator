@@ -1210,6 +1210,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Adicionar regras dinâmicas de segurança ao WAF (Web Application Firewall) ou NetworkPolicies no K8s de forma autônoma para bloquear vetores de rede associados ao exploit recém-descoberto.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração do Blue-Team Autônomo com SIEMs Corporativos para Resposta a Incidentes (SOAR)".
 
+- [ ] **Feature: Integração do Blue-Team Autônomo com SIEMs Corporativos para Resposta a Incidentes (SOAR)**
+  - **Descrição:** Para elevar a maturidade de segurança do ecossistema, o orquestrador expandirá as capacidades do Blue-Team Autônomo integrando-se diretamente a plataformas de SIEM (Security Information and Event Management) e ferramentas SOAR (Security Orchestration, Automation, and Response) corporativas. O objetivo é permitir que as detecções de intrusão, CVEs Zero-Day e as vacinas geradas proativamente não fiquem isoladas no Kubernetes, mas alimentem os painéis centrais de SOC (Security Operations Center) da organização. Com isso, o orquestrador também poderá receber comandos automatizados (playbooks) do SIEM para mitigar ameaças, isolar pods comprometidos ou revogar tokens de acesso de forma coordenada e em tempo real.
+  - **Critérios de Aceite:**
+    - [ ] Criar o conector de integração bidirecional suportando APIs dos principais SIEMs de mercado (ex: Splunk, Datadog Security, IBM QRadar), permitindo a ingestão de alertas de segurança estruturados gerados pelo orquestrador.
+    - [ ] Mapear o dicionário de dados de eventos do `SecurityWatchdogService` e do Blue-Team para formatos padrão como CEF (Common Event Format) ou JSON estruturado com taxonomia MITRE ATT&CK.
+    - [ ] Implementar a capacidade de escutar webhooks originados das ferramentas SOAR para executar ações automatizadas no cluster (ex: *Kill Pod*, *Block IP*, *Rotate Secrets*).
+    - [ ] Desenvolver um dashboard de "Status de Sincronização SIEM" no backoffice administrativo para monitorar a saúde da integração e a latência de entrega dos eventos de segurança.
+    - [ ] Validar a integração através de testes E2E simulando um incidente Zero-Day, comprovando que o alerta chega ao SIEM e o playbook de resposta do SOAR é executado com sucesso no cluster pelo orquestrador.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria Forense Autônoma e Preservação Legal de Evidências em Ambientes Efêmeros".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
