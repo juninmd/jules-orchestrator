@@ -1220,6 +1220,55 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Validar a integração através de testes E2E simulando um incidente Zero-Day, comprovando que o alerta chega ao SIEM e o playbook de resposta do SOAR é executado com sucesso no cluster pelo orquestrador.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria Forense Autônoma e Preservação Legal de Evidências em Ambientes Efêmeros".
 
+### ÉPICO 17: Aprimoramento e Sustentação Contínua dos Repositórios
+*Foco na evolução constante do ecossistema e ferramentas de suporte, garantindo a qualidade do código através da adoção contínua de boas práticas, automação de verificações, simplificação arquitetural e reforço da segurança.*
+
+- [ ] **Feature: Adoção de Conventional Commits e Versionamento Semântico Automático**
+  - **Descrição:** Implementar um fluxo estrito de Conventional Commits em todos os repositórios gerenciados. Isso permite a geração autônoma de changelogs e bump de versão (Semantic Versioning) a cada merge na branch principal, criando rastreabilidade perfeita e comunicando claramente o impacto das atualizações de forma preditiva.
+  - **Critérios de Aceite:**
+    - [ ] Configurar a ferramenta `commitlint` associada ao Husky para bloquear commits locais que não seguem o padrão (ex: feat, fix, chore).
+    - [ ] Adicionar um job no CI que valida o título do Pull Request gerado contra as regras do Semantic Release.
+    - [ ] Configurar um pipeline de release automatizado (ex: usando `semantic-release` ou Release Please) que gera tags e changelogs em markdown após um merge bem sucedido na `main`.
+    - [ ] Ajustar o `GithubService` do orquestrador para garantir que todos os commits gerados por IA obedeçam nativamente ao novo formato exigido, mitigando quebra do pipeline.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Unificado de Changelogs e Métricas de Entrega Contínua".
+
+- [ ] **Feature: Dashboard Unificado de Changelogs e Métricas de Entrega Contínua**
+  - **Descrição:** Uma interface executiva para visualizar as frequências de entrega, categorização de esforço (novas features vs bugs fixados) com base no semantic release. O painel deve agregar dados de múltiplos repositórios fornecendo visibilidade da velocidade e valor entregue.
+  - **Critérios de Aceite:**
+    - [ ] Consolidar os relatórios Markdown de changelog em uma base de dados central (relacional ou NoSQL).
+    - [ ] Criar um front-end leve exibindo as tags geradas, taxa de lançamentos mensais, e a relação % entre `feat`, `fix` e `chore`.
+    - [ ] Expor endpoints REST na API para consulta de notas de lançamento (release notes) filtrando por período ou serviço.
+    - [ ] Criar mecanismo de notificação consolidada de lançamentos nos canais públicos de comunicação da empresa.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Avaliação de Risco de Release com Base em Padrões de Falha".
+
+- [ ] **Feature: Verificação Contínua de Segurança de Código (SAST) em Repositórios Alvo**
+  - **Descrição:** Elevar o nível de qualidade e segurança estendendo a análise estática padrão por verificações de segurança focadas em aplicações (SAST - Static Application Security Testing). Garantir que padrões vulneráveis (Injeção de SQL, XSS, Exposição de chaves) sejam interceptados durante a CI.
+  - **Critérios de Aceite:**
+    - [ ] Integrar scanners open source (como Semgrep ou SonarQube) diretamente no repositório de templates e no runtime dos workspaces efêmeros.
+    - [ ] Definir baselines de segurança (Quality Gates) rigorosas: qualquer vulnerabilidade "High" ou "Critical" bloqueia imediatamente o merge do PR.
+    - [ ] Configurar o output do SAST para gerar anotações inline (comentários) apontando exatamente a linha do arquivo comprometida no PR do GitHub.
+    - [ ] Adicionar testes de validação no repositório comprovando que o scanner intercepta credenciais mockadas *hardcoded*.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agente IA Especialista em Correção Automática de Vulnerabilidades SAST".
+
+- [ ] **Feature: Agente IA Especialista em Correção Automática de Vulnerabilidades SAST**
+  - **Descrição:** Tendo um scanner de código rodando e detectando os problemas (SAST), esta feature evoluirá o orquestrador para ler os laudos de vulnerabilidades, deduzir as correções (ex: sanitização de entrada ou parameterização) e aplicar patches autônomos por meio de novos PRs.
+  - **Critérios de Aceite:**
+    - [ ] Criar e treinar o prompt do agente com as diretrizes do OWASP Top 10 para focar na remediação dos problemas apontados pelos scanners.
+    - [ ] Interceptar o payload de falha do Quality Gate, passando o arquivo problemático e as regras do SAST infringidas para a IA gerar o diff de correção.
+    - [ ] Garantir que o PR autônomo contenha testes atualizados para validar o contorno da vulnerabilidade, evitando degradação de cobertura de testes.
+    - [ ] Embutir mecanismo de retentativa se a correção proposta pelo modelo de linguagem quebrar a build original do repositório no pipeline isolado.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Consolidação de Painel DevSecOps (Unified Security Posture)".
+
+- [ ] **Feature: Refatoração Orientada a Clean Architecture e Isolamento de Domínios**
+  - **Descrição:** Para sustentar repositórios monolíticos que estão crescendo desenfreadamente, o orquestrador vai executar sessões de refatoração em lote, identificando contextos misturados e segregando a regra de negócio do roteamento, infraestrutura e acesso a dados (Clean/Hexagonal Architecture).
+  - **Critérios de Aceite:**
+    - [ ] Configurar heurísticas no agente de arquitetura (`Architect AI`) para detectar vazamento de SQL em *controllers* ou regra de negócios complexa em roteadores.
+    - [ ] Criar o fluxo de "Refactoring Campaign", onde a IA abrirá PRs iterativos movendo blocos de código para diretórios como `domain`, `application` (UseCases) e `infrastructure`.
+    - [ ] Utilizar a injeção de dependências nativa ou lib externa configurável para desacoplar as responsabilidades nos repositórios alvo.
+    - [ ] Todo o PR desta campanha precisa obrigatoriamente garantir que os testes unitários daquele domínio passem (sem mockar o próprio domínio testado), reescrevendo testes caso o contrato da função mude.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Documentação de Domínio (Ubiquitous Language)".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
