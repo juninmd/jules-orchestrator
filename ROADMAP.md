@@ -1268,7 +1268,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Todo o PR desta campanha precisa obrigatoriamente garantir que os testes unitários daquele domínio passem (sem mockar o próprio domínio testado), reescrevendo testes caso o contrato da função mude.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Documentação de Domínio (Ubiquitous Language)".
 
-- [ ] **Feature: Geração Autônoma de Documentação de Domínio (Ubiquitous Language)**
+- [x] **Feature: Geração Autônoma de Documentação de Domínio (Ubiquitous Language)**
   - **Descrição:** Com a base de código organizada em Clean Architecture e Domínios Isolados, o orquestrador fará o parsing da camada de domínio (entidades, agregados e value objects) e gerará um dicionário vivo da Linguagem Ubíqua (Ubiquitous Language), garantindo alinhamento técnico e de negócios.
   - **Critérios de Aceite:**
     - [ ] Criar parser de AST (Abstract Syntax Tree) para extrair classes, interfaces e tipos dos diretórios de domínio.
