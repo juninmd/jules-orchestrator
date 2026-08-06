@@ -1277,6 +1277,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] O dicionário gerado deve listar entidades e sugerir refatorações quando detectar nomenclaturas acopladas à infraestrutura.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor de Evolução Contínua de Domínios baseado em Code Review".
 
+- [ ] **Feature: Motor de Evolução Contínua de Domínios baseado em Code Review**
+  - **Descrição:** A documentação da Linguagem Ubíqua (`DOMAIN.md`) e os contextos delimitados precisam ser mantidos vivos. Esta funcionalidade implementa um revisor especializado que avaliará cada Pull Request no contexto de DDD (Domain-Driven Design). O orquestrador analisará as alterações em entidades de domínio para garantir que a lógica de negócios não vaze para outras camadas (ex: infraestrutura ou controllers) e que a nomenclatura adotada continue refletindo o negócio de forma aderente à documentação existente, sugerindo refatorações antes mesmo do merge. O objetivo de negócio é garantir uma evolução sustentável dos domínios isolados, impedindo degradação da Arquitetura Limpa a longo prazo.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o `DomainReviewService`, integrado ao job de revisão de PRs, especializado em analisar arquivos localizados em diretórios de domínio.
+    - [ ] O serviço deve comparar os termos e nomes de classes/métodos introduzidos no PR com o dicionário do `DOMAIN.md` para evitar inconsistências de linguagem (ex: usar `Customer` quando o domínio documenta `Client`).
+    - [ ] Criar validação de dependências: Se uma entidade de domínio importar um módulo de infraestrutura (ex: `knex`, `express`, `@aws-sdk`), o bot deve reprovar o PR com um alerta de violação de limite de domínio.
+    - [ ] Adicionar funcionalidade autônoma onde, em caso de violação de terminologia, a IA poste um comentário sugerindo o *diff* de renomeação no padrão correto da Linguagem Ubíqua.
+    - [ ] Criar métricas de "Saúde do Domínio" rastreando vazamentos bloqueados pelo serviço, para compor relatórios executivos de ROI de qualidade arquitetural.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Visualizador Interativo de Context Maps de DDD e Fronteiras de Domínio".
+
 
 ## 📝 Gestão do Documento e Próximos Passos
 
