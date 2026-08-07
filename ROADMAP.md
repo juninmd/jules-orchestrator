@@ -1288,6 +1288,25 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Visualizador Interativo de Context Maps de DDD e Fronteiras de Domínio".
 
 
+
+- [ ] **Feature: Implementação de Testes de Mutação (Mutation Testing)**
+  - **Descrição:** Para garantir que a alta cobertura de testes não seja apenas uma métrica vaidosa, introduziremos testes de mutação (ex: Stryker) no pipeline. Isso introduz falhas propositais no código em tempo de CI para validar se a suíte de testes existente é robusta o suficiente para interceptá-las. O objetivo de negócio é elevar a confiabilidade do código em produção, garantindo testes que validam regras de negócio ativamente.
+  - **Critérios de Aceite:**
+    - [ ] Configurar Stryker Mutator no repositório com suporte a TypeScript e Vitest.
+    - [ ] Criar um script npm `test:mutation` que execute a validação apenas nos arquivos que sofreram alteração no PR.
+    - [ ] Configurar um Quality Gate no CI que exige uma pontuação mínima de mutação de 80% para arquivos alterados, bloqueando o merge caso contrário.
+    - [ ] O relatório gerado deve ser salvo como um artefato do CI e um resumo inserido como comentário automático no PR.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Fuzzing Testing no Pipeline CI".
+
+- [ ] **Feature: Automação Inteligente de Atualização de Dependências (Dependency Governance)**
+  - **Descrição:** Implementar um bot (como Renovate ou Dependabot) configurado com políticas de auto-merge rigorosas para atualizações de patch e minor (sem breaking changes). Isso mitiga dívida técnica silenciosa, vulnerabilidades de segurança CVEs zero-day herdadas, e garante que o projeto utilize sempre as versões mais recentes e otimizadas das bibliotecas.
+  - **Critérios de Aceite:**
+    - [ ] Integrar o bot de dependências configurado no nível do repositório/organização.
+    - [ ] Configurar regras para auto-merge de atualizações "patch" ou "minor" APENAS se a build e todos os testes (E2E e Unitários) passarem.
+    - [ ] Definir limite para atualizações "major", exigindo aprovação manual ou de um agente de IA de code review (Jules).
+    - [ ] Agrupar atualizações não críticas em um PR único (batching) semanalmente para reduzir ruído no CI.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria de Saúde de Dependências de Terceiros".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
