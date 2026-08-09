@@ -1334,6 +1334,36 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Adicionar um módulo no Painel DevSecOps mostrando o ROI e o consumo financeiro da plataforma autônoma em tempo real.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Alocação Inteligente de Custo por Microsserviço e Time de Engenharia (Chargeback)".
 
+### ÉPICO 18: Evolução Autônoma de Arquitetura e Engenharia de Repositórios
+*Foco na capacidade do orquestrador de aprimorar continuamente a qualidade e a estrutura dos repositórios gerenciados, integrando o preenchimento de checklists como motor de geração de novas funcionalidades.*
+
+- [ ] **Feature: Parser de Arquitetura Orientada a Checklists para Aprimoramento Contínuo**
+  - **Descrição:** Para aprimorarmos os repositórios de forma orgânica, o sistema deve entender que o preenchimento de um checklist no fluxo de trabalho atual é a prova de um avanço arquitetural. Esta feature implementará um serviço de detecção no CI/CD que, ao constatar que um desenvolvedor ou agente IA marcou tarefas como concluídas, iniciará um mapeamento profundo de code smells e débitos técnicos adjacentes, gerando um relatório em tempo real de quais partes do sistema ainda precisam evoluir.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `ChecklistArchitectureParser`, que varre o histórico de commits e de issues em busca de *checklists* recém-marcados.
+    - [ ] Integrar a ferramenta de parser com analisadores de código estático (ex. SonarQube ou ESLint customizado) para avaliar o módulo recém-alterado.
+    - [ ] Consolidar as métricas de qualidade (cobertura, complexidade ciclomática, acoplamento) em um arquivo estruturado de "Saúde do Módulo".
+    - [ ] Garantir que o processo não gere falsos positivos ao lidar com checklists vazios ou mal formatados, adicionando testes unitários e mocks rigorosos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mapeamento Preditivo de Dependências Baseado no Progresso do Checklist".
+
+- [ ] **Feature: Mapeamento Preditivo de Dependências Baseado no Progresso do Checklist**
+  - **Descrição:** Uma vez que sabemos quando uma tarefa é concluída por meio do seu checklist, precisamos antecipar o impacto dessa mudança. Esta funcionalidade permitirá que o orquestrador mapeie preditivamente o código e alerte sobre quais outros arquivos ou serviços estão prestes a quebrar, transformando o checklist em uma ferramenta ativa de prevenção de regressão. O sistema usará grafos de dependências do repositório para sugerir ativamente onde o desenvolvedor (ou agente) deve focar sua próxima etapa.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver um motor de grafos (ex. utilizando `dependency-cruiser`) acoplado ao ciclo de vida da leitura de checklists.
+    - [ ] Sempre que o `ChecklistArchitectureParser` detectar avanço, varrer os nós do grafo de dependência adjacentes aos arquivos modificados no PR.
+    - [ ] Gerar uma lista sumarizada dos componentes afetados e injetar este contexto em um relatório temporário disponível para o P.O. Autônomo.
+    - [ ] Construir proteções contra loops infinitos caso a árvore de dependência seja circular ou demasiadamente extensa (cutoff limit).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor de Feedback Loop: Geração de Feature Dinâmica via Grafos".
+
+- [ ] **Feature: Motor de Feedback Loop: Geração de Feature Dinâmica via Grafos**
+  - **Descrição:** O ápice do aprimoramento contínuo dos repositórios: conforme as tarefas são desenvolvidas e o checklist é preenchido, este fluxo criará de forma totalmente autônoma novas *tasks* de features direcionadas a refatorar ou expandir as dependências que o mapeamento preditivo identificou. Isso garante que a arquitetura evolua e que débitos periféricos nunca sejam esquecidos, alimentando um backlog perpétuo e saudável.
+  - **Critérios de Aceite:**
+    - [ ] Conectar os relatórios do grafo de dependência ao `POService`, munindo o LLM com o contexto exato das fragilidades arquiteturais expostas pela feature recém-concluída.
+    - [ ] Adaptar o prompt do P.O. para gerar novas features não apenas baseadas em intuição, mas com justificativas de código precisas extraídas do parser de dependências.
+    - [ ] O fluxo deve injetar a nova feature gerada diretamente na seção apropriada do `ROADMAP.md` e criar a Issue no GitHub em sincronia.
+    - [ ] Implementar regras de idempotência robustas para evitar que o orquestrador crie issues repetidas caso o mesmo arquivo seja tocado em PRs diferentes consecutivamente.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Interativo do Ciclo de Evolução Perpétua de Repositórios".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
