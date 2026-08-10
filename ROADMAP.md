@@ -1364,6 +1364,33 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar regras de idempotência robustas para evitar que o orquestrador crie issues repetidas caso o mesmo arquivo seja tocado em PRs diferentes consecutivamente.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Interativo do Ciclo de Evolução Perpétua de Repositórios".
 
+- [ ] **Feature: Dashboard Interativo do Ciclo de Evolução Perpétua de Repositórios**
+  - **Descrição:** Tendo a infraestrutura de geração dinâmica de features estabelecida, os gestores precisam visualizar este backlog gerado automaticamente. O Dashboard Interativo fornecerá uma visão consolidada de todas as dependências mapeadas, os relatórios preditivos gerados pelas alterações de checklists e um pipeline claro mostrando as tasks criadas. Ele atuará como o hub central para que o P.O. humano acompanhe a evolução perpétua e as prioridades do repositório sugeridas pelo modelo.
+  - **Critérios de Aceite:**
+    - [ ] Criar interface React/Vue com gráficos interativos (ex. D3.js) demonstrando os grafos de dependência e como as tasks estão conectadas logicamente.
+    - [ ] Consolidar relatórios de "Saúde do Módulo" provenientes do `ChecklistArchitectureParser` na visão geral do painel.
+    - [ ] Implementar funcionalidade de aprovação/rejeição rápida na interface para as features idealizadas automaticamente, integrando com o GitHub.
+    - [ ] Exportar relatórios gerenciais em PDF sumariando o "Ciclo de Evolução Perpétua" e seu impacto na qualidade arquitetural.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auto-Calibração de Gatilhos de Novas Tasks via Aprendizado de Reforço".
+
+- [ ] **Feature: Auto-Calibração de Gatilhos de Novas Tasks via Aprendizado de Reforço**
+  - **Descrição:** O orquestrador não só deve gerar tasks a partir de checklists, mas aprender quais tasks trazem maior valor e impacto arquitetural com base no feedback humano (aprovações no Dashboard Interativo) e nos dados empíricos de execução. A IA será adaptada para um modelo de RL (Reinforcement Learning), calibando e selecionando ativamente quais gatilhos acionar baseando-se no ganho contínuo de eficiência.
+  - **Critérios de Aceite:**
+    - [ ] Integrar algoritmo de RL (como Q-Learning ou proxies de recompensa via LLM) ao motor de P.O.
+    - [ ] Definir a Função de Recompensa (Reward Function) vinculada à aceitação do PR autônomo, tempo de resolução da issue e ganho de cobertura de testes.
+    - [ ] Configurar mecanismo onde gatilhos que resultam em features rejeitadas pelos desenvolvedores recebam um "peso negativo", diminuindo sua probabilidade de recorrência.
+    - [ ] Emitir sumário periódico de "Lições Aprendidas pelo P.O." na aba de Analytics do Dashboard.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Sugestão de Refatoração Proativa e Mapeamento Contínuo".
+
+- [ ] **Feature: Sistema de Sugestão de Refatoração Proativa e Mapeamento Contínuo**
+  - **Descrição:** Avançando a auto-calibração, o sistema não deve apenas atrelar novas tasks ao fechamento de checklists, mas também observar o uso passivo do repositório. O Mapeamento Contínuo varrerá o código periodicamente, sugerindo refatorações baseadas em novos gargalos ou code-smells (identificados por ferramentas analíticas atualizadas), independentemente de uma issue recente, fomentando um roadmap "vivo" que antecipa o envelhecimento do código (Rot).
+  - **Critérios de Aceite:**
+    - [ ] Configurar um CronJob no Kubernetes para acionar varreduras estáticas totais nos repositórios a cada ciclo semanal (ou sob demanda).
+    - [ ] Criar inteligência de priorização, utilizando a RICE score gerada anteriormente, para que a IA não gere spam de refatorações de baixo impacto.
+    - [ ] Integrar sugestões diretas de refatorações proativas na base do "Auto-Calibração", acionando um pipeline seguro em Sandbox antes de gerar o pull request definitivo.
+    - [ ] Garantir notificação estruturada e aprovação prévia para "Refatorações Proativas Críticas" (aquelas que tocam arquivos do core do sistema).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração do Ciclo de Evolução com Planejamento Orçamentário e Impacto de ROI".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
