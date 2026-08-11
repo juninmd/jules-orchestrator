@@ -1391,6 +1391,33 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Garantir notificação estruturada e aprovação prévia para "Refatorações Proativas Críticas" (aquelas que tocam arquivos do core do sistema).
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração do Ciclo de Evolução com Planejamento Orçamentário e Impacto de ROI".
 
+- [ ] **Feature: Integração do Ciclo de Evolução com Planejamento Orçamentário e Impacto de ROI**
+  - **Descrição:** Conectar o ciclo contínuo de refatoração autônoma com o módulo de FinOps e planejamento orçamentário. O orquestrador avaliará se a execução de grandes "Refactoring Campaigns" cabe no orçamento atual de infraestrutura (compute, tokens de IA) e gerará um score de ROI (Retorno sobre Investimento) para priorizar as ações sugeridas.
+  - **Critérios de Aceite:**
+    - [ ] Integrar a saída do `ChecklistArchitectureParser` com o módulo de orçamento do `FinOpsAnalyzer`.
+    - [ ] Calcular um custo estimado para cada refatoração massiva proposta pelo P.O. Autônomo.
+    - [ ] Exigir aprovação de líderes técnicos e financeiros caso a projeção de custo de uma refatoração ultrapasse 15% do orçamento da sprint.
+    - [ ] Reportar o ROI efetivo (e.g., economia de recursos de servidor, queda de tempo de build) das refatorações aprovadas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Análise Preditiva de Débitos Técnicos baseada em Machine Learning".
+
+- [ ] **Feature: Análise Preditiva de Débitos Técnicos baseada em Machine Learning**
+  - **Descrição:** Evoluir a capacidade heurística do P.O. para além de regras estáticas. Esta funcionalidade usará Machine Learning (treinado com o histórico de refatorações de alto impacto) para prever quais classes e domínios acumularão dívida técnica nos próximos meses, mesmo antes de surgirem code-smells detectáveis pelas ferramentas tradicionais.
+  - **Critérios de Aceite:**
+    - [ ] Consolidar métricas de Churn, tamanho do código e frequência de bugs em um Data Lake leve (SQLite ou banco especializado).
+    - [ ] Treinar e integrar um modelo simplificado (ex: Random Forest via microserviço ou API LLM) capaz de cruzar padrões históricos.
+    - [ ] Produzir relatórios mensais apontando arquivos e módulos que entrarão em estágio crítico de manutenção em 3 a 6 meses.
+    - [ ] Sugerir proativamente a alocação de tempo na próxima sprint para agir nas previsões de alto risco.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Global de Previsibilidade de Deterioração de Código".
+
+- [ ] **Feature: Dashboard Global de Previsibilidade de Deterioração de Código**
+  - **Descrição:** Providenciar uma interface visual para explorar o resultado da análise preditiva de débitos técnicos. O dashboard fornecerá um "Mapa de Calor" do repositório, guiando gestores na tomada de decisões estratégicas de alocação de equipes para modernização estrutural.
+  - **Critérios de Aceite:**
+    - [ ] Criar no front-end uma visualização tipo Heatmap englobando a arquitetura do projeto.
+    - [ ] Classificar módulos do projeto com graduações de "Saudável" a "Crítico" baseado nas predições de ML.
+    - [ ] Implementar a capacidade de gerar um link ou PDF consolidado para apresentar em reuniões de Sprint Planning.
+    - [ ] Interligar áreas críticas detectadas a um botão "Gerar Plano de Ação Autônomo", invocando o P.O. IA.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Recomendador Autônomo de Congelamento de Funcionalidades em Áreas Críticas".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
