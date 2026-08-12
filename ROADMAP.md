@@ -1418,6 +1418,24 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Interligar áreas críticas detectadas a um botão "Gerar Plano de Ação Autônomo", invocando o P.O. IA.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Recomendador Autônomo de Congelamento de Funcionalidades em Áreas Críticas".
 
+- [ ] **Feature: Recomendador Autônomo de Congelamento de Funcionalidades em Áreas Críticas**
+  - **Descrição:** Com base na predição de deterioração e detecção de débitos técnicos críticos, este sistema atuará de forma autônoma sugerindo ou aplicando um "Code Freeze" (Congelamento de Funcionalidades) em módulos de alto risco. Isso evita que novas features sejam adicionadas a um código frágil antes que a refatoração ocorra. O P.O. IA bloqueará tentativas de merge de novas features nos pacotes afetados e notificará os desenvolvedores das razões e ações corretivas necessárias.
+  - **Critérios de Aceite:**
+    - [ ] Criar um serviço interceptador (`FeatureFreezeGuardian`) nos hooks de Pull Request que cruza os arquivos alterados com o mapa de áreas críticas.
+    - [ ] Se um PR adicionar complexidade a um módulo sinalizado como "Crítico", o P.O. IA deve gerar um comentário detalhado no PR bloqueando o merge e apontando a dívida técnica a ser resolvida primeiro.
+    - [ ] Implementar uma configuração de "Bypass" para permitir que administradores ignorem o bloqueio em casos emergenciais.
+    - [ ] Emitir notificações proativas via Slack/Teams alertando a equipe sobre quais módulos estão em estado de congelamento temporário.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Auto-Descongelamento e Validação de Resiliência Pós-Refatoração".
+
+- [ ] **Feature: Sistema de Auto-Descongelamento e Validação de Resiliência Pós-Refatoração**
+  - **Descrição:** Após um módulo crítico sofrer refatoração (resolvendo a dívida técnica apontada), o sistema deve identificar autonomamente a melhoria e remover o bloqueio de "Code Freeze". O orquestrador validará se a complexidade ciclomática e a cobertura de testes atingiram níveis seguros, promovendo um "Auto-Descongelamento" e liberando o fluxo normal de desenvolvimento sem intervenção manual do gestor.
+  - **Critérios de Aceite:**
+    - [ ] Integrar a ferramenta de análise estática ao processo de CI/CD para reavaliar módulos previamente classificados como "Críticos".
+    - [ ] Implementar uma lógica de avaliação comparativa (antes e depois da refatoração) para certificar a redução efetiva de débitos técnicos (ex: queda na complexidade, aumento de test coverage).
+    - [ ] Configurar a transição de status de "Congelado" para "Livre" no mapa de calor arquitetural, atualizando a visualização no Dashboard.
+    - [ ] Notificar automaticamente o autor do PR original bloqueado (ou a equipe) de que o módulo agora suporta novas features com segurança.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Gamificação da Redução de Dívida Técnica para Equipes de Engenharia".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
