@@ -1436,6 +1436,38 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Notificar automaticamente o autor do PR original bloqueado (ou a equipe) de que o módulo agora suporta novas features com segurança.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Gamificação da Redução de Dívida Técnica para Equipes de Engenharia".
 
+
+### ÉPICO X: Aprimoramento e Modernização Contínua do Repositório
+*Focado em responder à questão: "Como aprimoramos o repositório continuamente?", implementando gamificação, automação de segurança estrutural e documentação viva impulsionada pelo preenchimento de checklists.*
+
+- [ ] **Feature: Gamificação da Redução de Dívida Técnica para Equipes de Engenharia**
+  - **Descrição:** Uma vez que o orquestrador sugere tarefas de redução de débito técnico, o engajamento humano para resolvê-las deve ser incentivado. Esta feature introduzirá um sistema de gamificação ("Tech Debt Bounty") que atribui pontos, medalhas (badges) no perfil do GitHub e visibilidade no Leaderboard da equipe para os desenvolvedores que mais resolvem as dívidas técnicas sugeridas autonomamente pelo P.O. O sistema mapeará a resolução de checklists em pull requests para gerar o score.
+  - **Critérios de Aceite:**
+    - [ ] Criar o schema e serviço `GamificationService` que escuta eventos de Pull Requests mergeados vinculados a "features de débito técnico".
+    - [ ] Implementar a lógica de pontuação que varia de acordo com a complexidade da dívida técnica (medida por diminuição de complexidade ciclomática e linhas removidas de dead-code).
+    - [ ] Integrar com a API do GitHub para conceder Badges automáticos ou criar comentários de reconhecimento nos repositórios assim que o checklist do P.O for resolvido.
+    - [ ] Atualizar a UI do Dashboard Interativo com a aba "Leaderboard de Engenharia de Qualidade".
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Ecossistema Autônomo de SecOps e Varredura de Vulnerabilidades em Tempo Real".
+
+- [ ] **Feature: Ecossistema Autônomo de SecOps e Varredura de Vulnerabilidades em Tempo Real**
+  - **Descrição:** Ampliando os aprimoramentos do repositório, o orquestrador não só guiará features e refatorações, mas também atuará como engenheiro de segurança. Essa feature implementa pipelines dinâmicos que injetam varreduras SAST/DAST e auditorias de dependências em tempo real, transformando vulnerabilidades encontradas diretamente em tasks do Roadmap, já priorizadas por severidade (CVSS) com sugestões de auto-correção geradas via LLM.
+  - **Critérios de Aceite:**
+    - [ ] Integrar conectores com ferramentas como Trivy ou Snyk via CLI nos pipelines gerenciados pelo Kubernetes.
+    - [ ] Desenvolver o `SecurityVulnerabilityParser` capaz de extrair falhas críticas e gerar uma representação em formato RoadmapTask.
+    - [ ] Automatizar o P.O. Service para que, ao detectar vulnerabilidade, crie imediatamente uma Feature de correção no ROADMAP.md com a tag `[SECURITY-CRITICAL]`.
+    - [ ] Implementar bloqueio rígido (Code Freeze direcionado) em diretórios do repositório onde vulnerabilidades críticas de "Zero-Day" forem detectadas até que o checklist gerado seja resolvido.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração e Evolução de Arquitetura Viva (Living Architecture Documentation)".
+
+- [ ] **Feature: Geração e Evolução de Arquitetura Viva (Living Architecture Documentation)**
+  - **Descrição:** Como o repositório é constantemente aprimorado por meio de checklists e novas funcionalidades dinâmicas, a documentação estrutural fica defasada rapidamente. Esta feature implementará um processo que, após a execução de cada ciclo de melhoria (checklist preenchido), atualizará automaticamente os diagramas de arquitetura C4 Model, dicionários de domínio e ADRs (Architecture Decision Records) baseados nas mudanças semânticas do código-fonte.
+  - **Critérios de Aceite:**
+    - [ ] Integrar ferramentas como PlantUML ou Mermaid.js ao orquestrador para gerar gráficos automáticos de componentes e dependências do repositório.
+    - [ ] Modificar o hook pós-merge de Pull Requests aprovados para acionar o `ArchitectureDocumenterJob`.
+    - [ ] Implementar lógica com LLM que analisa o delta do Pull Request e redige (ou altera) um ADR sempre que houver mudanças em padrões de projeto, bibliotecas core ou serviços externos.
+    - [ ] Manter um arquivo `ARCHITECTURE.md` sempre sincronizado, exibindo a versão visual e textual mais recente da aplicação.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Otimizador Dinâmico de Performance e FinOps Baseado em Telemetria".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
