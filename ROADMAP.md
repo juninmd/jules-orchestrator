@@ -1467,6 +1467,33 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Manter um arquivo `ARCHITECTURE.md` sempre sincronizado, exibindo a versão visual e textual mais recente da aplicação.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Otimizador Dinâmico de Performance e FinOps Baseado em Telemetria".
 
+- [ ] **Feature: Otimizador Dinâmico de Performance e FinOps Baseado em Telemetria**
+  - **Descrição:** Baseado nos dados coletados pelo ciclo de aprimoramento contínuo da arquitetura, o orquestrador não só organizará o código, mas atuará na infraestrutura e performance. Esta feature integrará dados de APM (Application Performance Monitoring) em tempo real, cruzando com os custos de infraestrutura no Cloud Provider para identificar funções ou rotas que custam mais caro computacionalmente e precisam ser otimizadas pelo desenvolvedor.
+  - **Critérios de Aceite:**
+    - [ ] Integrar métricas de telemetria e custo de provedores como AWS Cost Explorer, Datadog ou Prometheus via APIs REST.
+    - [ ] Criar o `FinOpsMetricsAnalyzer` que faz o cruzamento entre as rotas mais lentas/custosas e os arquivos correspondentes no repositório.
+    - [ ] Modificar o P.O. Service para autogerar Tasks marcadas com `[PERFORMANCE/FINOPS]` detalhando o impacto de custo projetado e sugerindo refatorações, como cacheamento de queries SQL.
+    - [ ] Estabelecer limite rígido no CI/CD onde PRs que elevem a complexidade ciclomática em áreas de alto tráfego sem a devida justificativa sejam barrados por "Degradação de FinOps".
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Otimização Financeira em Pipeline (FinOps CI)".
+
+- [ ] **Feature: Integração Contínua de Otimização Financeira em Pipeline (FinOps CI)**
+  - **Descrição:** Tendo identificado as funções e componentes de maior custo (Otimizador Dinâmico), é crucial impedir que novos débitos de performance atinjam a produção. Esta feature estende o orquestrador para avaliar estimativas de custo e complexidade de execução diretamente na esteira de Continuous Integration, rodando testes de carga pontuais nos microsserviços modificados para prevenir regressões financeiras.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar um job especializado (FinOps Quality Gate) no pipeline de CI/CD principal.
+    - [ ] Instanciar testes sintéticos de carga rápida (ex: k6 ou JMeter em modo headless) focados exclusivamente nas rotas e módulos alterados pelo PR.
+    - [ ] Interceptar os resultados de carga, estimar o consumo extra em CPU/RAM e converter isso para impacto financeiro mensal usando uma calculadora de precificação na nuvem integrada ao projeto.
+    - [ ] Se o aumento de custo estimado for superior ao limite configurável (ex: > 5% do baseline), o Orquestrador injetará um comentário de alerta no GitHub e poderá barrar o merge exigindo revisão executiva.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Analítico Executivo de FinOps e ROI de Nuvem".
+
+- [ ] **Feature: Dashboard Analítico Executivo de FinOps e ROI de Nuvem**
+  - **Descrição:** Uma vez implementada a governança financeira no repositório, é indispensável prover visibilidade para a camada executiva e gerencial. Este dashboard consolidará a saúde da arquitetura, os débitos técnicos resolvidos e as otimizações financeiras (economias geradas pelo FinOps CI) em um painel iterativo de ROI (Return On Investment), tangibilizando o valor agregado do orquestrador.
+  - **Critérios de Aceite:**
+    - [ ] Construir interface web em React/Vue consumindo a API central para renderizar gráficos de tendência financeira (ex. Custo projetado vs Custo real mitigado pela automação).
+    - [ ] Apresentar relatórios agregados de "Dívidas Técnicas Quitadas" versus "Economia Mensal em Nuvem", demonstrando a correlação entre qualidade de código e FinOps.
+    - [ ] Disponibilizar filtros avançados por módulo de domínio (DDD), repositório e times de engenharia para identificar os squads mais eficientes.
+    - [ ] Adicionar funcionalidade autônoma de geração de relatórios mensais em PDF, distribuídos para as lideranças via e-mail corporativo ou Slack/Teams.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Alocação Inteligente de Custo por Microsserviço e Time de Engenharia (Chargeback)".
+
 
 ## 📝 Gestão do Documento e Próximos Passos
 
