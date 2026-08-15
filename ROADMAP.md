@@ -1495,6 +1495,24 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Alocação Inteligente de Custo por Microsserviço e Time de Engenharia (Chargeback)".
 
 
+
+- [ ] **Feature: Alocação Inteligente de Custo por Microsserviço e Time de Engenharia (Chargeback)**
+  - **Descrição:** Para criar uma cultura de responsabilidade financeira mais granular, esta feature introduzirá a capacidade de rastrear e alocar os custos da infraestrutura na nuvem diretamente aos microsserviços e aos times responsáveis (squads). O orquestrador integrará tags do provedor de nuvem (como AWS Cost Allocation Tags) e metadados de orquestração do Kubernetes para prover relatórios detalhados.
+  - **Critérios de Aceite:**
+    - [ ] Implementar integração automatizada que garanta que todos os recursos do Kubernetes (Pods, Services, Ingress) criados via CI/CD recebam labels obrigatórias (ex: `team=squad-alpha`, `service=auth-api`).
+    - [ ] Criar módulo no P.O. Service para consumir APIs de faturamento (Billing APIs) dos provedores e cruzar com os labels alocados.
+    - [ ] Desenvolver visualização "Chargeback" no Dashboard Analítico Executivo, permitindo que a liderança visualize os custos exatos gerados por cada time e microsserviço no mês.
+    - [ ] Configurar alertas automáticos (via Slack ou e-mail) para os tech leads caso o custo diário de um microsserviço de seu time ultrapasse a média histórica em mais de 15%.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Autoscaling Preditivo Baseado em Machine Learning e Custos Alocados".
+
+- [ ] **Feature: Autoscaling Preditivo Baseado em Machine Learning e Custos Alocados**
+  - **Descrição:** Tendo a visibilidade completa dos custos por microsserviço (Chargeback), a próxima evolução é otimizar o consumo ativamente. Em vez de reagir a picos de CPU/RAM, o orquestrador analisará padrões históricos de tráfego, sazonalidade e custo para escalar os serviços proativamente (predictive autoscaling), minimizando desperdícios fora dos horários de pico.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver um modelo preditivo leve (ex: Prophet ou ARIMA integrado via Python service) que analise o histórico de métricas (Prometheus) de pelo menos 30 dias.
+    - [ ] Integrar o modelo preditivo com o KEDA (Kubernetes Event-driven Autoscaling) ou o HPA (Horizontal Pod Autoscaler) nativo via custom metrics API.
+    - [ ] Assegurar que o algoritmo leve em consideração as métricas financeiras, restringindo o pre-scaling caso o orçamento configurado para o time naquele microsserviço já tenha sido excedido (a menos que em regime crítico).
+    - [ ] Construir interface no Dashboard para que times de engenharia ajustem o nível de agressividade do "scale-down" nos fins de semana e feriados.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Ativa de Spot Instances e Fallback Sem Interrupções".
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
