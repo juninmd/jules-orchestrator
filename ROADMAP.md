@@ -1437,7 +1437,7 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Gamificação da Redução de Dívida Técnica para Equipes de Engenharia".
 
 
-### ÉPICO X: Aprimoramento e Modernização Contínua do Repositório
+### ÉPICO 19: Aprimoramento e Modernização Contínua do Repositório
 *Focado em responder à questão: "Como aprimoramos o repositório continuamente?", implementando gamificação, automação de segurança estrutural e documentação viva impulsionada pelo preenchimento de checklists.*
 
 - [ ] **Feature: Gamificação da Redução de Dívida Técnica para Equipes de Engenharia**
@@ -1513,6 +1513,34 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Assegurar que o algoritmo leve em consideração as métricas financeiras, restringindo o pre-scaling caso o orçamento configurado para o time naquele microsserviço já tenha sido excedido (a menos que em regime crítico).
     - [ ] Construir interface no Dashboard para que times de engenharia ajustem o nível de agressividade do "scale-down" nos fins de semana e feriados.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Ativa de Spot Instances e Fallback Sem Interrupções".
+- [ ] **Feature: Orquestração Ativa de Spot Instances e Fallback Sem Interrupções**
+  - **Descrição:** Para maximizar a eficiência financeira da nuvem gerida pelo orquestrador, esta feature implementa a alocação dinâmica de instâncias de infraestrutura temporárias e ociosas (Spot Instances na AWS/GCP/Azure) para os jobs de CI/CD, testes E2E e processamento assíncrono de IA. Como essas instâncias podem ser interrompidas subitamente pelo provedor, o sistema terá um mecanismo de tolerância a falhas robusto (Graceful Degradation e Fallback) que transfere a carga de trabalho de volta para instâncias On-Demand de forma transparente, garantindo economia extrema (até 90%) sem perda de estado nas execuções críticas. O objetivo técnico é introduzir inteligência de FinOps no provisionamento efêmero.
+  - **Critérios de Aceite:**
+    - [ ] Integrar conectores com APIs de Spot Market dos principais provedores (AWS EC2 Spot Fleet, GCP Preemptible VMs) para criar e gerir os node pools.
+    - [ ] Criar o `SpotManagerService` para escutar sinais de interrupção (termination notices) emitidos pelos provedores de nuvem (geralmente com 2 minutos de antecedência).
+    - [ ] Implementar o mecanismo de suspensão (Check-pointing): quando um sinal for recebido, pausar imediatamente a execução dos contêineres e sincronizar os volumes efêmeros e logs em um storage durável.
+    - [ ] Desenvolver a lógica de "Fallback Autônomo": O Kubernetes reescalonará instantaneamente o pod pausado para um node pool de instâncias garantidas (On-Demand) retomando a execução do ponto exato da interrupção.
+    - [ ] Garantir que o Dashboard de FinOps rastreie e deduza de forma correta as métricas financeiras resultantes do uso dessas instâncias Spot.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Políticas de FinOps e Bloqueio de Orçamento (Budget Enforcement)".
+
+- [ ] **Feature: Integração Contínua de Políticas de FinOps e Bloqueio de Orçamento (Budget Enforcement)**
+  - **Descrição:** Como uma progressão natural da orquestração financeira, é vital não apenas monitorar os custos, mas garantir governança ativa. Esta feature injeta regras de orçamento ("Budget Policies") diretamente no pipeline de Continuous Integration. Se a soma dos custos da infraestrutura e dos consumos previstos (LLM tokens, instâncias On-Demand versus Spot) de um PR exceder o orçamento estipulado pelo time, o orquestrador atuará ativamente rejeitando merges e bloqueando deploys, obrigando a equipe a otimizar a arquitetura ou buscar aprovação gerencial.
+  - **Critérios de Aceite:**
+    - [ ] Configurar os arquivos manifestos (`budget.yaml`) por repositório para estipular quotas mensais dinâmicas, importadas das plataformas de ERP.
+    - [ ] Desenvolver um injetor no `GithubService` que intercepta o pipeline, calcula a projeção financeira das mudanças e posta o selo "FinOps Gate: Approved/Rejected" como status check do PR.
+    - [ ] Implementar a capacidade de auto-sugestão do orquestrador: se o gate falhar, o agente de IA sugerirá *patches* para reduzir o consumo (ex: migração forçada de jobs para Spot, uso de cache estático ou diminuição de réplicas HPA).
+    - [ ] Adicionar integrações com Slack/Teams para disparar alertas quando times consumirem 80%, 90% e 100% de seus limites de orçamento diários.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Global de Economia de Escala e Sustentabilidade (GreenOps)".
+
+- [ ] **Feature: Dashboard Global de Economia de Escala e Sustentabilidade (GreenOps)**
+  - **Descrição:** Sustentabilidade em engenharia de software tornou-se uma diretriz corporativa essencial. Ampliando o horizonte de FinOps, este módulo tangibilizará as economias feitas pelo orquestrador (scale-to-zero, spot instances, otimizações de código) e as converterá em métricas de impacto ambiental (GreenOps). Ele reportará quanta energia foi economizada e a consequente redução da pegada de carbono, conectando práticas de TI à sustentabilidade e permitindo que as empresas usem os ganhos arquiteturais como um selo de impacto ecológico positivo.
+  - **Critérios de Aceite:**
+    - [ ] Coletar as métricas de tempo ocioso economizado (CPU/horas mitigadas) decorrente do Scale-to-Zero e de refatorações de performance em todos os clusters gerenciados.
+    - [ ] Integrar APIs ou bibliotecas de conversão (ex: Cloud Carbon Footprint) que traduzem vCPU-horas economizadas e trafego de rede mitigado em toneladas de equivalência de CO2.
+    - [ ] Desenvolver uma visão executiva no Dashboard consolidando essas métricas em gráficos acessíveis (Energia economizada, CO2 mitigado, Meta de Sustentabilidade Trimestral).
+    - [ ] Estabelecer endpoints que permitem a exportação desses relatórios periódicos em PDF, formatados de acordo com diretrizes de relatórios ESG (Environmental, Social, and Governance).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Relatórios de ESG e Carbon Footprint da Infraestrutura".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
