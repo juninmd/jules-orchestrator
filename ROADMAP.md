@@ -1541,6 +1541,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Estabelecer endpoints que permitem a exportação desses relatórios periódicos em PDF, formatados de acordo com diretrizes de relatórios ESG (Environmental, Social, and Governance).
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Relatórios de ESG e Carbon Footprint da Infraestrutura".
 
+- [ ] **Feature: Certificação Autônoma de Maturidade de Repositórios (Tiering de Projetos)**
+  - **Descrição:** Com a grande escalabilidade da plataforma, precisamos garantir que todos os repositórios integrados atendam a um nível de maturidade mínimo de desenvolvimento antes de avançarem para produção. O orquestrador analisará proativamente repositórios, conferindo presença de README, cobertura de código mínima, conformidade com políticas de branches, segurança e Dockerfiles padronizados, pontuando e conferindo um tier (Gold, Silver, Bronze).
+  - **Critérios de Aceite:**
+    - [ ] Criar módulo `RepositoryTieringService` para escanear a estrutura do repositório em busca de artefatos padrão de engenharia.
+    - [ ] Desenvolver sistema de pontuação baseado em pesos para cobertura de testes (>80%), linting rígido e qualidade (Sonar/Semgrep rules).
+    - [ ] Automatizar o bloqueio de deploys contínuos caso repositórios estejam com certificação Bronze por mais de duas semanas consecutivas.
+    - [ ] Adicionar um endpoint no Dashboard para gerar relatórios visuais gamificados e encorajar equipes a subirem os seus tiers para Gold.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria Gamificada e Leaderboard de Maturidade entre Times".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
