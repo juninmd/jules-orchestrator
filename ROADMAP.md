@@ -1550,6 +1550,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Adicionar um endpoint no Dashboard para gerar relatórios visuais gamificados e encorajar equipes a subirem os seus tiers para Gold.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria Gamificada e Leaderboard de Maturidade entre Times".
 
+- [ ] **Feature: Fluxo Autônomo de Melhoria Contínua via Checklists**
+  - **Descrição:** Formalizar e automatizar o processo onde o preenchimento de checklists de critérios de aceite das features atuais atua como o principal motor de evolução do repositório. O sistema deve capturar a conclusão de tarefas e usar a IA (como Product Owner) para deduzir, detalhar e criar autonomamente as próximas features necessárias, mantendo o roadmap constantemente atualizado e as aplicações em contínuo aprimoramento.
+  - **Critérios de Aceite:**
+    - [ ] Criar um webhook ou listener que monitore o fechamento de issues ou commits que marquem os checkboxes no arquivo `ROADMAP.md`.
+    - [ ] Implementar a lógica de parsing que extrai o contexto da tarefa concluída e identifica o seu respectivo "Gatilho de Novas Tasks".
+    - [ ] Integrar com o serviço de LLM (Product Owner Autônomo) para gerar a descrição detalhada e novos critérios de aceite para a task definida no gatilho.
+    - [ ] Garantir que a nova feature gerada seja injetada automaticamente no final do `ROADMAP.md` e que uma issue correspondente seja criada no repositório.
+    - [ ] Implementar verificações de idempotência para evitar a geração duplicada de tasks caso o checklist seja marcado múltiplas vezes.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Acompanhamento do Fluxo de Evolução Autônoma".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
