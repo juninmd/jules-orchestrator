@@ -1560,6 +1560,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar verificações de idempotência para evitar a geração duplicada de tasks caso o checklist seja marcado múltiplas vezes.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Acompanhamento do Fluxo de Evolução Autônoma".
 
+- [ ] **Feature: Mapeamento de Dependências Bidirecionais e Testes de Impacto Cruzado**
+  - **Descrição:** Em um ecossistema autônomo, modificações realizadas em um microsserviço ou módulo central podem causar efeitos colaterais em toda a arquitetura. Esta funcionalidade cria um mapeamento dinâmico em tempo real de como os componentes se inter-relacionam e exige a execução de testes de impacto cruzado, onde módulos dependentes têm suas suítes de testes engatilhadas imediatamente. Dessa forma, garantimos estabilidade orgânica sem precisar depender de intervenção humana.
+  - **Critérios de Aceite:**
+    - [ ] Mapear o grafo de dependências do repositório identificando importações em comum, APIs compartilhadas ou uso de pacotes do monorepo, gerando um artefato visual contínuo da arquitetura (Graph).
+    - [ ] Integrar no pipeline de PR um mecanismo que escuta a aprovação e injeta os diffs, analisando quais componentes dependem (direta e indiretamente) dos arquivos alterados.
+    - [ ] Disparar os *unit tests* e *e2e tests* isolados para os componentes dependentes e registrar em formato de tabela de cobertura (impact matrix) no comentário do PR gerado pelo agente autônomo.
+    - [ ] Recusar PRs caso haja degradação (quebra de contrato ou testes falhando) em qualquer parte impactada pelo escopo da alteração cruzada.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Rollback Autônomo em Cascata em Caso de Falha de Impacto Cruzado".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
