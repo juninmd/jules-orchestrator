@@ -1569,6 +1569,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Recusar PRs caso haja degradação (quebra de contrato ou testes falhando) em qualquer parte impactada pelo escopo da alteração cruzada.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Rollback Autônomo em Cascata em Caso de Falha de Impacto Cruzado".
 
+
+- [ ] **Feature: Automação do Aprimoramento Contínuo dos Repositórios via Preenchimento de Check-lists**
+  - **Descrição:** Como P.O., para manter a evolução das aplicações de forma constante, precisamos estabelecer um fluxo orgânico em que a própria execução do trabalho dispare inovações. Esta feature consolida a base do "Aprimoramento Contínuo". Conforme as equipes (ou agentes autônomos) preenchem os check-lists de "Critérios de Aceite" no desenvolvimento, o sistema analisará esse progresso. Ao concluir a task original, o Orquestrador usará o contexto dos checklists preenchidos e a análise do repositório para engatilhar a próxima feature lógica do roadmap. Assim, cada entrega se transforma automaticamente no insumo gerador de novos requisitos, garantindo que a aplicação evolua perpetuamente em escala, segurança e robustez.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver um listener/webhook que escute fechamentos de PRs e monitoramentos de marcações (`- [x]`) em check-lists específicos dentro das issues e no arquivo `ROADMAP.md`.
+    - [ ] Extrair e enviar o contexto detalhado da task recém-concluída para o modelo LLM encarregado do papel de Product Owner.
+    - [ ] Garantir que o LLM (Product Owner) formule novas tasks com altíssimo nível de detalhe técnico, propondo invariavelmente melhorias incrementais relacionadas (ex.: adição de cache, resiliência, expansão de cobertura funcional).
+    - [ ] Autenticar a inserção (append) automatizada da nova task criada pelo agente P.O. ao final das listas no `ROADMAP.md`, sempre incluindo uma nova seção "Gatilho de Novas Tasks" para perpetuar o ciclo.
+    - [ ] Implementar mecanismo anti-loop: criar assinaturas para que o agente não reaja e gere tasks a partir de atualizações de documentação causadas por ele mesmo de maneira desenfreada.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo Avançado de Priorização de Tasks Autogeradas via Votação de Agentes e Impacto no Negócio".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
