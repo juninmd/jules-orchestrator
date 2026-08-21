@@ -1580,6 +1580,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar mecanismo anti-loop: criar assinaturas para que o agente não reaja e gere tasks a partir de atualizações de documentação causadas por ele mesmo de maneira desenfreada.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo Avançado de Priorização de Tasks Autogeradas via Votação de Agentes e Impacto no Negócio".
 
+- [ ] **Feature: Mecanismo Avançado de Priorização de Tasks Autogeradas via Votação de Agentes e Impacto no Negócio**
+  - **Descrição:** Como o orquestrador gera um alto volume de tarefas autônomas, é necessário um mecanismo avançado para priorizar o backlog sem depender exclusivamente da avaliação humana. Esta funcionalidade implementa um sistema de "Swarm Voting" onde diferentes perfis de agentes de IA (Arquitetura, QA, Segurança, FinOps) realizam uma votação ponderada para determinar a urgência de cada nova task. Essa avaliação colaborativa é então combinada com métricas de impacto no negócio (ROI estimado, mitigação de riscos críticos) para reordenar dinamicamente o backlog.
+  - **Critérios de Aceite:**
+    - [ ] Implementar um protocolo de deliberação no `SwarmBusService` onde múltiplos agentes avaliem cada nova task submetida, atribuindo uma nota de 1 a 10 baseada em suas heurísticas específicas (ex: SecOps focado em risco, QA focado em cobertura).
+    - [ ] Criar o motor de cálculo `BusinessImpactScorer` que pondera as notas dos agentes com dados provindos dos módulos de FinOps e Telemetria para compilar um score final (Score de Prioridade).
+    - [ ] Desenvolver um processo automatizado de reordenação (Sorting) que atualiza as seções do arquivo `ROADMAP.md` e reajusta as prioridades/labels nas Issues vinculadas no GitHub diariamente.
+    - [ ] Anexar um "Log de Deliberação" (Audit Log) como comentário na Issue criada, demonstrando de forma transparente os votos individuais de cada agente e a justificativa gerada pela IA para a prioridade final.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Interface de Simulação e Previsão de Roadmap (Roadmap What-If Analysis)".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
