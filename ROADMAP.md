@@ -1589,6 +1589,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Anexar um "Log de Deliberação" (Audit Log) como comentário na Issue criada, demonstrando de forma transparente os votos individuais de cada agente e a justificativa gerada pela IA para a prioridade final.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Interface de Simulação e Previsão de Roadmap (Roadmap What-If Analysis)".
 
+- [ ] **Feature: Interface de Simulação e Previsão de Roadmap (Roadmap What-If Analysis)**
+  - **Descrição:** Para fornecer previsibilidade ao desenvolvimento contínuo orquestrado pela plataforma, esta feature implementa uma interface analítica que permite a simulação de diferentes cenários no roadmap. Utilizando dados históricos de velocidade de entrega e impacto, o Product Owner (IA ou humano) poderá alterar variáveis como alocação de agentes, prioridade de tarefas e dependências para visualizar instantaneamente como essas mudanças afetariam o tempo de entrega (lead time) e a qualidade projetada. Esta funcionalidade é essencial para suportar decisões estratégicas e validar as escolhas automáticas do orquestrador antes da execução real.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver um módulo `RoadmapSimulationEngine` capaz de ingerir os dados do backlog atual (tasks pendentes no `ROADMAP.md` e no GitHub) e o histórico de produtividade dos agentes.
+    - [ ] Criar a interface de usuário (UI) "What-If Dashboard", permitindo arrastar tarefas (drag-and-drop) para alterar suas prioridades temporariamente sem impactar o banco de dados real.
+    - [ ] Implementar parâmetros ajustáveis na simulação (ex: número de agentes ativos, peso da segurança vs. velocidade, complexidade estimada).
+    - [ ] Gerar gráficos preditivos de Gantt ou Burndown refletindo os resultados dos cenários simulados de forma visual e interativa em tempo real.
+    - [ ] Adicionar funcionalidade para exportar o cenário simulado ideal como um relatório executivo ou como a nova configuração efetiva do roadmap.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Interativo de Alocação de Agentes por Demanda".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
