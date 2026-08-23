@@ -1599,6 +1599,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Adicionar funcionalidade para exportar o cenário simulado ideal como um relatório executivo ou como a nova configuração efetiva do roadmap.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Interativo de Alocação de Agentes por Demanda".
 
+- [ ] **Feature: Dashboard Interativo de Alocação de Agentes por Demanda**
+  - **Descrição:** Tendo validado a previsão do roadmap através da interface analítica (What-If Dashboard), o próximo passo é permitir que a liderança visualize e gerencie proativamente a alocação de agentes de inteligência artificial em tempo real. Esta feature construirá um painel interativo exibindo todos os agentes IA ativos e ociosos, e o volume de tarefas pendentes em cada microsserviço/projeto. Através do Dashboard, o gestor (ou o próprio orquestrador de forma autônoma) poderá alocar, desalocar ou rebalancear os agentes entre os projetos, permitindo absorção de picos de demanda sob cenários de incidentes críticos ou aceleração de entrega focada, sem necessidade de alterações técnicas manuais na infraestrutura.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver a interface visual "Agent Allocation Board" conectada em tempo real (via WebSockets/SSE) ao estado do cluster Kubernetes, listando agentes ativos e ociosos ( Swarm Nodes).
+    - [ ] Exibir de forma clara a carga de trabalho atual por projeto (fila de tarefas geradas) e a velocidade de execução prevista com a alocação atual.
+    - [ ] Implementar a capacidade de alocação drag-and-drop: o usuário poderá arrastar um grupo de agentes de um projeto de baixa prioridade para um projeto com gargalo ("Bottleneck") diretamente na interface.
+    - [ ] Construir o motor backend `DynamicAllocationService` que converte as ações visuais do painel em chamadas à API do Kubernetes (Scale Up/Down de deployments específicos) ou realocação lógica de filas no `SwarmBusService`.
+    - [ ] Incluir um "Modo Autônomo" onde o Orquestrador monitora limites de SLAs das filas de PRs e realoca os agentes autonomamente, relatando no painel a decisão através de um log de eventos focado no ROI.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Previsão de Falhas de SLA (Service Level Agreement) de Code Review e Alerta de Gargalos".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
