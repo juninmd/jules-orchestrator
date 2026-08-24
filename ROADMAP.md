@@ -1609,6 +1609,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Incluir um "Modo Autônomo" onde o Orquestrador monitora limites de SLAs das filas de PRs e realoca os agentes autonomamente, relatando no painel a decisão através de um log de eventos focado no ROI.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Previsão de Falhas de SLA (Service Level Agreement) de Code Review e Alerta de Gargalos".
 
+
+- [ ] **Feature: Sistema de Previsão de Falhas de SLA (Service Level Agreement) de Code Review e Alerta de Gargalos**
+  - **Descrição:** Baseado nos dados de alocação de agentes e velocidade de execução, o orquestrador deve implementar um sistema preditivo que analisa a fila de Pull Requests e Issues pendentes. Utilizando métricas históricas de Lead Time e Cycle Time, o sistema preverá se os SLAs de Code Review e resolução de tarefas serão violados, alertando as lideranças técnicas antes que o atraso ocorra para reajuste de prioridades ou alocação extra de agentes autônomos.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o módulo `SLAPredictorService` que consome as métricas de fila e o tempo médio de execução histórico dos agentes no `DynamicAllocationService`.
+    - [ ] Criar configurações de SLA configuráveis por repositório ou projeto (ex: "PRs devem receber o primeiro review em no máximo 2 horas").
+    - [ ] Implementar a regressão matemática ou heurística simples para calcular o "Estimated Time of Arrival" (ETA) de cada review pendente na fila.
+    - [ ] Disparar alertas preditivos via Slack ou Telegram para os canais de engenharia caso o ETA calculado ultrapasse o SLA acordado em mais de 15%.
+    - [ ] Integrar a visualização de "Risco de Violação de SLA" no Dashboard Interativo de Alocação de Agentes, destacando gargalos iminentes com cores de alerta (Amarelo/Vermelho).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Escalabilidade Emergencial de Agentes Baseada em SLAs Críticos".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
