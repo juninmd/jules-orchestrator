@@ -1620,6 +1620,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Integrar a visualização de "Risco de Violação de SLA" no Dashboard Interativo de Alocação de Agentes, destacando gargalos iminentes com cores de alerta (Amarelo/Vermelho).
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Escalabilidade Emergencial de Agentes Baseada em SLAs Críticos".
 
+- [ ] **Feature: Automação de Escalabilidade Emergencial de Agentes Baseada em SLAs Críticos**
+  - **Descrição:** O orquestrador não apenas preverá falhas de SLA, mas também atuará diretamente na infraestrutura para mitigá-las. Em caso de previsão de rompimento de SLA crítico, este mecanismo escalará dinamicamente novas instâncias temporárias de agentes (Pods) e realocará prioridades em tempo real, garantindo o cumprimento de contratos de nível de serviço sem intervenção humana.
+  - **Critérios de Aceite:**
+    - [ ] Integrar com o Horizontal Pod Autoscaler (HPA) e KEDA para permitir a injeção instantânea de novas instâncias de agentes IA no cluster.
+    - [ ] Criar regras de *Scale-Up Emergencial* que respondam exclusivamente ao módulo `SLAPredictorService`, ignorando métricas padrão de CPU temporariamente.
+    - [ ] Implementar política de *Scale-Down* acelerada assim que a fila de tarefas críticas normalizar, otimizando o orçamento após a mitigação.
+    - [ ] Registrar no banco de dados e notificar os engenheiros sobre quais tarefas ou PRs forçaram a ativação deste protocolo emergencial.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Impacto Financeiro da Escalabilidade Emergencial (ROI do SLA)".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
