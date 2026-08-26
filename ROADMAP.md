@@ -1629,6 +1629,295 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Registrar no banco de dados e notificar os engenheiros sobre quais tarefas ou PRs forçaram a ativação deste protocolo emergencial.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Impacto Financeiro da Escalabilidade Emergencial (ROI do SLA)".
 
+- [ ] **Feature: Compra e Venda Autônoma de Instâncias Spot Baseada em Precificação Temporal**
+  - **Descrição:** Otimização avançada de custos na nuvem (FinOps). O orquestrador monitorará o mercado de instâncias Spot (AWS/GCP/Azure) para identificar janelas temporais de baixo custo. Quando a precificação cair abaixo de um limite predefinido, o sistema comprará instâncias para rodar workloads de baixa prioridade (ex: jobs massivos de linting, QA de regressão noturna) e as desalocará automaticamente se o preço flutuar acima do aceitável.
+  - **Critérios de Aceite:**
+    - [ ] Integrar APIs de precificação (Spot Pricing History) das provedoras de nuvem.
+    - [ ] Criar motor de decisão que aciona a compra de instâncias e provisiona os jobs quando o custo é até 70% menor que On-Demand.
+    - [ ] Implementar mecanismo seguro (Graceful Degradation) que pausa a execução dos jobs caso o preço da Spot suba repentinamente, salvando o estado no cache.
+    - [ ] Adicionar seção no Dashboard de FinOps rastreando as economias geradas por esta arbitragem de infraestrutura.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Multicloud Autônoma de Migração de Carga Baseada em Custo".
+
+- [ ] **Feature: Implementação de Git Hooks para Análise de Segurança de Commits (Gitleaks)**
+  - **Descrição:** Proteger o repositório contra vazamento acidental de credenciais. Antes que um desenvolvedor consiga efetivar um commit, um hook local será ativado para varrer o diff do código buscando hardcodes de chaves de API, senhas, tokens e certificados PGP usando uma ferramenta como Gitleaks. Se encontrar algo sensível, bloqueia o commit na origem.
+  - **Critérios de Aceite:**
+    - [ ] Instalar o pacote `gitleaks` (ou equivalente em Node.js) no ecossistema de dependências de desenvolvimento.
+    - [ ] Configurar um `pre-commit` hook (junto ao lint-staged) que executa a varredura restrita aos arquivos do staged.
+    - [ ] Implementar regra `.gitleaksignore` customizada com falsos positivos do contexto do Jules Orchestrator.
+    - [ ] Incluir documentação automatizada que explica ao desenvolvedor por que seu commit foi bloqueado e como limpar os secrets do cache.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Vault Autônomo para Substituição Transparente de Hardcoded Secrets".
+
+- [ ] **Feature: Monitoramento Ativo de Rate Limits de Provedores de API de Terceiros**
+  - **Descrição:** Evitar falhas por estrangulamento de requisições. O orquestrador monitorará em tempo real o limite de chamadas de APIs externas (como GitHub, provedores de LLM, e Cloud) processando cabeçalhos HTTP como `X-RateLimit-Remaining`. Quando próximo do limite de bloqueio (HTTP 429), ele distribuirá a carga, fará pausa (backoff) consciente, ou trocará para chaves de fallback se disponíveis.
+  - **Critérios de Aceite:**
+    - [ ] Interceptar todas as requisições HTTP feitas pelos serviços centrais e extrair headers de rate-limit.
+    - [ ] Armazenar o estado global de cotas disponíveis num banco in-memory (ex: Redis).
+    - [ ] Suspender jobs específicos com status "Aguardando Cota" antes que a API recuse a conexão ativamente.
+    - [ ] Dashboard deve mostrar em tempo real o percentual de cota de API de cada provedor integrado (ex: GitHub limit usage).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Pool Rotativo de Tokens de Autenticação via Secrets Manager".
+
+- [ ] **Feature: Automatização de Threat Modeling Dinâmico por Componentes em Modificação**
+  - **Descrição:** Expandir o SecOps no ecossistema do Orquestrador. Antes de mesclar grandes refatorações autônomas (Swarm Refactoring), o sistema gerará um modelo de ameaças dinâmico. O modelo mapeará fluxos de dados sensíveis e fronteiras de confiança que foram tocadas na PR, informando o risco agregado (STRIDE) de antemão e sugerindo medidas de segurança preventivas na fase de revisão de código.
+  - **Critérios de Aceite:**
+    - [ ] Criar motor que processa diffs complexos em grafos relacionais, marcando entidades como entrada de usuário ou banco de dados.
+    - [ ] Utilizar LLM para cruzar o grafo gerado com a metodologia STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege).
+    - [ ] Gerar comentário na PR exibindo o "Painel de Ameaças" atualizado, com os riscos detectados pela mudança.
+    - [ ] A PR será bloqueada se o Threat Modeling classificar a nova mudança com risco "Crítico" ou "Alto" sem as devidas mitigações descritas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Engenharia de Prompt para Automação de Medidas de Mitigação de Riscos de STRIDE".
+
+- [ ] **Feature: Certificação Contínua de Alta Disponibilidade de Microsserviços**
+  - **Descrição:** Garantir que o repositório atenda rigorosos padrões de confiabilidade para implantação. O orquestrador medirá continuamente a resiliência dos microsserviços via validação de health checks robustos, tempo de inicialização (startup time) e tolerância a quedas (desligamento limpo/graceful shutdown), conferindo selos de certificação.
+  - **Critérios de Aceite:**
+    - [ ] Criar suíte de testes de certificação no CI (Integration/Infra tests) que emula quedas de energia (SIGKILL) para validar resiliência do estado de conexões de BD.
+    - [ ] Mensurar tempos de prontidão (Liveness e Readiness probes simuladas).
+    - [ ] Atribuir notas de 0 a 100 de Alta Disponibilidade ao microsserviço no Painel DevSecOps.
+    - [ ] Alertar se um PR aumenta em mais de 30% o tempo de boot de um container sem justificativa.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auto-Restauração Baseada em Quórum e Estado de Eleição (Leader Election) em Microsserviços".
+
+- [ ] **Feature: Integração Contínua Sensível a Contexto (Context-Aware CI)**
+  - **Descrição:** Para acelerar pipelines e reduzir o gasto com CI. Ao analisar uma PR, o orquestrador não executará todos os testes da aplicação (monorepo). O pipeline será sensível ao contexto: ele mapeará os arquivos afetados através de um grafo de dependência e executará de forma seletiva SOMENTE os testes (unitários, E2E) e as ferramentas de lint atreladas aos blocos afetados pela modificação.
+  - **Critérios de Aceite:**
+    - [ ] Implementar motor de determinação de testes (`Affected Test Finder`) que cruza o arquivo editado com as suites que o importam.
+    - [ ] Dinamizar os scripts CI do vitest para suportar flags baseadas na árvore de dependência.
+    - [ ] Comprovar que PRs com pequenas mudanças no backend ignoram builds custosos de frontend ou documentação.
+    - [ ] Diminuir em pelo menos 50% o tempo médio de execução do pipeline global.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Otimizador de Cache de Build Heurístico Baseado em Frequência de Commits".
+
+- [ ] **Feature: Auditoria Criptográfica de Vazamento de Entropia em Requisições de IA**
+  - **Descrição:** Ao interagir com provedores locais e em nuvem, precisamos certificar que o contexto gerado pelas chamadas de LLM não exponham ou reduzam a segurança criptográfica (ex: gerar strings randomizadas muito curtas). Um módulo de varredura avaliará constantemente as chaves sintéticas ou entropias e verificará o grau de pseudoaleatoriedade para proibir que código com senhas e segredos fracos sejam injetados via auto-healing.
+  - **Critérios de Aceite:**
+    - [ ] Injetar filtro em chamadas de AI-Output que escaneia propostas contendo geração de secrets.
+    - [ ] Avaliar entropia de strings sintéticas contidas em patches de segurança (Shanon Entropy Analyzer).
+    - [ ] Rejeitar auto-healing que proponha bibliotecas deprecadas (ex. `Math.random` para crypto) e forçar reiteração do prompt sugerindo API nativa de WebCrypto.
+    - [ ] Expor as métricas de segurança vetada na auditoria mensal P.O.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Políticas de TLS Rigorosas (Cipher Suites) via LLM".
+
+- [ ] **Feature: Geração Automática de Relatórios Post-Mortem Baseada em Linhas do Tempo de Incidentes**
+  - **Descrição:** Simplificar a burocracia pós-crise. Quando o orquestrador detecta que ocorreu uma anomalia severa seguida pela restauração do cluster (Auto-Healing concluído), ele buscará logs unificados da infra (tempo de queda, ações tomadas e commits de emergência) e produzirá de forma inteiramente autônoma um relatório executivo (Post-Mortem) descrevendo cronologia, root cause provável, e próximos passos para evitar recorrências.
+  - **Critérios de Aceite:**
+    - [ ] Integrar telemetria Prometheus, logs estruturados do Kubernetes e registro de ações de Self-healing num buffer temporal de incidente.
+    - [ ] Promptar a IA para redigir um "Post-Mortem" formatado em Markdown com seções "O Que Aconteceu", "Impacto", "Causa Raiz", "Resolução" e "Action Items".
+    - [ ] Postar o relatório no canal oficial do incidente no Slack e criar PR no repositório agregando o doc na pasta `/docs/incident-reports`.
+    - [ ] Mapear as "Action Items" descritas pelo Post-Mortem diretamente como Tasks do Roadmap com prioridade máxima.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Banco de Dados Vetorial de Post-Mortems e Auto-Correção Histórica".
+
+- [ ] **Feature: Modelo de Precificação Dinâmica Interna (Chargeback) para Consumo de Serviços Autônomos de Qualidade**
+  - **Descrição:** Em grandes corporações, automações (como testes de mutação ou chaos engineering) consomem vastos recursos de compute. Esse modelo de chargeback implementará preços internos (virtual billing) de modo que cada departamento tenha um extrato de quanto "comprou" das capacidades do orquestrador de IA, promovendo a disciplina financeira.
+  - **Critérios de Aceite:**
+    - [ ] Estabelecer "Preço por Job" fictício atrelado à base de tempo de execução e consumo de IA.
+    - [ ] Criar tabelas de faturamento interno (`Chargeback`) e alocar o consumo nas contas dos respectivos Squads ou Centros de Custo definidos nas tags do repositório.
+    - [ ] Dashboard gerencial listará extrato mensal "Custo Gerado vs. Benefício da Automação (ROI)" por departamento.
+    - [ ] Configuração limitadora, onde, caso um squad zere seu orçamento virtual mensal, perca privilégios aos Jobs premium de IA.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Gamificação Econômica e Compra de Perks Corporativos via Faturamento Virtual de Engenharia".
+
+- [ ] **Feature: Geração Autônoma de Casos de Uso Extremamente Complexos via Agentic Loop**
+  - **Descrição:** Elevar as capacidades de escrita de código do orquestrador ao delegar para a LLM o desafio de não apenas criar snippets, mas fluxos longos de regras de negócios complexas ponta-a-ponta (ex. processamentos financeiros distribuídos). Utilizar o Agentic Loop, onde múltiplos agents (Writer, Reviewer, Tester) criam, testam e corrigem sucessivamente um código num sandbox até que os critérios de aceite matemáticos em testes unitários sejam atingidos com precisão cirúrgica antes de abrirem o Pull Request definitivo.
+  - **Critérios de Aceite:**
+    - [ ] Configurar múltiplos prompts especializados operando em pipeline: Planner -> Coder -> Tester -> Critic.
+    - [ ] Desenvolver infraestrutura de feedback iterativo em workspace temporário onde o loop roda autônomamente um máximo de 10 vezes buscando passar nos próprios testes propostos (Test-Driven AI).
+    - [ ] Interromper loop com falha se os testes de mutação comprovarem que o agente apenas escreveu "assertions" vazios.
+    - [ ] Garantir formatação modular em componentes desacoplados no pull request final resultante.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Validação Heurística Autônoma de Requisitos de Negócio através de Behavior-Driven Development (BDD)".
+
+- [ ] **Feature: Criação de Workspaces Distribuídos em Múltiplos Pods (Map-Reduce de Build)**
+  - **Descrição:** Para repositórios gigantes, onde o build ou processamento (lint/testes) excede os recursos alocados num único pod K8s e gera gargalo de velocidade. O orquestrador orquestrará a quebra do repositório e distribuirá os artefatos de código para execução de jobs de forma distribuída e paralela através de múltiplos pods operários (worker pods), unificando os resultados no final num formato Map-Reduce.
+  - **Critérios de Aceite:**
+    - [ ] Implementar divisão estrutural do repositório baseada em pastas ou módulos (`workspace-sharding`).
+    - [ ] Acionar N pods (workers) simultaneamente distribuindo a carga através de filas no RabbitMQ/Redis.
+    - [ ] Consolidar relatórios JUnit de testes ou ESLint num único relatório final via um serviço `ReduceCoordinator`.
+    - [ ] Assegurar tolerância a falhas: Se um pod worker cair, sua tarefa deve ser reatribuída e o build global não deve falhar acidentalmente.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Rede de Transmissão de Cache Distribuído entre Múltiplos Pods de Build".
+
+- [ ] **Feature: Consolidação de Painel DevSecOps (Unified Security Posture)**
+  - **Descrição:** Como a quantidade de insights, varreduras (SAST/DAST) e logs gerados está crescendo, precisamos de um centro de comando unificado de segurança. A feature criará um Dashboard Single Pane of Glass que compilará relatórios do Sonar, alertas Gitleaks, métricas de SIEM e atualizações de CVEs provenientes de vários ambientes gerenciados em uma única visão hierárquica por serviço.
+  - **Critérios de Aceite:**
+    - [ ] Agregar APIs de relatórios do SonarQube, Snyk/Trivy, Gitleaks e relatórios de Threat Modeling em uma única API GraphQL ou REST interna.
+    - [ ] Fornecer interface em React/Vue onde gestores visualizarão a saúde das aplicações categorizadas por Cores e Severidade.
+    - [ ] Relatórios de auditoria exportáveis num clique para atestar Conformidade ISO/SOC2.
+    - [ ] Alertas unificados disparados se a "Saúde de Segurança Unificada" de um domínio cruzar o limiar de degradação aceita.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Correção Automática Massiva de Permissões IAM através de Orquestração Autônoma".
+
+- [ ] **Feature: Dashboard de Impacto Financeiro da Escalabilidade Emergencial (ROI do SLA)**
+  - **Descrição:** Dar visibilidade às lideranças sobre os custos operacionais (Cloud e IA) de quando a escalabilidade emergencial para bater SLA entra em ação. Demonstrar se a "aceleração emergencial" é efetiva ou está resultando em gastos computacionais insustentáveis comparados às multas de quebra do SLA real da empresa.
+  - **Critérios de Aceite:**
+    - [ ] Interceptar eventos de escala HPA e instanciar cálculo baseado no preço por hora de instâncias Spot/On-Demand injetadas de urgência.
+    - [ ] Comparar no dashboard gráfico: Custo Incorreto Computacional Emergencial vs. Perda Financeira ou de Contrato (SLAs Penalty).
+    - [ ] Permitir a gestão de thresholds financeiros globais ("Aceitar SLA violado se o scale-up passar de $500 por ocorrência").
+    - [ ] Sumarizar esses eventos e enviá-los no reporte gerencial consolidado do fechamento de sprint.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Simulador Visual Executivo de Penas de SLA e Modelos Financeiros de Carga (Stress Testing de Contrato)".
+
+- [ ] **Feature: Suporte a Multilinguismo em Dailies e Resumos de Sprint**
+  - **Descrição:** Em operações cross-border (times globais), Dailies, Post-mortems e relatórios precisam atingir times dispersos por idioma nativo (EN, PT, ES, etc). O Orquestrador IA detectará configurações por canal de comunicação (Slack/Teams) ou repositório e enviará resumos gerados dinamicamente em diversos idiomas simultaneamente mantendo a integridade técnica do contexto.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar camada de configuração de Localização (`Locales`) nos perfis dos times.
+    - [ ] Utilizar a API do modelo LLM para traduzir o output final das análises mantendo formatação MarkDown, referências (código não é traduzido) e clareza.
+    - [ ] O serviço Slack/Telegram deve saber qual idioma injetar baseado num arquivo YAML do projeto (`.jules-lang.yml`).
+    - [ ] Permitir o envio síncrono da Daily em Múltiplos Canais (ex. `Squad-BR`, `Squad-US`) cada qual em seu idioma predeterminado.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Criação de Dicionário Global de Contexto Institucional Suportado em Múltiplos Idiomas".
+
+- [ ] **Feature: Dashboard de Acompanhamento do Fluxo de Evolução Autônoma**
+  - **Descrição:** Visualização gerencial e acompanhamento interativo focada na capacidade autogeradora de features. Painel desenhado para que a gestão observe quais PRs completados ("Critérios de Aceite") originaram quais as tarefas mais recentes ("Gatilho") no pipeline, criando um mapa mental e visualização rastreável de causa e efeito da evolução orgânica do Produto.
+  - **Critérios de Aceite:**
+    - [ ] Construir layout React exibindo a cadeia visual contínua (ex: Feature X → Check-list → Trigger → Nova Feature Y).
+    - [ ] Indicar métricas de "Automação Efetiva", calculando quantas das features injetadas autonomamente foram concluídas pelos engenheiros na Sprint seguinte sem rejeição gerencial.
+    - [ ] Botões rápidos para curadoria humana "Rejeitar Ramo", que revoga features que fugiram ao core-business.
+    - [ ] Resumo gráfico com evolução de "Ramos Vivos" no projeto.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Engenheiro Virtual de Carga, Stress e Estabilidade Pós-Injeção Orgânica de Funcionalidades".
+
+- [ ] **Feature: Dashboard de Telemetria de Saúde de Dependências de Terceiros**
+  - **Descrição:** Visibilidade estendida para pacotes (NPM/Python). Relatórios visuais sumarizados categorizando a obsolescência das dependências, score de maturidade open-source, incidentes reportados, e o tempo médio que o bot gasta aplicando automerge e se curando de falhas no CI ao importar esses pacotes.
+  - **Critérios de Aceite:**
+    - [ ] Painel centralizado listando "Dependências Core" com badges verdes, amarelos, e vermelhos.
+    - [ ] Integrar pontuação baseada em métricas como "Frequency of Commits" e "Open CVEs" no repositório de origem da biblioteca de terceiros.
+    - [ ] Emissão de alertas se o orquestrador observar abandono da lib pela comunidade externa.
+    - [ ] Integração com sistema para banir "shadow-dependencies" ou bibliotecas sem update em 3 anos que entrem subitamente na aplicação.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Desligamento e Substituição Ativa por Sugestão Autônoma de Bibliotecas Core Abandonadas".
+
+- [ ] **Feature: Integração de Avaliação de Risco de Release com Base em Padrões de Falha**
+  - **Descrição:** Inteligência artificial aplicada à segurança de Deploy. Antes de promover uma Release via Conventional Commits para produção (Tags/ArgoCD), o orquestrador vasculha o histórico. Ele cruza os desenvolvedores, os arquivos (Churn-rate) e os comentários da PR que constituem a Tag com o banco de "Falhas Passadas", decidindo a probabilidade (Risk Score) do Release dar problema ou gerar timeout em produção, bloqueando Releases temerários.
+  - **Critérios de Aceite:**
+    - [ ] Banco de dados alimentando matriz preditiva: Padrões Falhos vs. Diffs Críticos.
+    - [ ] Gerar "Risk Score de 0-100%" a cada pipeline pós-merge (Release).
+    - [ ] Requerer aprovação manual obrigatória se o Risk Score ultrapassar o limite aceitável de tolerância ao erro configurado.
+    - [ ] Publicar no Slack aviso do Risk Score atrelado à Release gerada para transparência operacional.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor Heurístico de Prevenção a Regressões baseados na Complexidade Ciclomática da Release".
+
+- [ ] **Feature: Visualizador Interativo de Context Maps de DDD e Fronteiras de Domínio**
+  - **Descrição:** Com a Arquitetura Orientada a Domínio (DDD) em pauta, um painel Web dinâmico irá exibir o Mapa de Contextos (Context Map) extraído das pastas e módulos em tempo real. Identificará graficamente Bounded Contexts, parcerias de integração, relacionamentos de upstream/downstream entre serviços e realçará em vermelho quais domínios estão sofrendo acoplamento e vazando responsabilidades no código de produção no exato momento.
+  - **Critérios de Aceite:**
+    - [ ] Integração da engine frontend (D3/Mermaid visual) que renderiza Context Maps vivos.
+    - [ ] Linhas coloridas dinamicamente (Verde: Baixo acoplamento / Vermelho: Import direto de Banco em Controller de Domínio).
+    - [ ] Mecanismos de Zoom-in e filtro para analisar o grafo complexo de domínios em Microsserviços vs. Monorepos.
+    - [ ] Criação de botões exportadores para relatórios de Governança de Arquitetura em alta resolução (PNG/PDF).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Bloqueio Automatizado de Infiltração entre Domínios Distintos Através de Dependências Circulares".
+
+- [ ] **Feature: Auditoria Forense Autônoma e Preservação Legal de Evidências em Ambientes Efêmeros**
+  - **Descrição:** Conformidade e Perícia (Legal Hold). Se houver suspeita fundamentada de vazamento severo e exploração ativa de segurança dentro dos Workspaces Efêmeros (sandbox da IA) por entidades externas, o orquestrador executará Snapshot autônomo (Freezing) dos pods atacados, contendo dumps de memória (RAM) e logs PCAP selados digitalmente para serem armazenados remotamente, visando auditorias legais futuras sem que o cluster trave.
+  - **Critérios de Aceite:**
+    - [ ] API integrada a orquestração do cluster (Kubernetes Volume Snapshots/CSI) e ferramentas de Dump do sistema.
+    - [ ] Envio das evidências em bucket encriptado S3 sem chaves na infra atacada.
+    - [ ] Criação do serviço `LegalHoldService` que carimba temporalmente o pacote e o reporta na base de auditoria para fins periciais.
+    - [ ] Destruir e recriar ambiente expurgado sem contaminação, isolando a infra original.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Políticas SecOps Kyverno para Isolamento Legal".
+
+- [ ] **Feature: Geração em Lote Autônoma de Testes Unitários de Arquivo Legado**
+  - **Descrição:** Foco no abatimento brutal de dívida técnica legada. Identificar quais arquivos do repositório operam regras core de negócios, possuem complexidade alta mas zero (ou baixa) cobertura de testes documentada. Lançar o "Swarm de Testers" IA para processar em massa e em lotes assíncronos a criação autônoma de suites de testes (Vitest/Jest) que cubram esses débitos e as integrar mediante aprovação PR, mantendo os comportamentos passados ("Caracterization Tests").
+  - **Critérios de Aceite:**
+    - [ ] Script Cron identificando e enfileirando "Test Debt" focado em arquivos não tocados há mais de 6 meses (Legados Core).
+    - [ ] Geração simultânea isolada de testes utilizando a base Vetorial para deduzir funções do código de origem.
+    - [ ] Rodar testes em Sandbox para comprovação (100% de hit).
+    - [ ] Abrir pull-requests consolidados rotulados como "Tech-Debt-Abatement" com no máximo 5 arquivos de testes por batch.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Motor Automatizado de Expansão de Testes de Integração de API End-to-End".
+
+- [ ] **Feature: Rollback Autônomo em Cascata em Caso de Falha de Impacto Cruzado**
+  - **Descrição:** Como o sistema testa falhas de impacto cruzado, caso uma regressão atinja dependências inter-serviços durante o deploy simultâneo em monorepos, o sistema fará revesão massiva. Todos os serviços alterados naquela pipeline voltarão ao estado sadio anterior autonomamente, isolando o colapso, protegendo a experiência do usuário final sem intervenção humana sob cenários noturnos de incidentes, via Git Revert e ArgoCD Sync.
+  - **Critérios de Aceite:**
+    - [ ] Escutar sinal de degradação cruzada emitido por ferramenta APM/Log.
+    - [ ] Avaliar quais outros deploys na janela de 20 minutos também importaram a biblioteca danificada.
+    - [ ] Executar script de Fallback simultâneo para repor a malha inteira do serviço de volta à versão `N-1`.
+    - [ ] Post-Mortem engatilhado reportando a interdependência falha em canal central de P.O.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Teste Interativo de Chaos Mesh contra Deploys de Alto Impacto Cruzado Simultâneos".
+
+- [ ] **Feature: Auditoria Gamificada e Leaderboard de Maturidade entre Times**
+  - **Descrição:** Ampliação e ludificação dos Tiers (Bronze, Silver, Gold). Os repositórios da empresa pontuarão individualmente em práticas DevSecOps e o score alimentará o "Leaderboard" (Placar de Times) público (no dashboard interno ou painéis Slack). Premiações reais de departamento baseadas nessa tabela atuarão como vetores de incentivo forte, tornando a disciplina de manutenção de repo uma competição saudável corporativa.
+  - **Critérios de Aceite:**
+    - [ ] Front-end gamificado consumindo banco de maturidade e score contínuo.
+    - [ ] Algoritmo detectará quando o repositório avança nos rankings ao corrigir lint, adicionar README ou remover libs vulneráveis.
+    - [ ] Integração com bot no Telegram que comemora vitórias (Ex: "O Squad Beta elevou o repositório API Auth de Prata para Ouro!").
+    - [ ] Gráfico com ranking histórico para mostrar melhora contínua e times ofensores sem punição moral explícita.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Programa Autônomo de Certificações Internas para Times de Engenharia High-Performance".
+
+- [ ] **Feature: Isolamento Dinâmico em Sandboxes de Aplicações Vulneráveis em Produção**
+  - **Descrição:** Medida reativa extrema para falhas em produção. Quando um Zero-Day crasso não resolvido atinge código já promovido (vazamento real detectado via firewall), o Kubernetes, via orquestrador, alocará a aplicação do pod atingido diretamente a um sandbox segregado de redes e volumes críticos para a empresa (Redirecionamento Sinkhole). O sistema continuará respondendo à internet de forma controlada sem espalhar o exploit à malha interna.
+  - **Critérios de Aceite:**
+    - [ ] Integrar WAF/Network Policies (Istio/Cilium) gerando rotas em tempo real.
+    - [ ] A trigger de detecção moverá a aplicação (Namespace de quarentena).
+    - [ ] Monitoramento profundo da aplicação no sandbox para extrair as assinaturas do exploit do atacante.
+    - [ ] Notificação instantânea gerencial de P0 Security Alert em Slack e RedTeam integrados.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Engenharia Reversa de Payload e Geração Automática de Vacinas de Rede em WAF".
+
+- [ ] **Feature: Teste de Stress e Carga Autônomo com Geração de Tráfego Sintético (Bot Swarm)**
+  - **Descrição:** Provar os recursos e limites sob stress sem intervenção manual, a plataforma executará disparos sintéticos (Swarm bots). Em horários pré-configurados de baixa utilidade, orquestrará instâncias K6/JMeter na nuvem batendo no ambiente Staging/QA, avaliando as limitações do HPA, as conexões máximas em Banco e reportando se a API suporta o SLA estipulado no Contrato de Release antes da Promoção e Deployment final.
+  - **Critérios de Aceite:**
+    - [ ] Serviço instanciando jobs K6 K8s de forma paralela via Custom Resources Definitions.
+    - [ ] Geração dinâmica de scripts (fakers, LLMs) para navegação orgânica.
+    - [ ] Coleta e comparação métrica do threshold (500ms P95 latency).
+    - [ ] Bloqueio de subidas à main no CD e geração autônoma de tickets apontando vazamentos de memória na rota falha detectada pelo Swarm.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard Parametrizável de Saúde e Bottleneck Tracing em Carga Extrema".
+
+- [ ] **Feature: Integração de Relatórios de ESG e Carbon Footprint da Infraestrutura**
+  - **Descrição:** Integrar métricas puras ao viés de negócio corporativo sustentável e relatórios financeiros públicos (GreenOps). Ao quantificar o impacto ecológico na etapa anterior, a aplicação gerará PDFs corporativos trimestrais nos moldes oficiais padronizados globais, enviando direto aos painéis financeiros atestando reduções de pegada de carbono efetivas geradas diretamente pela Automação do Jules Orchestrator e sua eficiência Scale-to-Zero.
+  - **Critérios de Aceite:**
+    - [ ] Formatar o Data-pipeline de emissões ao padrão PDF estético de Relatório Anual (Markdown-to-PDF com formatação profissional via ferramentas Headless).
+    - [ ] Consolidar "kWh Poupos" vs. "Carbono Mitigado".
+    - [ ] Envio automático via e-mail e webhook (APIs ERP SAP/Oracle).
+    - [ ] Interface visual destacando as "Green Scores" aos líderes, agregando peso na decisão de FinOps.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação Autônoma de Algoritmos de Rotas Eficientes Baseados na Oferta de Energia Renovável Regional Cloud".
+
+- [ ] **Feature: Alocação Autônoma de Features a Desenvolvedores via Análise de Expertise (Skills Matrix)**
+  - **Descrição:** Evoluindo a alocação do fluxo (Backlog Prioritizado via Matriz RICE), a IA passará a analisar as linguagens e bibliotecas associadas à task prioritária (ex: Rust, gRPC) e sugerirá aos gestores no PR de issues a atribuição automática ao desenvolvedor da equipe mais gabaritado nas referidas hard-skills. Através do monitoramento dos git diffs históricos, saberá exatamente quem soluciona problemas daquele módulo mais rápido e emitirá Assignee Autônomo.
+  - **Critérios de Aceite:**
+    - [ ] Criar parser de "Skill Matrix" de histórico por dev baseado no churn history de componentes (quem coda o que).
+    - [ ] No hook de Injeção de Features RICE do ROADMAP, alocar um `Assignee: @usuario` sugerido logicamente baseado no contexto da descrição da task versus a skill-tree deduzida.
+    - [ ] Notificar o desenvolvedor ("Notamos que você domina módulo Y, temos este bug aqui").
+    - [ ] Permite recusa manual na Issue para manter flexibilidade e espalhamento de conhecimento técnico.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Painel Individual de Retrospectiva de Competências Evoluídas pelo IA Coach no Desenvolvedor".
+
+- [ ] **Feature: Implementação de Conselho de Revisão de Ética Algorítmica (A/B Testing de Prompts)**
+  - **Descrição:** Como garantir a IA neutra após auditoria? Implementaremos na base de Review do P.O. testes A/B passivos entre as propostas do Bot, avaliando em cenários de sugestões polêmicas qual estilo/prompt a equipe referenda melhor ao aceitar PRs (Prompt Calibration). Um comitê humano de compliance definirá a política base a ser respeitada no "Conselho Algorítmico", blindando o agente P.O. contra enviesamento em prol de frameworks ou ideologias corporativas.
+  - **Critérios de Aceite:**
+    - [ ] Ferramental no orquestrador (`ABPromptService`) permitindo dois modelos diferentes ou parâmetros processarem propostas aleatórias em PRs simulados.
+    - [ ] Motor captando aprovações vs. rejeições, alterando internamente qual versão do Prompt prevalece na base Vetorial (Reinforcement Learning from Human Feedback RLHF integrado).
+    - [ ] Formulário visual no Backoffice listando as diretrizes de ética, permitindo inserção de chaves bloqueadas e aprovação por membros com papel "Auditor".
+    - [ ] Expor resultados em relatórios mensais provando alinhamento humano-agente (AI Alignment).
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Revisão Hierárquica Autônoma Multicamadas para Código Governamental Sensível".
+
+- [ ] **Feature: Balanceamento de Carga Sensível à Temperatura e Energia do Cluster de GPUs**
+  - **Descrição:** Controle extremo em datacenters físicos locais rodando IA on-edge. Como a inferência LLM consome alto throughput, esse sistema integrará APIs IPMI para medir temperatura física dos servidores e nós GPU. O HPA e o KEDA serão orquestrados proativamente a realocar requisições pesadas aos pods distribuídos em racks geográficos com temperatura estável ou energia mais barata, evitando throttling térmico severo e maximizando a resiliência física do orquestrador de IA.
+  - **Critérios de Aceite:**
+    - [ ] Adicionar Node-Exporter (Metrics) via Prometheus acoplando temperatura CPU/GPU dos Nodes na K8s.
+    - [ ] Lógica de Scheduling (`ThermalBalancerService`) inserindo tolerâncias nas rules (pod affinity/anti-affinity baseada em carga calórica).
+    - [ ] Drain (Esvaziamento) automático preventivo de Nós superaquecendo antes de falha de Hardware Catastrófica.
+    - [ ] Dashboard de FinOps exibirá a visão térmica de infraestrutura para relatórios executivos unificados.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Painel Analítico Preditivo de Desgaste Mecânico e Preventiva (Hard-disk Failure AI Prediction)".
+
+- [ ] **Feature: Integração de Fuzzing Testing no Pipeline CI**
+  - **Descrição:** Segurança e Q.A. evoluído: A plataforma não ficará submissa aos testes de unidade e mutação já declarados. Injetará inputs sistêmicos automatizados, aleatórios e corrompidos de maneira agressiva, via um framework em Sandox nas rotas e componentes API gerados recém desenvolvidos para explodir e testar os limites do Buffer/Input Validation da release no CI, antes do deploy, interceptando 500s severos ou quebras de memória mascaradas e engatilhando as tarefas de resolução no Roadmap.
+  - **Critérios de Aceite:**
+    - [ ] Integração de suite (ex. Boofuzz, OSS-Fuzz adaptado local).
+    - [ ] Disparo automático de Fuzzing a cada Merge em branch Staging.
+    - [ ] Parsing da exceção sistêmica via IA para produzir Task com detalhe rastreável de "Uncaught Exception".
+    - [ ] Geração dinâmica de Issues P0 no Kanban travando CI com prioridade severa.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Consolidação e Tratamento Autônomo e Inteligente de Error e Logging Exceptions em Banco Relacional".
+
+- [ ] **Feature: Rate-Limiting Inteligente e Priorização de Tráfego de IA em Picos de Consumo**
+  - **Descrição:** Resiliência da infra-AI interna sob picos gigantes de solicitações massivas de análise de Code Review de times operando. Estabelecimento e observação autônoma de cotas para serviços locais, priorizando execuções de Self-Healing em Produção a PR-Reviews diários assíncronos no escalonador. Intervir no congestionamento limitando velocidade ou bloqueando filas pesadas que causem atraso em requests prioritários do Swarm Bus.
+  - **Critérios de Aceite:**
+    - [ ] Implementar Ingress/Gateway dinâmico ou fila Kafka/RabbitMQ baseada em Prioridade (Priority Queues).
+    - [ ] Classificadores (Heurística e Rótulos) das payloads de serviço no Router LLM.
+    - [ ] Bloqueio "Graceful" de requests nível Baixo via HTTP 429 Retry-After estendido ou fila suspensa temporária quando gargalos detectados.
+    - [ ] Módulo analítico visual de tráfego do LLM demonstrando Dropped/Delayed Requests vs Critical Hits.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema Preditivo Autônomo de Warming e Pre-Scaling Noturno Baseado em Padrões Diários do Time".
+
+- [ ] **Feature: Integração de Content Delivery Network (CDN) P2P para Distribuição de Embeddings**
+  - **Descrição:** Expandir o Cache de Embeddings e a Propagação de Vacinas. Ao invés do Orquestrador Master enviar todos os dados massivos aos clusters locais da empresa, o tráfego utilizará malha descentralizada/P2P interna, aproveitando storages da Edge, poupando custos exorbitantes de tráfego (egress data) na nuvem e pulverizando o consumo da rede eficientemente a cada atualização nas matrizes vetoriais (Data Gravity).
+  - **Critérios de Aceite:**
+    - [ ] Implementar/Conectar um serviço Torrent/P2P ou protocolos Gossip inter-node no kubernetes (`DataFederationProtocol`).
+    - [ ] Integrar hashes SHA integridade comprovados ao download da distribuição de Base Vetorial atualizada (Vaccines).
+    - [ ] Testar cenários de replicação do orquestrador K3s e sua velocidade de latência (deve cortar os tempos massivos em >70%).
+    - [ ] Relatar nas métricas de FinOps Economia de Tráfego de Saída da Cloud Pública Mensal.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Malha Autônoma de Propagação Descentralizada de Artefatos Docker entre Ambientes Segregados".
+
+- [ ] **Feature: Módulo de Acompanhamento e Predição de Risco de Burnout de Desenvolvedores**
+  - **Descrição:** Um P.O. autônomo humano zela pelo time; o IA não pode explorar cegamente o throughput humano (OKRs e Features assíncronas). Coletando dados do histórico de comites de madrugada, feriados ou volume insano gerado vs. fechado nas reviews e avaliando anomalias no Churn de PRs e Retrospectivas, o sistema extrairá um score de risco e alertará os líderes RH ou Gestores que certos membros/times correm Risco Elevado de Burnout antes que peçam demissão.
+  - **Critérios de Aceite:**
+    - [ ] Coletar carimbos temporais de Commits, Issue Resolutions e Interações vs Perfil Padrão Diário de Utilização e Timesheet orgânico.
+    - [ ] Desenvolver "Burnout Predictor Logic", classificando risco "Alto, Médio, Baixo".
+    - [ ] Não penalizar (não punitivo), gerar relatórios sigilosos apenas a cargos C-Level/RH Dashboard via IAM Roles de privacidade.
+    - [ ] Adicionar política automática no Orquestrador para NÃO pingar desenvolvedores de alto Risco em Revisões Automáticas por IA de PRs nos finais de semana.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Gamificação Dinâmica Social: Módulo de Wellness e Saúde Laboral Autogerenciado com Foco no Engajamento".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
