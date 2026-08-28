@@ -2206,6 +2206,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver suítes de testes autônomas (E2E/Integração) garantindo que falhas sejam interceptadas antes do merge no Main.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão Modular e Refinamento de Heurísticas para a Feature Gamificação Dinâmica Social: Módulo de Wellness e Saúde Laboral Autogerenciado com Foco no Engajamento".
 
+
+- [ ] **Feature: Sistema Autônomo de Análise e Aprimoramento Contínuo de Repositórios**
+  - **Descrição:** Funcionalidade na qual o orquestrador atuará ativamente para analisar a base de código, dependências e estrutura de cada repositório alvo. O objetivo é buscar e sugerir ativamente melhorias na arquitetura (como aderência ao SOLID/KISS/DRY), realizar upgrades de segurança de pacotes de forma automatizada, analisar gargalos de performance nas suítes de testes, e criar um mapa de calor dos débitos técnicos (technical debt heat map). Esse sistema será completamente autônomo, rodando sob um cron e abrindo pull requests ou criando issues detalhadas no board.
+  - **Critérios de Aceite:**
+    - [ ] Mapear e classificar módulos do projeto para identificar o nível atual de acoplamento e dependência.
+    - [ ] Criar um job (`AnaliseAprimoramentoRepoJob`) que faça a extração dessas métricas utilizando as ferramentas mais avançadas de análise estática (ex. Sonar, linters semânticos).
+    - [ ] Implementar a lógica autônoma para criar um relatório gerencial na issue/board ao detectar débito técnico severo.
+    - [ ] Integrar com o serviço do Github para abrir pull requests automaticamente aplicando refatorações simples e de baixo risco (ex. upgrades de versões menores de bibliotecas, correções de sintaxe ou lint).
+    - [ ] Desenvolver suítes de testes (Unitários/Integração) garantindo que a varredura não afete as operações diárias, falhando silenciosamente caso não haja anomalias críticas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão da Automação de Aprimoramento para Criação Automática de Suítes de Testes Faltantes Baseada em IA".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
