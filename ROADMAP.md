@@ -2217,6 +2217,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver suítes de testes (Unitários/Integração) garantindo que a varredura não afete as operações diárias, falhando silenciosamente caso não haja anomalias críticas.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão da Automação de Aprimoramento para Criação Automática de Suítes de Testes Faltantes Baseada em IA".
 
+- [ ] **Feature: Fluxo Contínuo de Geração de Roadmap via P.O. Autônomo**
+  - **Descrição:** Como aprimoramos o repositório? Através de um fluxo orgânico e contínuo onde o orquestrador assume o papel de Product Owner (P.O.) autônomo. O sistema criará e manterá o roadmap constante das aplicações diretamente no arquivo `ROADMAP.md`. Toda tarefa será gerada com um altíssimo nível de detalhamento, abrangendo escopo, impacto e passos claros. O aprimoramento contínuo acontece da seguinte forma: conforme o desenvolvimento avança, os desenvolvedores ou agentes preenchem o check-list de critérios de aceite. Esse próprio fluxo de conclusão e preenchimento de check-list atua como o motor que aciona a geração autônoma de novas tasks de features, mantendo o backlog sempre atualizado e o projeto em perpétua evolução.
+  - **Critérios de Aceite:**
+    - [ ] Implementar um observador de repositório que detecta a marcação de checkboxes (`[x]`) em pull requests e issues associadas ao roadmap.
+    - [ ] Desenvolver o `ProductOwnerAgent`, responsável por analisar o contexto da tarefa recém-concluída e idealizar o próximo passo lógico para a aplicação.
+    - [ ] O agente deve criar novas tarefas de feature exigindo a geração de descrições detalhadas, critérios de aceite em formato de checklist exaustivo e um gatilho de continuação explícito.
+    - [ ] Modificar programaticamente o arquivo `ROADMAP.md` e criar a Issue correspondente sem duplicação (idempotência) para cada nova task idealizada.
+    - [ ] Gerar relatórios de produtividade baseados no fluxo de tarefas concluídas vs. tarefas recém-criadas pelo P.O.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Predição de Evolução do Roadmap baseado na Velocidade de Preenchimento de Check-lists".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
