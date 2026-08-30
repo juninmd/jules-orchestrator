@@ -2227,6 +2227,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Gerar relatórios de produtividade baseados no fluxo de tarefas concluídas vs. tarefas recém-criadas pelo P.O.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Predição de Evolução do Roadmap baseado na Velocidade de Preenchimento de Check-lists".
 
+
+- [ ] **Feature: Dashboard de Predição de Evolução do Roadmap baseado na Velocidade de Preenchimento de Check-lists**
+  - **Descrição:** Funcionalidade na qual o orquestrador atuará ativamente para analisar a velocidade histórica e a consistência do preenchimento de check-lists e issues associadas ao Roadmap. O objetivo é cruzar essas informações com a capacidade de entrega real dos times (throughput) para gerar projeções preditivas precisas de prazos, exibindo em um painel gerencial em tempo real quando as features e épicos serão efetivamente concluídos, independentemente de estimativas estáticas manuais.
+  - **Critérios de Aceite:**
+    - [ ] Mapear as métricas de tempo (Lead Time e Cycle Time) de check-lists completados em issues conectadas ao `ROADMAP.md` e armazenar esses eventos (timestamps).
+    - [ ] Criar o serviço `RoadmapPredictiveAnalyzerService` que aplica um modelo simples de regressão matemática e previsão de tendências (extrapolação de dados históricos) com base no throughput das últimas sprints.
+    - [ ] Desenvolver um endpoint na API que sirva os dados calculados de datas preditivas, níveis de incerteza (intervalos de confiança) e a progressão temporal de épicos e features em desenvolvimento.
+    - [ ] Implementar a visualização em uma nova aba no Dashboard existente, exibindo de forma interativa (gráficos de Gantt dinâmicos, burndown de épicos ou barras de progresso preditivas) as datas estimadas de término para cada grande entrega estrutural, e alertar gerentes se os atrasos indicarem que uma sprint ou release corre risco.
+    - [ ] Incluir suítes de testes unitários e de integração para validar se a predição da API lida com cenários de "zero issues concluídas no mês" (burnout/interrupção) adequadamente.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Preditiva de Fatores de Gargalo: Identificação de Dependências Bloqueantes de Múltiplas Sprints".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
