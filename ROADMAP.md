@@ -2238,6 +2238,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Incluir suítes de testes unitários e de integração para validar se a predição da API lida com cenários de "zero issues concluídas no mês" (burnout/interrupção) adequadamente.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Preditiva de Fatores de Gargalo: Identificação de Dependências Bloqueantes de Múltiplas Sprints".
 
+
+- [ ] **Feature: Integração Preditiva de Fatores de Gargalo: Identificação de Dependências Bloqueantes de Múltiplas Sprints**
+  - **Descrição:** Funcionalidade na qual o orquestrador atuará ativamente para mapear dependências complexas (cruzamento de épicos, módulos e times) que podem bloquear entregas em múltiplas sprints à frente. Utilizando análise de grafos e predições baseadas no Roadmap, o sistema identificará gargalos arquiteturais e operacionais de forma preventiva, emitindo alertas antes que o fluxo de trabalho dos times seja paralisado por dependências inter-serviços ou falta de infraestrutura.
+  - **Critérios de Aceite:**
+    - [ ] Criar o serviço `BottleneckPredictorService` utilizando algoritmos de teoria dos grafos (ex. PageRank, Caminho Crítico) sobre a malha de issues e repositórios.
+    - [ ] Integrar com as APIs do GitHub e ferramentas de APM (Datadog/Prometheus) para correlacionar débitos técnicos conhecidos com dependências futuras de negócio.
+    - [ ] Desenvolver visualização de "Grafo de Gargalos Preditivos" (Predictive Bottleneck Graph) no Dashboard Interativo, realçando nós críticos em vermelho que precisam ser desfeitos em sprints iniciais.
+    - [ ] Implementar motor de sugestão autônoma no P.O. IA que priorize a geração de tarefas focadas em quebrar os acoplamentos identificados no caminho crítico.
+    - [ ] Testar a robustez do grafo contra cenários de dependência circular, assegurando que o algoritmo não entre em loops infinitos ou deadlocks.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Desacoplamento Autônomo e Geração de Microsserviços para Nós Críticos do Grafo de Gargalos".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
