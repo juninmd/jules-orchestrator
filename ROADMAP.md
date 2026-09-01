@@ -2248,6 +2248,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar motor de sugestão autônoma no P.O. IA que priorize a geração de tarefas focadas em quebrar os acoplamentos identificados no caminho crítico.
     - [ ] Testar a robustez do grafo contra cenários de dependência circular, assegurando que o algoritmo não entre em loops infinitos ou deadlocks.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Desacoplamento Autônomo e Geração de Microsserviços para Nós Críticos do Grafo de Gargalos".
+- [ ] **Feature: Desacoplamento Autônomo e Geração de Microsserviços para Nós Críticos do Grafo de Gargalos**
+  - **Descrição:** Dando continuidade à identificação preditiva de gargalos, esta feature permite que o orquestrador atue de forma corretiva nos nós mais críticos do grafo de dependências. Ao identificar um monólito ou um módulo excessivamente acoplado que impacta o fluxo de múltiplas sprints, o sistema autônomo (atuando como Arquiteto e P.O.) orquestrará a refatoração, extraindo o domínio afetado e gerando o scaffolding completo de um novo microsserviço independente. Isso reduz a complexidade ciclomática e descentraliza o risco, garantindo escalabilidade contínua.
+  - **Critérios de Aceite:**
+    - [ ] Criar o serviço `MicroserviceExtractorAgent` capaz de isolar o contexto de um domínio (Bounded Context) detectado pelo Grafo de Gargalos.
+    - [ ] Gerar autônoma e automaticamente o repositório e o boilerplate base do novo microsserviço (Dockerfiles, CI/CD pipelines, k8s manifests).
+    - [ ] Analisar o código-fonte original para identificar e refatorar pontos de acoplamento direto, sugerindo a implementação de comunicação via mensageria (ex: Kafka/RabbitMQ) ou gRPC.
+    - [ ] Criar pull requests paralelos: um no repositório original (para depreciação do código legado e direcionamento para a nova API) e outro para a subida do novo microsserviço.
+    - [ ] Desenvolver testes de contrato automatizados (Consumer-Driven Contracts) para garantir a estabilidade das interfaces durante a transição de monólito para microsserviços.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Inteligente de Migração de Dados sem Downtime (Zero-Downtime Data Migration)".
+
 
 ## 📝 Gestão do Documento e Próximos Passos
 
