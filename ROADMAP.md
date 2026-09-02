@@ -2259,6 +2259,19 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Inteligente de Migração de Dados sem Downtime (Zero-Downtime Data Migration)".
 
 
+
+- [ ] **Feature: Orquestração Inteligente de Migração de Dados sem Downtime (Zero-Downtime Data Migration)**
+  - **Descrição:** Como uma evolução natural ao desacoplamento de monólitos, esta funcionalidade capacitará o orquestrador a planejar, executar e monitorar a migração de dados de serviços legados para as novas bases de dados dos microsserviços recém-criados. O P.O. autônomo e Arquiteto garantirão que a transição ocorra sem qualquer indisponibilidade (zero-downtime). O sistema utilizará padrões como Change Data Capture (CDC), dual-writing ou event-sourcing temporário, orquestrando a sincronização até que o tráfego possa ser comutado (cutover) de forma segura e transparente.
+  - **Critérios de Aceite:**
+    - [ ] Implementar o agente `ZeroDowntimeMigrationPlanner`, responsável por analisar o esquema de dados do nó crítico e planejar as fases de migração (cópia inicial, replicação contínua e cutover).
+    - [ ] Integrar com ferramentas de Change Data Capture (ex: Debezium) configurando os conectores necessários de forma autônoma nos clusters do Kubernetes.
+    - [ ] Desenvolver a capacidade de injetar código ou proxies (sidecars) no monólito temporariamente, habilitando escritas duplas (dual-writes) para sincronia de dados em tempo real.
+    - [ ] Criar métricas e health-checks de paridade de dados (Data Parity Verifier), garantindo que as tabelas de destino estejam idênticas à origem antes de sugerir o direcionamento de tráfego (cutover).
+    - [ ] Implementar a mecânica de fallback automatizado, permitindo abortar e reverter (rollback) o cutover em milissegundos se taxas de erro nas APIs do novo microsserviço aumentarem bruscamente.
+    - [ ] Criar Pull Requests estruturados contendo as flags de feature e as chaves de comutação que os engenheiros poderão aprovar de forma controlada.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria Autônoma de Conformidade e Segurança (Compliance e SecOps) em Microsserviços e Bases de Dados Distribuídas".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
