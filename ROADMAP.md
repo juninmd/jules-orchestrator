@@ -2313,6 +2313,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Criar fluxo onde o P.O. Autônomo propõe "Tech Debates" no GitHub Discussions, apresentando os resultados das PoCs para votação e deliberação dos engenheiros de software humanos antes de qualquer tomada de decisão.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Agentes Especialistas de QA (Quality Assurance) com Geração Autônoma de BDD e TDD Baseada em Requisitos de Negócio".
 
+- [ ] **Feature: Integração Contínua de Agentes Especialistas de QA (Quality Assurance) com Geração Autônoma de BDD e TDD Baseada em Requisitos de Negócio**
+  - **Descrição:** Como a plataforma agora sugere e implementa novas linguagens e frameworks, é imperativo garantir a estabilidade do sistema sem depender exclusivamente de engenheiros humanos para testes. Esta funcionalidade introduzirá agentes autônomos de Qualidade (QA) que interpretarão os requisitos de negócio escritos no ROADMAP ou em issues e gerarão autonomamente suítes completas de testes unitários (TDD) e comportamentais (BDD). Esses agentes se integrarão aos pipelines de CI/CD para assegurar que cada nova PR ou refatoração orquestrada seja amplamente coberta por testes criados pela própria IA antes do merge.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o agente `QASpecialistAI`, capaz de interpretar User Stories e critérios de aceite para gerar cenários BDD utilizando frameworks como Cucumber ou Behave.
+    - [ ] Criar fluxo onde o orquestrador infere a linguagem/tecnologia da PR e autogera os testes unitários correspondentes (Jest, PyTest, JUnit, etc) aderindo ao paradigma TDD.
+    - [ ] Implementar análise estática avançada acoplada ao QA, validando se a cobertura de código autogerado atinge o threshold mínimo configurado (ex: 85%).
+    - [ ] Construir mecanismo de "Self-Healing Testes", onde o orquestrador conserta testes previamente existentes que quebraram devido a refatorações estruturais ou mudanças em APIs.
+    - [ ] Gerar relatórios de "Health-Check de QA", detalhando o percentual de testes aprovados, cenários de borda (edge cases) descobertos pela IA e sugestões de otimização no fluxo de negócio humano.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Autônoma de Geração de Dados Sintéticos e Mock APIs Inteligentes".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
