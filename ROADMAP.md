@@ -2323,6 +2323,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Gerar relatórios de "Health-Check de QA", detalhando o percentual de testes aprovados, cenários de borda (edge cases) descobertos pela IA e sugestões de otimização no fluxo de negócio humano.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Autônoma de Geração de Dados Sintéticos e Mock APIs Inteligentes".
 
+- [ ] **Feature: Orquestração Autônoma de Geração de Dados Sintéticos e Mock APIs Inteligentes**
+  - **Descrição:** Em um ambiente de microsserviços gerado autonomamente, testar e integrar componentes que dependem de APIs em desenvolvimento ou dados sensíveis pode se tornar um gargalo. Esta funcionalidade implementa um agente capaz de analisar contratos de API (OpenAPI/Swagger) ou payloads de eventos e gerar automaticamente *Mock APIs* responsivas e conjuntos de dados sintéticos realistas. Isso permite que suítes de testes (QA) iniciem os trabalhos imediatamente, simulando comportamentos complexos e *edge cases* sem expor dados reais (PII), acelerando o ciclo de desenvolvimento e mantendo a privacidade (Compliance).
+  - **Critérios de Aceite:**
+    - [ ] Criar o `SyntheticDataAgent` que lê especificações OpenAPI/Swagger e esquemas de banco de dados para inferir a estrutura de dados necessária de forma contextual.
+    - [ ] Implementar geração de dados fictícios semanticamente coerentes (ex: nomes reais, CNPJs válidos) utilizando modelos de IA leves, substituindo o uso exclusivo de dados aleatórios.
+    - [ ] Autogerar e orquestrar o deploy de endpoints *Mock* em namespaces efêmeros no Kubernetes, disponibilizando as URLs base para as suítes de testes.
+    - [ ] Configurar os Mocks para aceitar injeção de comportamento anômalo (ex: injeção de latência, códigos de erro 5xx) via headers HTTP para testes de resiliência automatizados.
+    - [ ] Produzir artefatos estáticos de massa de dados (JSON/CSV) que possam ser automaticamente ingeridos por ferramentas de teste de carga (e.g., K6, JMeter) no pipeline CI.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Ecossistema Autônomo de Verificação de Qualidade de Dados (Data Observability) e Detecção de Anomalias no Pipeline de CI".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
