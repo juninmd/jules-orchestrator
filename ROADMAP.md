@@ -2333,6 +2333,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Produzir artefatos estáticos de massa de dados (JSON/CSV) que possam ser automaticamente ingeridos por ferramentas de teste de carga (e.g., K6, JMeter) no pipeline CI.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Ecossistema Autônomo de Verificação de Qualidade de Dados (Data Observability) e Detecção de Anomalias no Pipeline de CI".
 
+- [ ] **Feature: Ecossistema Autônomo de Verificação de Qualidade de Dados (Data Observability) e Detecção de Anomalias no Pipeline de CI**
+  - **Descrição:** Como o orquestrador autogerou Mock APIs sintéticas na tarefa anterior para acelerar testes, é crucial garantir a observabilidade sobre o fluxo dos dados ao transitar no CI e ambientes de testes. Essa feature cria uma camada de Data Observability que auditará todos os payloads trafegados (reais e mockados), comparará com os esquemas e contratos esperados, e detectará anomalias (drift de schema, nulos excessivos) antes que causem falhas silenciosas na integração. Atuando como uma garantia rigorosa da integridade dos testes e simulações.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `DataObservabilityAgent`, responsável por coletar estatísticas descritivas (média, desvio padrão, frequências) dos payloads que transitam no ambiente de CI, utilizando interceptores HTTP/gRPC.
+    - [ ] Integrar análise contínua de "Data Drift", comparando a estrutura e semântica do tráfego mais recente com as baselines de testes aprovadas ou descrições no OpenAPI.
+    - [ ] Implementar a capacidade de gerar alertas automáticos via Slack/Teams se o percentual de dados nulos ou falhas em validações sintáticas exceder os limiares esperados.
+    - [ ] Automatizar a criação de issues formatadas apontando os logs detalhados quando uma quebra de contrato invisível de payload não lançar um status 500 imediato, mas corromper fluxos (Silent failures).
+    - [ ] Fornecer uma aba no Dashboard Executivo de CI relatando a "Qualidade Semântica e Sintática de Dados" por PR submetida.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Autocorreção Adaptativa de Contratos de API em Tempo de Build".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
