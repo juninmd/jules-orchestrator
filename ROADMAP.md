@@ -2343,6 +2343,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Fornecer uma aba no Dashboard Executivo de CI relatando a "Qualidade Semântica e Sintática de Dados" por PR submetida.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Autocorreção Adaptativa de Contratos de API em Tempo de Build".
 
+- [ ] **Feature: Autocorreção Adaptativa de Contratos de API em Tempo de Build**
+  - **Descrição:** Como a validação de dados sintáticos foi assegurada no pipeline, agora avançamos para garantir que contratos de API nunca quebrem o código. Esta funcionalidade implementará um agente orquestrador capaz de ler as definições OpenAPI e os esquemas GraphQL alterados e adaptar automaticamente as interfaces, DTOs e tipagens no código fonte do projeto frontend/backend antes da compilação. Se uma mudança de backend quebrar um payload esperado pelo frontend, o agente fará uma refatoração autônoma (`self-healing`) do código, atualizando os modelos de domínio e os mocks locais. Isso elimina completamente as falhas de build motivadas por descasamento de contratos entre microsserviços.
+  - **Critérios de Aceite:**
+    - [ ] Construir o `ContractHealerAgent` integrado ao ecossistema de compilação (TSC, Webpack) capaz de interceptar falhas de build decorrentes de type mismatches.
+    - [ ] Implementar integração com repositórios de esquema (e.g. Apollo Studio, Swagger Hub) para detectar proativamente novas versões de contrato de API aprovadas.
+    - [ ] Criar rotinas autônomas que geram AST (Abstract Syntax Tree) do código cliente afetado e aplicam as mutações necessárias nas interfaces (TypeScript/Java/C#) de forma segura.
+    - [ ] Garantir que o agente adicione comentários JSDoc nas propriedades corrigidas explicando o motivo e a origem da alteração baseada no novo contrato.
+    - [ ] Fornecer um relatório de *API Drift Resolution* como comentário no Pull Request detalhando quais arquivos foram adaptados automaticamente para refletir a mudança no contrato.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Suítes de Teste de Mutação Baseadas em Contratos de API".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
