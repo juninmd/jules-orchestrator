@@ -2353,6 +2353,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Fornecer um relatório de *API Drift Resolution* como comentário no Pull Request detalhando quais arquivos foram adaptados automaticamente para refletir a mudança no contrato.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Geração Autônoma de Suítes de Teste de Mutação Baseadas em Contratos de API".
 
+- [ ] **Feature: Geração Autônoma de Suítes de Teste de Mutação Baseadas em Contratos de API**
+  - **Descrição:** Como a integridade dos contratos e a cobertura inicial de testes já foram asseguradas, o próximo passo para garantir a resiliência máxima das aplicações é a implementação de testes de mutação. Esta feature visa criar um agente inteligente que, ao analisar os contratos de API e a base de código, introduz falhas sintéticas e mutações no código-fonte em tempo de teste. O objetivo é validar se as suítes de testes autogeradas (TDD/BDD) são robustas o suficiente para detectar essas falhas (matar os mutantes). Isso garante que os testes não apenas cubram linhas de código, mas efetivamente avaliem a qualidade e a segurança do comportamento do software, evitando "falsos positivos" de cobertura.
+  - **Critérios de Aceite:**
+    - [ ] Criar o agente `MutationTestAgent` capaz de realizar análise estática e modificar dinamicamente a árvore de sintaxe (AST) para injetar mutações seguras de código (e.g., trocar `+` por `-`, `<` por `<=`).
+    - [ ] Integrar o agente ao ciclo de testes no pipeline de CI/CD, disparando execuções de teste de mutação em microsserviços de forma otimizada.
+    - [ ] Desenvolver mecanismos de geração de relatórios de *Mutation Score*, exibindo quais mutantes sobreviveram e apontando as deficiências na suíte de testes original.
+    - [ ] Orquestrar um fluxo de *feedback loop* onde, caso o Mutation Score fique abaixo de um limiar aceitável (ex: 80%), o `QASpecialistAI` seja automaticamente acionado para gerar novos testes que cubram as falhas detectadas.
+    - [ ] Garantir que o processo aplique técnicas de análise de impacto, testando apenas as áreas do código afetadas pelas modificações recentes, visando reduzir o tempo de execução do CI.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Agentes de Governança de Código e Compliance de Segurança para Validação Automática baseada em Normas ISO/SOC2".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
