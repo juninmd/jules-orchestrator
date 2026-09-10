@@ -2363,6 +2363,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Garantir que o processo aplique técnicas de análise de impacto, testando apenas as áreas do código afetadas pelas modificações recentes, visando reduzir o tempo de execução do CI.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Agentes de Governança de Código e Compliance de Segurança para Validação Automática baseada em Normas ISO/SOC2".
 
+
+- [ ] **Feature: Integração Contínua de Agentes de Governança de Código e Compliance de Segurança para Validação Automática baseada em Normas ISO/SOC2**
+  - **Descrição:** Para garantir que o código desenvolvido e orquestrado atenda aos mais altos padrões de segurança e conformidade regulatória, esta feature propõe a implementação de um ecossistema de Agentes de Governança. Esses agentes serão responsáveis por auditar continuamente o código-fonte, configurações de infraestrutura (IaC) e dependências de terceiros, validando-os contra frameworks reconhecidos como ISO 27001 e SOC2. Eles atuarão preventivamente nos pipelines de CI/CD, bloqueando merges que introduzam vulnerabilidades (como exposição de PII ou falhas de IAM) e sugerindo correções automáticas para manter o compliance de forma ininterrupta, eliminando o gargalo das auditorias de segurança manuais.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `GovernanceAgent`, integrado ao fluxo de Pull Requests, capaz de realizar análises estáticas avançadas de segurança (SAST) em busca de vulnerabilidades e antipadrões de compliance.
+    - [ ] Desenvolver e integrar um módulo de validação focado em requisitos da ISO 27001 e SOC2, verificando rastreabilidade, controles de acesso e criptografia de dados em repouso e em trânsito no código gerado e orquestrado.
+    - [ ] Implementar a capacidade do agente sugerir *Security Patches* autônomos por meio de code reviews e auto-healing focado em segurança, resolvendo vulnerabilidades conhecidas (CVEs) de forma autônoma.
+    - [ ] Integrar análise de infraestrutura como código (IaC) no ambiente Kubernetes, detectando problemas de configuração e permissões excessivas que possam expor o ecossistema.
+    - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
