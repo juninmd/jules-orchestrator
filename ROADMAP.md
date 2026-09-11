@@ -2374,6 +2374,27 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Como a aplicação agora orquestra fluxos autônomos e cria ambientes efêmeros (Mocks, Data Observability, Testes de Mutação), os custos e o uso de recursos na nuvem podem se tornar imprevisíveis. Esta feature cria um agente especializado em analisar os dados de telemetria, logs de execução e métricas de infraestrutura (CPU, RAM, tráfego de rede) para fornecer uma visualização clara e em tempo real sobre a saúde do sistema e os gastos associados. O agente irá correlacionar o comportamento da aplicação com os custos da nuvem, fornecendo análises preditivas sobre os próximos faturamentos e sugerindo proativamente otimizações de recursos (right-sizing) sem comprometer o desempenho.
+  - **Critérios de Aceite:**
+    - [ ] Criar o agente `FinOpsAndTelemetryAgent` capaz de consumir dados de provedores Cloud (AWS, Azure, GCP) e ferramentas de observabilidade (Datadog, Prometheus) para calcular os custos reais por microsserviço e fluxo de orquestração.
+    - [ ] Implementar dashboards interativos que exibam métricas chave: custo por tarefa autônoma, utilização de recursos por agente, e previsões de gastos baseadas em tendências de uso.
+    - [ ] Desenvolver algoritmos preditivos que alertam a equipe via Slack/Teams sobre picos anômalos de custos (Cost Anomalies) ou projeções que excedam o orçamento predefinido (Budget Thresholds).
+    - [ ] Permitir que o agente sugira ações automáticas de otimização, como desligamento de ambientes efêmeros ociosos (Mocks não utilizados) ou redimensionamento de pods Kubernetes com base na demanda histórica.
+    - [ ] Integrar a análise de telemetria com os relatórios de execução de PRs, fornecendo um "Custo Estimado por Feature" para cada nova funcionalidade orquestrada.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração de Atualizações de Dependências 'Zero-Downtime' com Validação Semântica Autônoma".
+
+- [ ] **Feature: Orquestração de Atualizações de Dependências 'Zero-Downtime' com Validação Semântica Autônoma**
+  - **Descrição:** Com a complexidade dos ecossistemas de microsserviços aumentando e os custos monitorados de forma eficaz, a manutenção contínua torna-se o próximo desafio crítico. Esta funcionalidade visa criar um agente autônomo responsável por gerenciar ativamente as atualizações de dependências (bibliotecas, frameworks) do projeto, indo além dos métodos tradicionais. O agente não apenas identificará pacotes desatualizados ou com vulnerabilidades, mas executará uma análise semântica das mudanças de código (Changelog/Release Notes), validará se a atualização é segura e orquestrará a aplicação do update em um pipeline "Zero-Downtime", garantindo que a aplicação se mantenha moderna e segura sem intervenção manual.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `DependencyHealerAgent` que escaneia proativamente os arquivos de gerenciamento de pacotes (package.json, pom.xml, requirements.txt) em busca de novas versões ou alertas de segurança.
+    - [ ] Implementar capacidade de análise semântica de changelogs e release notes utilizando IA, determinando o impacto real da atualização no código-fonte (quebras de contrato, mudanças de API).
+    - [ ] Integrar com o fluxo de testes existente, acionando suítes de testes de regressão e de mutação para validar a estabilidade após a atualização da dependência.
+    - [ ] Desenvolver mecanismo de fallback autônomo (Rollback), desfazendo a atualização caso os testes falhem ou a telemetria aponte problemas de performance após o update.
+    - [ ] Garantir que o agente abra PRs descritivos para atualizações bem-sucedidas, incluindo o relatório de impacto semântico, resultados dos testes e métricas de desempenho comparativas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agente Especialista de Performance e Otimização de Código (Refactoring) Guiado por Profiling Contínuo".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
