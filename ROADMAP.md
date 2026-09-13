@@ -2374,6 +2374,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Funcionalidade autônoma onde o orquestrador atuará ativamente para prover visibilidade profunda e preditiva sobre o uso e os custos de infraestrutura em nuvem. Utilizando o comportamento da aplicação em tempo real e modelos preditivos, este dashboard oferecerá projeções de gastos baseadas no tráfego, no consumo de IA, na execução de fluxos assíncronos e no ciclo de desenvolvimento. O objetivo é evitar surpresas no faturamento, prevendo o esgotamento de *budgets* antes que aconteça e sugerindo redimensionamentos proativamente.
+  - **Critérios de Aceite:**
+    - [ ] Mapear as fontes de dados de billing (ex: AWS Cost Explorer, GCP Billing API) e as métricas de performance da aplicação, unificando a extração (`TelemetriaDeCustosService`).
+    - [ ] Implementar a lógica autônoma de *machine learning* simplificada para cruzar métricas de tráfego (CPU/RAM/Throughput) e estimar os custos a curto e médio prazo.
+    - [ ] Criar a interface visual do dashboard integrada à aplicação principal para que desenvolvedores e stakeholders (C-level e FinOps) consigam simular cenários de gastos (What-If analysis).
+    - [ ] Desenvolver um sistema de alertas proativos que interaja via mensageria corporativa (Slack/Teams) quando um possível estouro orçamentário for previsto para as próximas semanas.
+    - [ ] Desenvolver suítes de testes autônomas (Unitários/E2E) garantindo a precisão das projeções em cenários de variações súbitas na base de dados simulada, falhando a build se a precisão do modelo regredir consideravelmente.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Resolução de Anomalias de Custo via Orquestrador".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
