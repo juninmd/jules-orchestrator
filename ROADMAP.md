@@ -2374,6 +2374,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Com a segurança, escalabilidade e qualidade garantidas, torna-se necessário gerenciar os recursos de infraestrutura orquestrados de forma eficiente para evitar custos excessivos. Esta feature visa criar um módulo de telemetria preditiva, que acompanha os padrões de uso dos microsserviços nos clusters Kubernetes em tempo real e os cruza com as tabelas de precificação das provedoras (AWS, GCP, Azure). O dashboard permitirá identificar anomalias no uso de recursos e utilizar modelos preditivos para estimar custos futuros baseados na tendência de consumo, recomendando *downscaling* proativo ou reservas de instâncias de forma autônoma.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o agente `FinOpsAgent` para coletar métricas de CPU, memória, rede e armazenamento diretamente dos nós e pods do Kubernetes utilizando Prometheus ou integração com a API do provedor Cloud.
+    - [ ] Construir e treinar um modelo preditivo leve capaz de identificar sazonalidades no tráfego e prever o consumo de recursos para os próximos 30 dias.
+    - [ ] Criar um Dashboard Interativo no frontend (React/Vue) para exibir gráficos de tendências de custos e destacar microsserviços ofensores (com baixo uso e alta alocação).
+    - [ ] Implementar a funcionalidade de "Recomendação Autônoma", na qual o agente sugere modificações nos HPA (Horizontal Pod Autoscalers) para otimizar os custos sem impacto na performance.
+    - [ ] Integrar alertas de anomalias financeiras no Slack/Teams, disparando notificações imediatas se o *burn rate* projetado superar os orçamentos definidos por projeto/namespace.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Módulo de Otimização e Sustentabilidade (GreenOps) para Redução da Pegada de Carbono em Tempo de Orquestração".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
