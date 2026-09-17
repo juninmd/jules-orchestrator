@@ -2374,6 +2374,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+- **Implementação do Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** O objetivo desta feature é criar um dashboard abrangente que agregue e visualize métricas de telemetria detalhadas da orquestração de IA e do uso de recursos em tempo real. Este sistema deve analisar os dados de comportamento dos agentes, execução de processos, tempo de resolução, e realizar uma análise preditiva para estimar os custos de infraestrutura e serviços de IA na nuvem (ex: tokens consumidos via APIs, instâncias Kubernetes). A intenção é ter visibilidade financeira atrelada ao desempenho, permitindo identificar gargalos, otimizar consumo de recursos e escalar o sistema de maneira sustentável e transparente.
+  - **Critérios de Aceite:**
+    - [ ] Mapear e instrumentar todos os endpoints e chamadas de API (como integrações de IA e requisições ao GitHub) para capturar métricas de latência, uso de tokens, taxa de sucesso/falha e volume de requisições.
+    - [ ] Criar o componente `TelemetryDashboard` que exiba as métricas coletadas em tempo real utilizando gráficos interativos.
+    - [ ] Integrar um módulo de cálculo de custo e análise preditiva baseado no histórico de consumo e comportamento atual dos agentes de IA.
+    - [ ] Desenvolver mecanismos de alertas automatizados quando a previsão de consumo ou custos exceder um threshold (limite) configurado.
+    - [ ] Escrever testes de integração e unitários para o módulo de coleta de telemetria e o painel de dashboard para garantir a exatidão das métricas e das previsões.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Webhooks para Resolução Autônoma de Incidentes Baseada em Alertas Preditivos".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
