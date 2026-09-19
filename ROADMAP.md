@@ -2374,6 +2374,18 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+
+
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Com a evolução da arquitetura e adoção contínua de microsserviços e integrações com provedores de IA, é crítico monitorar em tempo real não só a saúde do sistema, mas também os custos associados a cada agente, requisição e orquestração. Esta feature entregará um painel de telemetria unificado, cruzando métricas de performance (latência, throughput) com consumo de recursos de infraestrutura (Kubernetes/Cloud) e chamadas a APIs pagas (como LLMs). Utilizando modelos de regressão e aprendizado de máquina, o sistema será capaz de prever picos de custo, alertar anomalias de consumo antes de fechar o ciclo de faturamento e sugerir redimensionamentos de infraestrutura autônomos visando eficiência de custos sem impacto em SLA.
+  - **Critérios de Aceite:**
+    - [ ] Integrar exportação de métricas detalhadas via OpenTelemetry nos principais componentes (`Orchestrator`, `LLMProvider`, etc).
+    - [ ] Criar o `CostAgent`, um agente responsável por analisar o uso de tokens (LLMs) e métricas de nós Kubernetes em tempo real.
+    - [ ] Implementar modelo de machine learning leve para análise de séries temporais de custos, identificando anomalias (ex: um loop infinito chamando IA).
+    - [ ] Desenvolver interface visual (dashboard web) para visualização das métricas consolidadas, com drill-down por namespace, agente e endpoint.
+    - [ ] Implementar mecanismo de alertas automáticos configuráveis via Slack ou e-mail quando o limite preditivo diário/semanal ultrapassar X%.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Self-Healing para Rollback Automático de Configurações Baseado em Degradação de Métricas de Negócio".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
