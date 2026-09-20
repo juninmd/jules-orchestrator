@@ -2374,6 +2374,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Avançando a governança de código e compliance e o monitoramento financeiro anterior, esta feature criará um dashboard preditivo que cruza os dados de uso da aplicação (APM, telemetria estruturada) com o custo real de cloud, estimando os custos futuros de infraestrutura. Ao analisar o comportamento da aplicação (ex. requisições atípicas por usuário, uso ineficiente de banco de dados, falhas não tratadas causando tráfego morto), o sistema detectará ineficiências comportamentais e as correlacionará diretamente em métricas de "Custo vs Valor", exibindo uma previsão preditiva de aumento de custos, mitigando impactos no orçamento antes do faturamento final do mês.
+  - **Critérios de Aceite:**
+    - [ ] Criar serviço orquestrado (Agent) capaz de coletar e consolidar métricas unificadas provenientes de ferramentas de APM (Datadog/NewRelic) com APIs de Billing de nuvem pública.
+    - [ ] Desenvolver modelo preditivo simples (regressão) para antecipar a curva de custo baseando-se nas tendências de comportamento de consumo de infra (por exemplo, CPU associado à transação X).
+    - [ ] O dashboard deve exibir visualizações correlacionadas de custo com as rotas/operações de maior tráfego e gasto em "dólar/milisegundo".
+    - [ ] Implementar a funcionalidade de geração de alertas autônomos por Slack que ativam gatilhos caso o modelo detecte a previsão de um aumento drástico de mais de 10% do custo em 24h sem justificativa de aumento de carga real de usuários.
+    - [ ] Permitir simulação "What-If" no painel, mostrando o impacto de otimizar determinada métrica e seu potencial saving.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Recomendador Autônomo de Otimização de Transações Críticas Através de Cache Distribuído".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
