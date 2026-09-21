@@ -2374,6 +2374,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Com a implementação bem-sucedida dos Agentes de Governança e Segurança, a orquestração do ecossistema agora está blindada contra vulnerabilidades. O próximo nível de maturidade exige visibilidade em tempo real sobre a eficiência operacional e os custos gerados pelos agentes e microsserviços. Esta feature introduz um painel interativo de telemetria avançada que correlaciona o comportamento da aplicação (número de chamadas de LLM, tempo de execução, consumo de CPU/RAM em pods do Kubernetes) com os custos financeiros associados na Cloud e em provedores de IA. Através de modelos preditivos, o sistema alertará sobre possíveis picos de custo (Cost Anomaly Detection) e sugerirá otimizações de recursos.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `FinOpsAgent`, responsável por coletar e unificar dados de consumo de recursos do Kubernetes (via Prometheus) e APIs de billing dos provedores.
+    - [ ] Desenvolver um Dashboard executivo que centralize métricas operacionais e financeiras, permitindo filtros por agente, microsserviço, ambiente e período.
+    - [ ] Implementar um modelo preditivo baseado em séries temporais para projetar os custos futuros, alertando caso a previsão exceda o budget alocado.
+    - [ ] Construir uma funcionalidade de "Recomendação de Otimização" que sugere ajustes autônomos em requests/limits de pods ou troca de modelos de IA em tarefas de baixa complexidade.
+    - [ ] Automatizar a criação de PRs para aplicar os ajustes de infraestrutura sugeridos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Rollback Baseada em Degradação de Experiência do Usuário (UX/CX)".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
