@@ -2374,6 +2374,19 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+
+
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Como aprimoramos o repositório e a gestão do ecossistema? Através de observabilidade financeira inteligente. Esta feature cria um painel (Dashboard) que não apenas coleta métricas de uso de CPU/Memória, mas correlaciona o comportamento da aplicação (número de PRs revisados, jobs de self-healing executados, tokens consumidos via AI Router) com os custos diretos na nuvem (AWS/GCP/Azure) e APIs de IA. Utilizando modelos preditivos, o sistema alertará as lideranças sobre anomalias financeiras e projetará o custo ao final do mês, permitindo otimizações proativas antes do fechamento da fatura.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o módulo `CloudCostTelemetryService` que integra com APIs de faturamento (Billing APIs) dos principais provedores de nuvem para extrair custos diários de instâncias do Kubernetes.
+    - [ ] Implementar integração no `AIRouterService` para registrar e totalizar o número de tokens (input/output) consumidos por job e por repositório alvo.
+    - [ ] Criar o motor de predição `CostPredictorEngine` (usando regressão linear simples) que extrapola o consumo atual para gerar uma estimativa de custo de fechamento mensal.
+    - [ ] Construir a interface visual (Dashboard) que exibe o custo atual vs. o orçamento planejado (budget), destacando os repositórios ou jobs que mais consomem recursos.
+    - [ ] Configurar alertas automatizados (via Telegram/Slack) que disparam caso o custo diário ultrapasse a média histórica em mais de 20%, indicando possível anomalia (ex: loop infinito em self-healing).
+    - [ ] Garantir cobertura de testes de no mínimo 85% para o `CloudCostTelemetryService` e o `CostPredictorEngine`, validando cálculos financeiros com mocks precisos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Auto-Tuning e Downgrade Dinâmico de Modelos de IA em Cenários de Estouro de Orçamento".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
