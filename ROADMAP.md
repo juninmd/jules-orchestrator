@@ -2374,6 +2374,27 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Funcionalidade autônoma onde o orquestrador atuará ativamente para coletar, analisar e prever os custos operacionais (Cloud e infraestrutura de IA) com base no comportamento em tempo real das aplicações e do fluxo de CI/CD. O sistema correlacionará picos de uso com execuções de testes, builds ou deploys e fornecerá projeções financeiras, atuando como um consultor proativo para a otimização de recursos sem comprometer a performance ou resiliência.
+  - **Critérios de Aceite:**
+    - [ ] Mapear arquitetura e criar serviços base necessários (`DashboardTelemetriaAvançadaeAnálisePreditivadeCustosCloudService`).
+    - [ ] Implementar a lógica de orquestração autônoma e comunicação no `SwarmBusService`.
+    - [ ] Criar métricas de telemetria e dashboards visuais para observabilidade (Painel / Prometheus).
+    - [ ] Desenvolver suítes de testes autônomas (E2E/Integração) garantindo que falhas sejam interceptadas antes do merge no Main.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão Modular e Refinamento de Heurísticas para a Feature Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
+
+
+- [ ] **Feature: Expansão Modular e Refinamento de Heurísticas para a Feature Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Tendo estruturado a base do dashboard preditivo de telemetria, esta feature foca em estender as heurísticas preditivas do orquestrador. A IA passará a analisar os metadados do repositório em tempo real para correlacionar não apenas picos de uso, mas anomalias de código (ex: algoritmos ineficientes, vazamentos de memória sutis) com projeções financeiras em nuvem (FinOps). O orquestrador atuará proativamente, sugerindo refatorações de código específicas via Pull Request para otimizar os custos antes mesmo do deploy em produção.
+  - **Critérios de Aceite:**
+    - [ ] Criar o módulo `HeuristicsRefinementEngine` integrado ao painel de telemetria para analisar o impacto do código nos custos de nuvem.
+    - [ ] Desenvolver novas métricas compostas que cruzem dados de complexidade ciclomática (Sonar) com projeções de custo (Cloud Pricing APIs).
+    - [ ] Implementar a capacidade do P.O. autônomo de gerar issues e Pull Requests automáticos com sugestões de otimização de custo (FinOps-as-Code).
+    - [ ] Adicionar um visualizador de "Impacto Financeiro por Linha de Código" na interface do dashboard.
+    - [ ] Executar testes de integração simulando picos de tráfego e avaliar a eficácia das refatorações sugeridas em ambiente sandbox.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Orçamentos Dinâmicos e Circuit Breakers Financeiros Autônomos baseados em Telemetria Preditiva".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
