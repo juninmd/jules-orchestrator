@@ -2374,6 +2374,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Como a conformidade e a segurança foram garantidas pelo ecossistema autônomo, o próximo passo para uma gestão de infraestrutura madura é a compreensão e otimização dos custos e desempenho. Esta feature visa criar um painel central que unifica métricas de uso da infraestrutura (CPU, memória, tráfego de rede) extraídas diretamente de clusters Kubernetes e Cloud Providers. O diferencial é a integração de um agente preditivo (FinOps AI) que correlacionará essas métricas de uso com os perfis de carga gerados no CI e o comportamento da aplicação em produção. Isso permitirá a antecipação de picos de custo, a recomendação proativa de *right-sizing* dos recursos provisionados e alertas sobre anomalias financeiras antes que as faturas fechem, oferecendo total transparência e otimização de OPEX (Despesas Operacionais).
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o `FinOpsAgent`, que integrará APIs de faturamento de nuvem (AWS Cost Explorer, GCP Billing) e métricas do Prometheus para ingestão contínua de dados de consumo.
+    - [ ] Criar um Dashboard interativo que cruze o custo financeiro com a atividade das aplicações (ex: custo por transação ou por usuário ativo), proporcionando visibilidade granular.
+    - [ ] Implementar modelos de previsão de séries temporais para projetar os gastos no final do mês com base nas tendências atuais e no histórico de uso.
+    - [ ] Orquestrar o envio de notificações semanais e alertas de anomalias (ex: aumento súbito e inexplicável no consumo de banco de dados) para canais corporativos como Slack/Teams.
+    - [ ] Capacitar o agente para gerar automaticamente Pull Requests sugerindo atualizações nas manifestações do Kubernetes (`requests` e `limits` em YAML/Helm) para adequar o provisionamento à demanda real, visando economia sem perda de performance.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Retenção Dinâmica e Arquivamento Automático de Dados a Frio (Cold Storage) Orientado por Uso".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
