@@ -2374,6 +2374,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Com a implementação de agentes de governança e validações robustas em pipelines, o ecossistema atinge alta maturidade operacional. Esta feature visa construir uma camada de observabilidade financeira (FinOps) e telemetria avançada, correlacionando o comportamento real da aplicação e o consumo de recursos na nuvem. A intenção é prover um Dashboard Executivo capaz de detectar ociosidade em microsserviços, projetar os custos ao longo do mês e recomendar ações de "right-sizing" (redimensionamento de recursos) no Kubernetes com base na demanda preditiva, garantindo otimização de infraestrutura e custos operacionais, sem perda de performance.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o `FinOpsAgent` para coletar métricas de uso de recursos (CPU, Memória, I/O) da infraestrutura (Kubernetes) e integrá-las aos provedores de nuvem para extração de custos.
+    - [ ] Criar o Dashboard de Telemetria Avançada correlacionando dados de telemetria de microsserviços com o impacto financeiro (Custo por Transação/Ação).
+    - [ ] Implementar um modelo preditivo baseado em Machine Learning capaz de projetar faturamento cloud com base no histórico recente de comportamento de tráfego.
+    - [ ] Habilitar alertas proativos sobre picos de consumo ou detecção de ineficiência, notificando as equipes de desenvolvimento de forma clara e acionável.
+    - [ ] Integrar sugestões de ajuste de HPA (Horizontal Pod Autoscaler) e "right-sizing" automático, permitindo ao orquestrador aplicar as reduções de recursos recomendadas quando autorizado.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implantação de Agente de Automação de Rollback Baseado em Métricas de Saúde de Negócio em Produção".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
