@@ -2374,6 +2374,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Funcionalidade autônoma onde o orquestrador gerenciará e otimizará o escopo desta feature, garantindo resiliência, segurança, e governança contínua baseada em regras de negócio e contexto de infraestrutura.
+  - **Critérios de Aceite:**
+    - [ ] Mapear arquitetura e criar serviços base necessários (`DashboarddeTelemetriaAvançadaeAnálisePreditivadeCustosCloudbaseadanoComportamentodaAplicaçãoService`).
+    - [ ] Implementar a lógica de orquestração autônoma e comunicação no `SwarmBusService`.
+    - [ ] Criar métricas de telemetria e dashboards visuais para observabilidade (Painel / Prometheus).
+    - [ ] Desenvolver suítes de testes autônomas (E2E/Integração) garantindo que falhas sejam interceptadas antes do merge no Main.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão Modular e Refinamento de Heurísticas para a Feature Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
