@@ -2375,15 +2375,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
 
+
 - [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
-  - **Descrição:** Com a implementação bem-sucedida dos Agentes de Governança e Segurança, a orquestração do ecossistema agora está blindada contra vulnerabilidades. O próximo nível de maturidade exige visibilidade em tempo real sobre a eficiência operacional e os custos gerados pelos agentes e microsserviços. Esta feature introduz um painel interativo de telemetria avançada que correlaciona o comportamento da aplicação (número de chamadas de LLM, tempo de execução, consumo de CPU/RAM em pods do Kubernetes) com os custos financeiros associados na Cloud e em provedores de IA. Através de modelos preditivos, o sistema alertará sobre possíveis picos de custo (Cost Anomaly Detection) e sugerirá otimizações de recursos.
+  - **Descrição:** Como aprimoramos o repositório e a gestão do ecossistema? Através de observabilidade financeira inteligente. Esta feature cria um painel (Dashboard) que não apenas coleta métricas de uso de CPU/Memória, mas correlaciona o comportamento da aplicação (número de PRs revisados, jobs de self-healing executados, tokens consumidos via AI Router) com os custos diretos na nuvem (AWS/GCP/Azure) e APIs de IA. Utilizando modelos preditivos, o sistema alertará as lideranças sobre anomalias financeiras e projetará o custo ao final do mês, permitindo otimizações proativas antes do fechamento da fatura.
   - **Critérios de Aceite:**
-    - [ ] Criar o `FinOpsAgent`, responsável por coletar e unificar dados de consumo de recursos do Kubernetes (via Prometheus) e APIs de billing dos provedores.
-    - [ ] Desenvolver um Dashboard executivo que centralize métricas operacionais e financeiras, permitindo filtros por agente, microsserviço, ambiente e período.
-    - [ ] Implementar um modelo preditivo baseado em séries temporais para projetar os custos futuros, alertando caso a previsão exceda o budget alocado.
-    - [ ] Construir uma funcionalidade de "Recomendação de Otimização" que sugere ajustes autônomos em requests/limits de pods ou troca de modelos de IA em tarefas de baixa complexidade.
-    - [ ] Automatizar a criação de PRs para aplicar os ajustes de infraestrutura sugeridos.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Rollback Baseada em Degradação de Experiência do Usuário (UX/CX)".
+    - [ ] Desenvolver o módulo `CloudCostTelemetryService` que integra com APIs de faturamento (Billing APIs) dos principais provedores de nuvem para extrair custos diários de instâncias do Kubernetes.
+    - [ ] Implementar integração no `AIRouterService` para registrar e totalizar o número de tokens (input/output) consumidos por job e por repositório alvo.
+    - [ ] Criar o motor de predição `CostPredictorEngine` (usando regressão linear simples) que extrapola o consumo atual para gerar uma estimativa de custo de fechamento mensal.
+    - [ ] Construir a interface visual (Dashboard) que exibe o custo atual vs. o orçamento planejado (budget), destacando os repositórios ou jobs que mais consomem recursos.
+    - [ ] Configurar alertas automatizados (via Telegram/Slack) que disparam caso o custo diário ultrapasse a média histórica em mais de 20%, indicando possível anomalia (ex: loop infinito em self-healing).
+    - [ ] Garantir cobertura de testes de no mínimo 85% para o `CloudCostTelemetryService` e o `CostPredictorEngine`, validando cálculos financeiros com mocks precisos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Mecanismo de Auto-Tuning e Downgrade Dinâmico de Modelos de IA em Cenários de Estouro de Orçamento".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
