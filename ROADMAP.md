@@ -2376,24 +2376,24 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
 
 
 - [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
-  - **Descrição:** Como a aplicação agora orquestra fluxos autônomos e cria ambientes efêmeros (Mocks, Data Observability, Testes de Mutação), os custos e o uso de recursos na nuvem podem se tornar imprevisíveis. Esta feature cria um agente especializado em analisar os dados de telemetria, logs de execução e métricas de infraestrutura (CPU, RAM, tráfego de rede) para fornecer uma visualização clara e em tempo real sobre a saúde do sistema e os gastos associados. O agente irá correlacionar o comportamento da aplicação com os custos da nuvem, fornecendo análises preditivas sobre os próximos faturamentos e sugerindo proativamente otimizações de recursos (right-sizing) sem comprometer o desempenho.
+  - **Descrição:** Como o ecossistema autônomo está orquestrando recursos efêmeros, mocks, agentes de segurança e testes contínuos, há um risco inerente de inflacionar os custos operacionais (FinOps) no Kubernetes e na Cloud. Para mitigar isso, esta feature visa construir um agente analítico que centraliza logs, métricas (Prometheus) e traces (OpenTelemetry) para criar um dashboard executivo detalhado. Mais do que exibir dados, o agente usará modelos de IA para prever tendências de custos com base no comportamento de execução atual das PRs (ex: aumento no consumo de RAM devido a novas lógicas de processamento) e alertará proativamente se a arquitetura submetida ultrapassar orçamentos estipulados.
   - **Critérios de Aceite:**
-    - [ ] Criar o agente `FinOpsAndTelemetryAgent` capaz de consumir dados de provedores Cloud (AWS, Azure, GCP) e ferramentas de observabilidade (Datadog, Prometheus) para calcular os custos reais por microsserviço e fluxo de orquestração.
-    - [ ] Implementar dashboards interativos que exibam métricas chave: custo por tarefa autônoma, utilização de recursos por agente, e previsões de gastos baseadas em tendências de uso.
-    - [ ] Desenvolver algoritmos preditivos que alertam a equipe via Slack/Teams sobre picos anômalos de custos (Cost Anomalies) ou projeções que excedam o orçamento predefinido (Budget Thresholds).
-    - [ ] Permitir que o agente sugira ações automáticas de otimização, como desligamento de ambientes efêmeros ociosos (Mocks não utilizados) ou redimensionamento de pods Kubernetes com base na demanda histórica.
-    - [ ] Integrar a análise de telemetria com os relatórios de execução de PRs, fornecendo um "Custo Estimado por Feature" para cada nova funcionalidade orquestrada.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração de Atualizações de Dependências 'Zero-Downtime' com Validação Semântica Autônoma".
+    - [ ] Criar o `FinOpsObservabilityAgent` capaz de consumir APIs de faturamento de nuvem (AWS/GCP/Azure) e cruzar com os metadados dos jobs Kubernetes orquestrados.
+    - [ ] Integrar telemetria nativa nos agentes existentes utilizando OpenTelemetry, garantindo que o tempo de execução e uso de recursos sejam reportados em tempo real.
+    - [ ] Implementar um modelo preditivo leve que analisa a baseline de consumo e projeta os custos mensais considerando os artefatos em staging/produção gerados pelas PRs mais recentes.
+    - [ ] Desenvolver um mecanismo de alerta no GitHub Actions que adicione um comentário no Pull Request com a "Estimativa de Impacto de Custo" caso o threshold de consumo de memória/CPU da nova feature seja 20% superior à versão anterior.
+    - [ ] Fornecer visualizações gráficas no Dashboard Central (Next.js/React) para os executivos acompanharem a eficiência do gasto computacional correlacionada com a entrega de valor das features autogeradas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Recomendação de Arquitetura Autônoma para Otimização de Performance".
 
-- [ ] **Feature: Orquestração de Atualizações de Dependências 'Zero-Downtime' com Validação Semântica Autônoma**
-  - **Descrição:** Com a complexidade dos ecossistemas de microsserviços aumentando e os custos monitorados de forma eficaz, a manutenção contínua torna-se o próximo desafio crítico. Esta funcionalidade visa criar um agente autônomo responsável por gerenciar ativamente as atualizações de dependências (bibliotecas, frameworks) do projeto, indo além dos métodos tradicionais. O agente não apenas identificará pacotes desatualizados ou com vulnerabilidades, mas executará uma análise semântica das mudanças de código (Changelog/Release Notes), validará se a atualização é segura e orquestrará a aplicação do update em um pipeline "Zero-Downtime", garantindo que a aplicação se mantenha moderna e segura sem intervenção manual.
+- [ ] **Feature: Sistema de Recomendação de Arquitetura Autônoma para Otimização de Performance**
+  - **Descrição:** Com a análise de custos e telemetria ativas, será possível identificar padrões ineficientes (gargalos de CPU, chamadas lentas a banco, redundância de rede) no comportamento das aplicações. Esta feature adiciona um agente arquiteto, o `ArchitectureSpecialistAI`, que analisa continuamente os relatórios do FinOpsObservabilityAgent e propõe refatorações arquiteturais. Isso inclui sugestões como: migrar de banco de dados relacional para NoSQL em fluxos específicos, implementar cache (Redis) em rotas de alta latência, ou separar monólitos lógicos em serverless functions, fornecendo blueprints de código prontos.
   - **Critérios de Aceite:**
-    - [ ] Criar o `DependencyHealerAgent` que escaneia proativamente os arquivos de gerenciamento de pacotes (package.json, pom.xml, requirements.txt) em busca de novas versões ou alertas de segurança.
-    - [ ] Implementar capacidade de análise semântica de changelogs e release notes utilizando IA, determinando o impacto real da atualização no código-fonte (quebras de contrato, mudanças de API).
-    - [ ] Integrar com o fluxo de testes existente, acionando suítes de testes de regressão e de mutação para validar a estabilidade após a atualização da dependência.
-    - [ ] Desenvolver mecanismo de fallback autônomo (Rollback), desfazendo a atualização caso os testes falhem ou a telemetria aponte problemas de performance após o update.
-    - [ ] Garantir que o agente abra PRs descritivos para atualizações bem-sucedidas, incluindo o relatório de impacto semântico, resultados dos testes e métricas de desempenho comparativas.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agente Especialista de Performance e Otimização de Código (Refactoring) Guiado por Profiling Contínuo".
+    - [ ] Implementar o `ArchitectureSpecialistAI` para ler métricas agregadas do Prometheus e logs de lentidão do OpenTelemetry, identificando fluxos de dados custosos ou de baixa performance.
+    - [ ] Integrar o agente ao repositório para analisar a árvore de diretórios e padrões arquiteturais atuais (Clean Architecture, MVC) e correlacioná-los com as métricas de performance.
+    - [ ] Capacitar o agente para gerar PRs automatizadas sugerindo a introdução de camadas de cache (ex: Redis/Memcached) em endpoints que apresentam latência constante e dados de baixa mutabilidade.
+    - [ ] Desenvolver relatórios arquiteturais automatizados que justifiquem as mudanças recomendadas utilizando padrões de design de software modernos e trade-offs claros.
+    - [ ] Garantir que o agente possa gerar *Proof of Concepts* (PoCs) isoladas no Kubernetes para validar o ganho de performance real da nova arquitetura antes de submetê-la aos revisores humanos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agente de Mapeamento Dinâmico e Refatoração de Domínio (Domain-Driven Design) para Redução de Acoplamento".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
