@@ -2375,13 +2375,14 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
 - [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
-  - **Descrição:** Funcionalidade autônoma onde o orquestrador gerenciará e otimizará o escopo desta feature, garantindo resiliência, segurança, e governança contínua baseada em regras de negócio e contexto de infraestrutura.
+  - **Descrição:** Com a auditoria de compliance (ISO/SOC2) estabelecida, precisamos garantir que o ecossistema também seja eficiente em termos de custos. Esta feature propõe a construção de um dashboard analítico focado em *FinOps*, que utilizará inteligência artificial para monitorar o comportamento da aplicação em tempo real. O agente coletará métricas de consumo (CPU, Memória, I/O, chamadas de API) e os cruzará com as tabelas de preços dos provedores de nuvem. Com base nessas informações, a IA não apenas mostrará relatórios de telemetria visualmente ricos, mas também gerará alertas preditivos para evitar estouros de orçamento (over-budgeting) e sugerirá arquiteturas de instâncias mais baratas (como spot instances).
   - **Critérios de Aceite:**
-    - [ ] Mapear arquitetura e criar serviços base necessários (`DashboarddeTelemetriaAvançadaeAnálisePreditivadeCustosCloudbaseadanoComportamentodaAplicaçãoService`).
-    - [ ] Implementar a lógica de orquestração autônoma e comunicação no `SwarmBusService`.
-    - [ ] Criar métricas de telemetria e dashboards visuais para observabilidade (Painel / Prometheus).
-    - [ ] Desenvolver suítes de testes autônomas (E2E/Integração) garantindo que falhas sejam interceptadas antes do merge no Main.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão Modular e Refinamento de Heurísticas para a Feature Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
+    - [ ] Desenvolver o `CloudCostPredictorAgent`, encarregado de agregar métricas da infraestrutura (Kubernetes, AWS/GCP/Azure) e consumo de APIs externas (como provedores de LLMs).
+    - [ ] Implementar um modelo preditivo baseado em Machine Learning (ex. ARIMA ou Prophet) para prever o custo de nuvem nas próximas 4 semanas baseado no crescimento histórico da carga.
+    - [ ] Construir a interface do "Dashboard FinOps" (em React ou Vue) que apresentará gráficos de tendências de custos (Burndown chart de orçamento e projeções).
+    - [ ] Criar o mecanismo de alerta que notifica as equipes no Slack/Teams quando a IA prever que um determinado repositório ou microsserviço consumirá mais de 90% do orçamento mensal alocado.
+    - [ ] Habilitar o orquestrador para abrir Pull Requests automáticos ajustando limites de CPU/Memória (limits/requests no Helm/Kustomize) caso detecte recursos super-dimensionados de forma persistente.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação Dinâmica de FinOps: Compra e Venda de Instâncias Spot (Spot Instance Arbitrage) via IA".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
