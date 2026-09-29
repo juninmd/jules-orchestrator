@@ -2384,6 +2384,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Integrar sugestões de ajuste de HPA (Horizontal Pod Autoscaler) e "right-sizing" automático, permitindo ao orquestrador aplicar as reduções de recursos recomendadas quando autorizado.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implantação de Agente de Automação de Rollback Baseado em Métricas de Saúde de Negócio em Produção".
 
+- [ ] **Feature: Implantação de Agente de Automação de Rollback Baseado em Métricas de Saúde de Negócio em Produção**
+  - **Descrição:** Com a robustez da infraestrutura assegurada e a telemetria avançada operando ativamente, esta feature visa introduzir uma camada adicional de resiliência e segurança nas entregas em produção. A funcionalidade propõe a criação de um agente orquestrador de rollback automatizado, capaz de correlacionar continuamente métricas técnicas de saúde da aplicação (latência, taxas de erro 5xx) com KPIs de negócio vitais em tempo real (taxa de conversão, sucesso em fluxos de pagamentos, etc.) logo após um novo deploy. Caso o agente detecte uma degradação significativa nos indicadores de negócio, mesmo que as métricas técnicas pareçam estáveis (evitando falhas silenciosas ou de usabilidade), ele intervirá autonomamente acionando os mecanismos do orquestrador de containers (Kubernetes) para reverter a versão para a última versão estável conhecida. Isso garante a proteção da receita e da experiência do usuário, minimizando o *Mean Time to Recovery* (MTTR) a frações de segundo.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o `RollbackOrchestratorAgent`, assegurando integração nativa e segura à API do Kubernetes (via `@kubernetes/client-node`) e aos pipelines de Continuous Deployment (CD).
+    - [ ] Implementar integração com conectores de telemetria de negócios e ferramentas de observabilidade (ex: Datadog, Prometheus) para ingestão e monitoramento contínuo das métricas-chave (Golden Signals) e KPIs de produto.
+    - [ ] Criar o motor analítico e de regras (Rule Engine) baseado em detecção de anomalias, capaz de avaliar desvios estatísticos (ex: queda > 10% nas conversões nos primeiros minutos de um rollout de Canary/Blue-Green) e acionar a reversão preventiva.
+    - [ ] Automatizar o fluxo prático de reversão (e.g., `kubectl rollout undo`), com gerenciamento adequado do ciclo de vida dos pods, conexões ativas e esvaziamento de tráfego, assegurando *zero-downtime* no rollback.
+    - [ ] Construir módulo de relatórios e alertas (Notificação), disparando avisos críticos (via Slack/Teams) e gerando tickets (Jira/GitHub) com detalhes do "Blast Radius" (impacto), métricas ofensoras e links de logs para análise post-mortem pelas equipes de engenharia.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agente Orquestrador de Recuperação de Desastres e Failover Autônomo em Múltiplas Nuvens (Multi-Cloud Disaster Recovery)".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
