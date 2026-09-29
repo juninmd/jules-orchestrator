@@ -2374,16 +2374,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
-- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
-  - **Descrição:** Avançando a governança de código e compliance e o monitoramento financeiro anterior, esta feature criará um dashboard preditivo que cruza os dados de uso da aplicação (APM, telemetria estruturada) com o custo real de cloud, estimando os custos futuros de infraestrutura. Ao analisar o comportamento da aplicação (ex. requisições atípicas por usuário, uso ineficiente de banco de dados, falhas não tratadas causando tráfego morto), o sistema detectará ineficiências comportamentais e as correlacionará diretamente em métricas de "Custo vs Valor", exibindo uma previsão preditiva de aumento de custos, mitigando impactos no orçamento antes do faturamento final do mês.
-  - **Critérios de Aceite:**
-    - [ ] Criar serviço orquestrado (Agent) capaz de coletar e consolidar métricas unificadas provenientes de ferramentas de APM (Datadog/NewRelic) com APIs de Billing de nuvem pública.
-    - [ ] Desenvolver modelo preditivo simples (regressão) para antecipar a curva de custo baseando-se nas tendências de comportamento de consumo de infra (por exemplo, CPU associado à transação X).
-    - [ ] O dashboard deve exibir visualizações correlacionadas de custo com as rotas/operações de maior tráfego e gasto em "dólar/milisegundo".
-    - [ ] Implementar a funcionalidade de geração de alertas autônomos por Slack que ativam gatilhos caso o modelo detecte a previsão de um aumento drástico de mais de 10% do custo em 24h sem justificativa de aumento de carga real de usuários.
-    - [ ] Permitir simulação "What-If" no painel, mostrando o impacto de otimizar determinada métrica e seu potencial saving.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Recomendador Autônomo de Otimização de Transações Críticas Através de Cache Distribuído".
 
+- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Com a implementação bem-sucedida dos Agentes de Governança e Segurança, a orquestração do ecossistema agora está blindada contra vulnerabilidades. O próximo nível de maturidade exige visibilidade em tempo real sobre a eficiência operacional e os custos gerados pelos agentes e microsserviços. Esta feature introduz um painel interativo de telemetria avançada que correlaciona o comportamento da aplicação (número de chamadas de LLM, tempo de execução, consumo de CPU/RAM em pods do Kubernetes) com os custos financeiros associados na Cloud e em provedores de IA. Através de modelos preditivos, o sistema alertará sobre possíveis picos de custo (Cost Anomaly Detection) e sugerirá otimizações de recursos.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `FinOpsAgent`, responsável por coletar e unificar dados de consumo de recursos do Kubernetes (via Prometheus) e APIs de billing dos provedores.
+    - [ ] Desenvolver um Dashboard executivo que centralize métricas operacionais e financeiras, permitindo filtros por agente, microsserviço, ambiente e período.
+    - [ ] Implementar um modelo preditivo baseado em séries temporais para projetar os custos futuros, alertando caso a previsão exceda o budget alocado.
+    - [ ] Construir uma funcionalidade de "Recomendação de Otimização" que sugere ajustes autônomos em requests/limits de pods ou troca de modelos de IA em tarefas de baixa complexidade.
+    - [ ] Automatizar a criação de PRs para aplicar os ajustes de infraestrutura sugeridos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Rollback Baseada em Degradação de Experiência do Usuário (UX/CX)".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
