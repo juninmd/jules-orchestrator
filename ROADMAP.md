@@ -2374,16 +2374,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
-
-- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
-  - **Descrição:** Com a segurança, escalabilidade e qualidade garantidas, torna-se necessário gerenciar os recursos de infraestrutura orquestrados de forma eficiente para evitar custos excessivos. Esta feature visa criar um módulo de telemetria preditiva, que acompanha os padrões de uso dos microsserviços nos clusters Kubernetes em tempo real e os cruza com as tabelas de precificação das provedoras (AWS, GCP, Azure). O dashboard permitirá identificar anomalias no uso de recursos e utilizar modelos preditivos para estimar custos futuros baseados na tendência de consumo, recomendando *downscaling* proativo ou reservas de instâncias de forma autônoma.
+- **Implementação do Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** O objetivo desta feature é criar um dashboard abrangente que agregue e visualize métricas de telemetria detalhadas da orquestração de IA e do uso de recursos em tempo real. Este sistema deve analisar os dados de comportamento dos agentes, execução de processos, tempo de resolução, e realizar uma análise preditiva para estimar os custos de infraestrutura e serviços de IA na nuvem (ex: tokens consumidos via APIs, instâncias Kubernetes). A intenção é ter visibilidade financeira atrelada ao desempenho, permitindo identificar gargalos, otimizar consumo de recursos e escalar o sistema de maneira sustentável e transparente.
   - **Critérios de Aceite:**
-    - [ ] Desenvolver o agente `FinOpsAgent` para coletar métricas de CPU, memória, rede e armazenamento diretamente dos nós e pods do Kubernetes utilizando Prometheus ou integração com a API do provedor Cloud.
-    - [ ] Construir e treinar um modelo preditivo leve capaz de identificar sazonalidades no tráfego e prever o consumo de recursos para os próximos 30 dias.
-    - [ ] Criar um Dashboard Interativo no frontend (React/Vue) para exibir gráficos de tendências de custos e destacar microsserviços ofensores (com baixo uso e alta alocação).
-    - [ ] Implementar a funcionalidade de "Recomendação Autônoma", na qual o agente sugere modificações nos HPA (Horizontal Pod Autoscalers) para otimizar os custos sem impacto na performance.
-    - [ ] Integrar alertas de anomalias financeiras no Slack/Teams, disparando notificações imediatas se o *burn rate* projetado superar os orçamentos definidos por projeto/namespace.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Módulo de Otimização e Sustentabilidade (GreenOps) para Redução da Pegada de Carbono em Tempo de Orquestração".
+    - [ ] Mapear e instrumentar todos os endpoints e chamadas de API (como integrações de IA e requisições ao GitHub) para capturar métricas de latência, uso de tokens, taxa de sucesso/falha e volume de requisições.
+    - [ ] Criar o componente `TelemetryDashboard` que exiba as métricas coletadas em tempo real utilizando gráficos interativos.
+    - [ ] Integrar um módulo de cálculo de custo e análise preditiva baseado no histórico de consumo e comportamento atual dos agentes de IA.
+    - [ ] Desenvolver mecanismos de alertas automatizados quando a previsão de consumo ou custos exceder um threshold (limite) configurado.
+    - [ ] Escrever testes de integração e unitários para o módulo de coleta de telemetria e o painel de dashboard para garantir a exatidão das métricas e das previsões.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração de Webhooks para Resolução Autônoma de Incidentes Baseada em Alertas Preditivos".
+
 
 ## 📝 Gestão do Documento e Próximos Passos
 
