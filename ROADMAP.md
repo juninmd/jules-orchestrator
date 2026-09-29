@@ -2374,15 +2374,27 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
-- [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
-  - **Descrição:** Com a auditoria de compliance (ISO/SOC2) estabelecida, precisamos garantir que o ecossistema também seja eficiente em termos de custos. Esta feature propõe a construção de um dashboard analítico focado em *FinOps*, que utilizará inteligência artificial para monitorar o comportamento da aplicação em tempo real. O agente coletará métricas de consumo (CPU, Memória, I/O, chamadas de API) e os cruzará com as tabelas de preços dos provedores de nuvem. Com base nessas informações, a IA não apenas mostrará relatórios de telemetria visualmente ricos, mas também gerará alertas preditivos para evitar estouros de orçamento (over-budgeting) e sugerirá arquiteturas de instâncias mais baratas (como spot instances).
+
+- [ ] **Feature: Geração Autônoma de Documentação de Domínio (Ubiquitous Language)**
+  - **Descrição:** Tendo um ambiente analítico seguro para estudar o comportamento do código (Sandbox Analítico) e com a garantia de que as interações são mapeadas e seguras, a próxima evolução arquitetural é a extração e a padronização do conhecimento de domínio (DDD - Domain-Driven Design). Esta feature introduz um agente de inteligência artificial focado em vasculhar o código validado (especialmente as entidades de domínio e os serviços) para deduzir e gerar de forma autônoma o "Dicionário de Linguagem Ubíqua" (Ubiquitous Language). O objetivo é preencher a lacuna entre a linguagem técnica (desenvolvedores) e a linguagem de negócio (P.O.s e Stakeholders), autogerando e mantendo um glossário atualizado que sirva como base de referência unificada.
   - **Critérios de Aceite:**
-    - [ ] Desenvolver o `CloudCostPredictorAgent`, encarregado de agregar métricas da infraestrutura (Kubernetes, AWS/GCP/Azure) e consumo de APIs externas (como provedores de LLMs).
-    - [ ] Implementar um modelo preditivo baseado em Machine Learning (ex. ARIMA ou Prophet) para prever o custo de nuvem nas próximas 4 semanas baseado no crescimento histórico da carga.
-    - [ ] Construir a interface do "Dashboard FinOps" (em React ou Vue) que apresentará gráficos de tendências de custos (Burndown chart de orçamento e projeções).
-    - [ ] Criar o mecanismo de alerta que notifica as equipes no Slack/Teams quando a IA prever que um determinado repositório ou microsserviço consumirá mais de 90% do orçamento mensal alocado.
-    - [ ] Habilitar o orquestrador para abrir Pull Requests automáticos ajustando limites de CPU/Memória (limits/requests no Helm/Kustomize) caso detecte recursos super-dimensionados de forma persistente.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação Dinâmica de FinOps: Compra e Venda de Instâncias Spot (Spot Instance Arbitrage) via IA".
+    - [ ] Desenvolver o agente `DomainGlossaryAI` capaz de analisar repositórios e extrair termos de domínio, entidades de negócio e suas respectivas relações lógicas a partir do código-fonte (ex: interfaces TypeScript, enums, nomes de métodos de serviços).
+    - [ ] Implementar a geração e manutenção autônoma do arquivo `UBIQUITOUS_LANGUAGE.md` (ou integração com plataformas como Confluence/Notion), formatando as definições extraídas com explicações claras e acessíveis para não-técnicos.
+    - [ ] Criar um mecanismo de sincronização bidirecional que alerta a equipe de engenharia via Pull Request caso novos termos introduzidos no código divirjam do glossário existente, sugerindo a adoção dos termos já padronizados ou solicitando aprovação para a expansão do dicionário de domínio.
+    - [ ] Integrar os termos da Linguagem Ubíqua às revisões automáticas (Code Reviews), fazendo com que o agente revisor sugira a refatoração de nomes de variáveis ou métodos que não estejam aderentes ao glossário de negócio aprovado.
+    - [ ] Desenvolver suítes de testes automatizados para validar que a extração de termos consegue lidar com nomenclaturas complexas e acrônimos sem gerar falsos positivos ou definições ambíguas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua e Refatoração Autônoma de Nomenclatura de Código Baseada em Linguagem Ubíqua".
+
+
+- [ ] **Feature: Integração Contínua e Refatoração Autônoma de Nomenclatura de Código Baseada em Linguagem Ubíqua**
+  - **Descrição:** Tendo a documentação gerada pelo `DomainGlossaryAI`, agora é necessário colocar a padronização do código em prática (Enforcement). Este agente revisará continuamente o repositório, identificando variáveis, nomes de métodos, classes e pacotes que violem a definição estabelecida na "Ubiquitous Language". Agindo como P.O. e Tech Lead simultâneos, o agente criará Pull Requests com refatorações seguras de nomenclatura, garantindo alinhamento perfeito do jargão no código com o negócio sem quebrar contratos, reduzindo radicalmente a dívida semântica do projeto.
+  - **Critérios de Aceite:**
+    - [ ] Criar o agente `UbiquitousEnforcerAI`, capaz de receber o estado atual do `UBIQUITOUS_LANGUAGE.md` e gerar a árvore AST (Abstract Syntax Tree) do repositório alvo.
+    - [ ] Implementar a capacidade do agente sugerir refatorações usando Diff e abrir PRs onde o código (variáveis ambíguas) é ajustado para o termo exato mapeado no glossário.
+    - [ ] Desenvolver mecanismos de *alias* no glossário (ex. `Client` e `Customer`), permitindo que a IA reconheça e substitua termos depreciados para a versão atualizada da Linguagem Ubíqua.
+    - [ ] Integrar testes de regressão automáticos garantindo que refatorações de nomes de classes ou métodos exportados em bibliotecas não gerem quebra de contratos sem a devida depreciação/compatibilidade.
+    - [ ] Incluir no PR autogerado a métrica de "Dívida Semântica Mitigada" e as instâncias exatas que foram alteradas em todo o código-fonte.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Engenharia Reversa de Requisitos Autônoma via Extração de Comportamento Comprovado (BDD)".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
