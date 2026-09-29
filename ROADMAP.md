@@ -2374,26 +2374,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver a geração de um relatório executivo de "Compliance Score" em cada PR, oferecendo evidências automatizadas para auditores de segurança e mitigando riscos antes do merge.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
 
-
 - [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
-  - **Descrição:** Como o ecossistema autônomo está orquestrando recursos efêmeros, mocks, agentes de segurança e testes contínuos, há um risco inerente de inflacionar os custos operacionais (FinOps) no Kubernetes e na Cloud. Para mitigar isso, esta feature visa construir um agente analítico que centraliza logs, métricas (Prometheus) e traces (OpenTelemetry) para criar um dashboard executivo detalhado. Mais do que exibir dados, o agente usará modelos de IA para prever tendências de custos com base no comportamento de execução atual das PRs (ex: aumento no consumo de RAM devido a novas lógicas de processamento) e alertará proativamente se a arquitetura submetida ultrapassar orçamentos estipulados.
+  - **Descrição:** Funcionalidade autônoma onde o orquestrador atuará ativamente para prover visibilidade profunda e preditiva sobre o uso e os custos de infraestrutura em nuvem. Utilizando o comportamento da aplicação em tempo real e modelos preditivos, este dashboard oferecerá projeções de gastos baseadas no tráfego, no consumo de IA, na execução de fluxos assíncronos e no ciclo de desenvolvimento. O objetivo é evitar surpresas no faturamento, prevendo o esgotamento de *budgets* antes que aconteça e sugerindo redimensionamentos proativamente.
   - **Critérios de Aceite:**
-    - [ ] Criar o `FinOpsObservabilityAgent` capaz de consumir APIs de faturamento de nuvem (AWS/GCP/Azure) e cruzar com os metadados dos jobs Kubernetes orquestrados.
-    - [ ] Integrar telemetria nativa nos agentes existentes utilizando OpenTelemetry, garantindo que o tempo de execução e uso de recursos sejam reportados em tempo real.
-    - [ ] Implementar um modelo preditivo leve que analisa a baseline de consumo e projeta os custos mensais considerando os artefatos em staging/produção gerados pelas PRs mais recentes.
-    - [ ] Desenvolver um mecanismo de alerta no GitHub Actions que adicione um comentário no Pull Request com a "Estimativa de Impacto de Custo" caso o threshold de consumo de memória/CPU da nova feature seja 20% superior à versão anterior.
-    - [ ] Fornecer visualizações gráficas no Dashboard Central (Next.js/React) para os executivos acompanharem a eficiência do gasto computacional correlacionada com a entrega de valor das features autogeradas.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Sistema de Recomendação de Arquitetura Autônoma para Otimização de Performance".
-
-- [ ] **Feature: Sistema de Recomendação de Arquitetura Autônoma para Otimização de Performance**
-  - **Descrição:** Com a análise de custos e telemetria ativas, será possível identificar padrões ineficientes (gargalos de CPU, chamadas lentas a banco, redundância de rede) no comportamento das aplicações. Esta feature adiciona um agente arquiteto, o `ArchitectureSpecialistAI`, que analisa continuamente os relatórios do FinOpsObservabilityAgent e propõe refatorações arquiteturais. Isso inclui sugestões como: migrar de banco de dados relacional para NoSQL em fluxos específicos, implementar cache (Redis) em rotas de alta latência, ou separar monólitos lógicos em serverless functions, fornecendo blueprints de código prontos.
-  - **Critérios de Aceite:**
-    - [ ] Implementar o `ArchitectureSpecialistAI` para ler métricas agregadas do Prometheus e logs de lentidão do OpenTelemetry, identificando fluxos de dados custosos ou de baixa performance.
-    - [ ] Integrar o agente ao repositório para analisar a árvore de diretórios e padrões arquiteturais atuais (Clean Architecture, MVC) e correlacioná-los com as métricas de performance.
-    - [ ] Capacitar o agente para gerar PRs automatizadas sugerindo a introdução de camadas de cache (ex: Redis/Memcached) em endpoints que apresentam latência constante e dados de baixa mutabilidade.
-    - [ ] Desenvolver relatórios arquiteturais automatizados que justifiquem as mudanças recomendadas utilizando padrões de design de software modernos e trade-offs claros.
-    - [ ] Garantir que o agente possa gerar *Proof of Concepts* (PoCs) isoladas no Kubernetes para validar o ganho de performance real da nova arquitetura antes de submetê-la aos revisores humanos.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agente de Mapeamento Dinâmico e Refatoração de Domínio (Domain-Driven Design) para Redução de Acoplamento".
+    - [ ] Mapear as fontes de dados de billing (ex: AWS Cost Explorer, GCP Billing API) e as métricas de performance da aplicação, unificando a extração (`TelemetriaDeCustosService`).
+    - [ ] Implementar a lógica autônoma de *machine learning* simplificada para cruzar métricas de tráfego (CPU/RAM/Throughput) e estimar os custos a curto e médio prazo.
+    - [ ] Criar a interface visual do dashboard integrada à aplicação principal para que desenvolvedores e stakeholders (C-level e FinOps) consigam simular cenários de gastos (What-If analysis).
+    - [ ] Desenvolver um sistema de alertas proativos que interaja via mensageria corporativa (Slack/Teams) quando um possível estouro orçamentário for previsto para as próximas semanas.
+    - [ ] Desenvolver suítes de testes autônomas (Unitários/E2E) garantindo a precisão das projeções em cenários de variações súbitas na base de dados simulada, falhando a build se a precisão do modelo regredir consideravelmente.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Resolução de Anomalias de Custo via Orquestrador".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
