@@ -2376,14 +2376,24 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
 
 
 - [ ] **Feature: Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
-  - **Descrição:** Com a segurança e compliance garantidos, a próxima etapa é otimizar os custos e obter visibilidade completa do ambiente. Esta feature visa implementar um sistema avançado de telemetria que coleta métricas de execução, consumo de recursos (CPU, Memória, I/O) no Kubernetes e na orquestração de IA. A partir dessas métricas, um modelo preditivo analisará o comportamento da aplicação para projetar custos e sugerir otimizações proativamente (FinOps Autônomo), gerando um dashboard em tempo real para tomada de decisão técnica e de negócios.
+  - **Descrição:** Funcionalidade autônoma onde o orquestrador atuará ativamente para coletar, analisar e prever os custos operacionais (Cloud e infraestrutura de IA) com base no comportamento em tempo real das aplicações e do fluxo de CI/CD. O sistema correlacionará picos de uso com execuções de testes, builds ou deploys e fornecerá projeções financeiras, atuando como um consultor proativo para a otimização de recursos sem comprometer a performance ou resiliência.
   - **Critérios de Aceite:**
-    - [ ] Desenvolver coletores de métricas integrados ao Prometheus/Grafana e aos providers de IA (ex: Ollama, Vercel AI SDK) para rastrear uso de tokens e latência de inferência.
-    - [ ] Criar o `FinOpsAgent` para cruzar métricas de consumo de infraestrutura com tabelas de precificação de cloud e de provedores de IA.
-    - [ ] Implementar um modelo preditivo leve capaz de prever anomalias de custos e picos de uso baseados em padrões históricos.
-    - [ ] Construir um Dashboard interativo apresentando os custos projetados versus reais.
-    - [ ] Adicionar alertas de "Cost Anomaly Detection" integrados aos pull requests, alertando caso uma PR introduza código ineficiente.
-  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Agente de Autocorreção de Performance e Otimização Dinâmica de Recursos Kubernetes".
+    - [ ] Mapear arquitetura e criar serviços base necessários (`DashboardTelemetriaAvançadaeAnálisePreditivadeCustosCloudService`).
+    - [ ] Implementar a lógica de orquestração autônoma e comunicação no `SwarmBusService`.
+    - [ ] Criar métricas de telemetria e dashboards visuais para observabilidade (Painel / Prometheus).
+    - [ ] Desenvolver suítes de testes autônomas (E2E/Integração) garantindo que falhas sejam interceptadas antes do merge no Main.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão Modular e Refinamento de Heurísticas para a Feature Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação".
+
+
+- [ ] **Feature: Expansão Modular e Refinamento de Heurísticas para a Feature Dashboard de Telemetria Avançada e Análise Preditiva de Custos Cloud baseada no Comportamento da Aplicação**
+  - **Descrição:** Tendo estruturado a base do dashboard preditivo de telemetria, esta feature foca em estender as heurísticas preditivas do orquestrador. A IA passará a analisar os metadados do repositório em tempo real para correlacionar não apenas picos de uso, mas anomalias de código (ex: algoritmos ineficientes, vazamentos de memória sutis) com projeções financeiras em nuvem (FinOps). O orquestrador atuará proativamente, sugerindo refatorações de código específicas via Pull Request para otimizar os custos antes mesmo do deploy em produção.
+  - **Critérios de Aceite:**
+    - [ ] Criar o módulo `HeuristicsRefinementEngine` integrado ao painel de telemetria para analisar o impacto do código nos custos de nuvem.
+    - [ ] Desenvolver novas métricas compostas que cruzem dados de complexidade ciclomática (Sonar) com projeções de custo (Cloud Pricing APIs).
+    - [ ] Implementar a capacidade do P.O. autônomo de gerar issues e Pull Requests automáticos com sugestões de otimização de custo (FinOps-as-Code).
+    - [ ] Adicionar um visualizador de "Impacto Financeiro por Linha de Código" na interface do dashboard.
+    - [ ] Executar testes de integração simulando picos de tráfego e avaliar a eficácia das refatorações sugeridas em ambiente sandbox.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Orçamentos Dinâmicos e Circuit Breakers Financeiros Autônomos baseados em Telemetria Preditiva".
 
 ## 📝 Gestão do Documento e Próximos Passos
 
