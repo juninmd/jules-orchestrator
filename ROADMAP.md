@@ -2404,6 +2404,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Gerar relatórios executivos de Pós-Incidente de forma autônoma após qualquer atuação do agente, detalhando a anomalia inicial, as ações de failover tomadas e o SLA atingido.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Ecossistema de IA Preditiva para Auto-Escalonamento Dinâmico Baseado em Padrões Sazonais e Comportamentais".
 
+- [ ] **Feature: Ecossistema de IA Preditiva para Auto-Escalonamento Dinâmico Baseado em Padrões Sazonais e Comportamentais**
+  - **Descrição:** Visando otimizar continuamente o uso de recursos e garantir que os microsserviços do ecossistema operem com capacidade ideal, sem subutilização ou saturação, esta feature propõe a implementação de um sistema de auto-escalonamento dinâmico impulsionado por Inteligência Artificial (IA Preditiva). Ao contrário do escalonamento tradicional reativo, que responde a picos já ocorridos, o modelo preditivo consumirá históricos de telemetria, padrões sazonais (ex: picos de uso em horários comerciais, Black Friday, fechamentos de mês) e até métricas de negócios em tempo real, para prever a carga de trabalho. Com base nessas predições, o agente atuará de forma proativa junto ao Kubernetes (HPA/VPA), pré-escalando os pods e instâncias pouco antes da demanda real ocorrer e reduzindo a infraestrutura assim que a previsão indicar ociosidade. Isso garantirá alta performance com o menor custo operacional possível.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `PredictiveScalingAgent` para consolidar grandes volumes de dados de telemetria histórica e métricas de negócios.
+    - [ ] Desenvolver e treinar um modelo de *Machine Learning* especializado em séries temporais para identificar padrões sazonais e comportamentais na carga de tráfego.
+    - [ ] Implementar a capacidade do agente de gerar recomendações precisas de configuração de escalonamento (HPA/VPA) baseadas nas predições do modelo.
+    - [ ] Integrar o agente de forma nativa e segura com a API do Kubernetes para aplicar autonomamente o *pre-scaling* de recursos minutos antes da demanda projetada.
+    - [ ] Desenvolver um módulo de auditoria contínua que avalia a precisão das predições do modelo contra a carga de tráfego real, ajustando os hiperparâmetros automaticamente em caso de desvios significativos.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Plataforma de Governança de APIs Autônoma com Gestão do Ciclo de Vida e Segurança Zero-Trust".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
