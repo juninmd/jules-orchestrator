@@ -2414,6 +2414,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver um módulo de auditoria contínua que avalia a precisão das predições do modelo contra a carga de tráfego real, ajustando os hiperparâmetros automaticamente em caso de desvios significativos.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Plataforma de Governança de APIs Autônoma com Gestão do Ciclo de Vida e Segurança Zero-Trust".
 
+
+- [ ] **Feature: Plataforma de Governança de APIs Autônoma com Gestão do Ciclo de Vida e Segurança Zero-Trust**
+  - **Descrição:** Expandindo o ecossistema Preditivo, esta feature foca em estabelecer uma governança estrita e autônoma para todas as APIs criadas e orquestradas. Com o crescimento orgânico dos microsserviços, a complexidade no gerenciamento de endpoints, versões, autenticação e limites de tráfego (rate limiting) exige um controle unificado. A plataforma atuará como um "API Gateway Manager" autônomo. O agente lerá os contratos gerados (OpenAPI/Swagger), criará e publicará políticas de segurança (Zero-Trust) para as APIs recém implantadas e aplicará versionamento semântico automatizado (lifecycle management), desativando versões legadas com segurança sem interromper clientes ativos.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `ApiGovernanceAgent` que interage diretamente com soluções de API Gateway no cluster (ex: Kong, Tyk ou NGINX Ingress).
+    - [ ] Desenvolver mecanismo para injetar políticas de segurança *Zero-Trust* (e.g., validação estrita de JWT, mTLS) em todo novo microsserviço implantado de forma automática e auditável.
+    - [ ] Implementar a capacidade autônoma de gerir o ciclo de vida (API Lifecycle): provisionamento de endpoints, versionamento transparente (e.g., de v1 para v2 sem breaking changes imediatas) e depreciação controlada de APIs obsoletas.
+    - [ ] Integrar a aplicação de limites de requisição (Rate Limiting) e Quotas dinâmicas baseadas no tipo de consumidor da API ou plano assinado, integrando-se com métricas do Painel de FinOps.
+    - [ ] Gerar automaticamente documentação interativa (Developer Portal) agregada de todas as APIs governadas, centralizando os contratos e expondo guias de integração com *mocks* de testes.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação Extrema de Engenharia Reversa em Bancos Legados para Geração de Microsserviços de Transição".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
