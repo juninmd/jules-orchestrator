@@ -2425,6 +2425,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Gerar automaticamente documentação interativa (Developer Portal) agregada de todas as APIs governadas, centralizando os contratos e expondo guias de integração com *mocks* de testes.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação Extrema de Engenharia Reversa em Bancos Legados para Geração de Microsserviços de Transição".
 
+- [ ] **Feature: Automação Extrema de Engenharia Reversa em Bancos Legados para Geração de Microsserviços de Transição**
+  - **Descrição:** O orquestrador assumirá o papel de engenheiro de modernização de sistemas legados. Ele conectará-se a bancos de dados monolíticos antigos e complexos, realizará engenharia reversa no esquema de dados, procedimentos armazenados e logs de acesso, para deduzir domínios de negócio subjacentes (Bounded Contexts) e gerar automaticamente estruturas de microsserviços modernos. Isso inclui o mapeamento de dados antigos para novos esquemas distribuídos e a criação de APIs e DTOs correspondentes, acelerando de forma sem precedentes a transição de legados para a nuvem.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `LegacyModernizationAgent` capaz de se conectar e extrair o DDL completo (tabelas, chaves, triggers, stored procedures) de bancos de dados legados corporativos (ex: SQL Server, Oracle, DB2).
+    - [ ] Integrar análise de logs de acesso e query (Slow Query Log / APM) para identificar agrupamentos de tabelas e joins frequentes, inferindo domínios de negócio (DDD) e Contextos Delimitados naturais dentro do monólito.
+    - [ ] Desenvolver um transpiler baseado em LLM que converte lógicas de negócios engessadas em Stored Procedures complexas para código de aplicação moderno e testável (Node.js/Python/Java) alocado nos novos microsserviços gerados.
+    - [ ] Gerar autônoma e automaticamente scripts de migração de dados e configurações de Change Data Capture (CDC, ex: Debezium) para manter a sincronização contínua bidirecional entre o banco legado e os novos datastores distribuídos durante a fase de transição (Strangler Fig Pattern).
+    - [ ] Desenvolver uma aba no Dashboard Executivo ("Strangler Fig Monitor") para acompanhar visualmente o progresso da extração de domínios, exibindo a redução progressiva de tráfego e dependência sobre o banco de dados monolítico ao longo do tempo.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Testes de Paridade de Comportamento para Microsserviços Extraídos de Monólitos Legados".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
