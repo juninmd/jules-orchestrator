@@ -2435,6 +2435,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver uma aba no Dashboard Executivo ("Strangler Fig Monitor") para acompanhar visualmente o progresso da extração de domínios, exibindo a redução progressiva de tráfego e dependência sobre o banco de dados monolítico ao longo do tempo.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Testes de Paridade de Comportamento para Microsserviços Extraídos de Monólitos Legados".
 
+
+- [ ] **Feature: Integração Contínua de Testes de Paridade de Comportamento para Microsserviços Extraídos de Monólitos Legados**
+  - **Descrição:** Para garantir que a transição de monólitos para microsserviços ocorra sem degradação de funcionalidade ou experiência do usuário, o orquestrador implementará um sistema autônomo de Testes de Paridade. Este sistema irá interceptar em tempo real as requisições em ambiente de produção direcionadas ao banco/sistema legado ("shadow traffic" ou "dark launching"), e enviá-las paralelamente para os novos microsserviços gerados. O agente analisará as respostas, latências e metadados de ambas as arquiteturas, gerando relatórios de divergência de comportamento, sem impactar o usuário final. Isso proporcionará confiança absoluta antes do corte definitivo ("cut-over") do sistema legado.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `ParityTestingAgent` com capacidade de configurar espelhamento de tráfego de produção seguro (Shadowing) através do Service Mesh ou API Gateway.
+    - [ ] Implementar motor de comparação profunda em tempo real, capaz de diferenciar ruídos temporais de divergências reais na carga útil das respostas entre as arquiteturas monolitica e distribuída.
+    - [ ] Desenvolver painel de análise visual ("Parity Dashboard") exibindo a porcentagem de compatibilidade, divergências comuns de payload, e métricas de desempenho (P99 de latência legado vs novo microsserviço).
+    - [ ] Automatizar a geração de Issues e Tasks detalhadas para correção de bugs no novo microsserviço caso a paridade de resposta caia abaixo do limiar de confiança configurado (ex: 99.99%).
+    - [ ] Construir mecanismo de desativação autônoma (kill switch) do espelhamento caso o tráfego sombra ameace a estabilidade ou performance da aplicação primária de produção.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de FinOps e Identificação de Desperdícios de Infraestrutura em Ambientes de Microsserviços".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
