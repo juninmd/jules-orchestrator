@@ -2446,6 +2446,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Construir mecanismo de desativação autônoma (kill switch) do espelhamento caso o tráfego sombra ameace a estabilidade ou performance da aplicação primária de produção.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de FinOps e Identificação de Desperdícios de Infraestrutura em Ambientes de Microsserviços".
 
+- [ ] **Feature: Automação de FinOps e Identificação de Desperdícios de Infraestrutura em Ambientes de Microsserviços**
+  - **Descrição:** Tendo a plataforma particionada em microsserviços gerados autonomamente, os custos na nuvem (Cloud Computing) podem escalar rapidamente e se tornar um ponto cego. O orquestrador assumirá o papel de Engenheiro de FinOps. Ele irá monitorar e analisar continuamente a utilização de recursos (CPU, Memória, I/O, Banda de Rede) através de métricas extraídas de ferramentas como Prometheus/Datadog e as APIs de *billing* dos provedores de cloud. Com isso, será capaz de identificar instâncias ociosas (Zombie Instances), serviços superdimensionados (Over-provisioned) e armazenamento efêmero excessivo não utilizado. O sistema não apenas reportará os desperdícios, mas também poderá sugerir ou aplicar correções autônomas, como redimensionar *Horizontal Pod Autoscalers* (HPA) e *Vertical Pod Autoscalers* (VPA) com o objetivo de reduzir custos operacionais com impacto zero na estabilidade (SLA).
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o agente `FinOpsAgent` configurado para ingerir dados contínuos de métricas de infraestrutura subjacente e das faturas da AWS/GCP/Azure.
+    - [ ] Criar motor analítico para cruzar dados de consumo real contra limites alocados (`requests` vs `limits` no Kubernetes), visando identificar o nível exato de desperdício (underutilization).
+    - [ ] Implementar integração que gere propostas de correção sob a forma de Pull Requests modificando os manifestos YAML de Helm/Kustomize, acompanhadas de estimativas exatas de economia (ex: "Diminuir Memory Request em 2GB gerará $X de economia/mês").
+    - [ ] Fornecer alertas via canais corporativos (Slack/Teams) quando um microsserviço ou ambiente ultrapassar as quotas pré-estabelecidas de gastos em menos de 24h (Cost Spike Detection).
+    - [ ] Desenvolver uma nova aba de "Eficiência de Cloud e FinOps" no Dashboard Administrativo, destacando o custo por serviço e apontando os principais ofensores.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Adoção Autônoma de Instâncias Spot (Spot Instances) Preemptivas para Workloads Tolerantes a Falhas".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
