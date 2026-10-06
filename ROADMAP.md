@@ -2456,6 +2456,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver uma nova aba de "Eficiência de Cloud e FinOps" no Dashboard Administrativo, destacando o custo por serviço e apontando os principais ofensores.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Adoção Autônoma de Instâncias Spot (Spot Instances) Preemptivas para Workloads Tolerantes a Falhas".
 
+- [ ] **Feature: Adoção Autônoma de Instâncias Spot (Spot Instances) Preemptivas para Workloads Tolerantes a Falhas**
+  - **Descrição:** Dando continuidade à otimização de FinOps, o orquestrador buscará ativamente reduzir os custos de workloads não-críticos e tolerantes a interrupções (como jobs em lote, treinamentos de modelos e execuções de linting/testes). A plataforma implementará uma lógica autônoma para orquestrar a criação, alocação e recuperação preemptiva de instâncias Spot (preços com desconto) através de integrações com os provedores de Cloud. O sistema deverá identificar momentos de baixa nos preços de Spot, alocar os pods para essas instâncias, e, ao receber avisos de interrupção (Spot interruption notices), migrar os workloads graciosamente de volta para instâncias On-Demand sem perdas ou tempo de inatividade.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `SpotInstanceOrchestratorAgent`, conectando às APIs de Spot Market da AWS (EC2 Spot Fleet), GCP (Preemptible VMs) e Azure (Spot Virtual Machines).
+    - [ ] Desenvolver a lógica preditiva para identificar e classificar jobs no cluster como "Tolerantes a Interrupções" através de anotações no manifesto Kubernetes.
+    - [ ] Implementar interceptores de sinais de preempção do cloud provider (por exemplo, aviso de 2 minutos na AWS) para orquestrar o draining limpo (esvaziamento) do nó e recriar os pods em instâncias On-Demand garantidas.
+    - [ ] Configurar alertas autônomos no Painel de FinOps demonstrando a economia líquida acumulada ("Spot Savings") obtida pelo direcionamento do workload tolerante a falhas.
+    - [ ] Criar e executar suítes de Chaos Engineering específicas simulando a perda súbita de 50% dos nós Spot do cluster, validando que as aplicações não apresentem degradação (Zero Downtime) para o usuário final.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Preditiva de Análise de Padrões de Falha em Produção para Orquestração Antecipada de Capacidade (Capacity Planning)".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
