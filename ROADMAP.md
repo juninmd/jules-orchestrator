@@ -2466,6 +2466,28 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Criar e executar suítes de Chaos Engineering específicas simulando a perda súbita de 50% dos nós Spot do cluster, validando que as aplicações não apresentem degradação (Zero Downtime) para o usuário final.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Preditiva de Análise de Padrões de Falha em Produção para Orquestração Antecipada de Capacidade (Capacity Planning)".
 
+
+- [ ] **Feature: Integração Preditiva de Análise de Padrões de Falha em Produção para Orquestração Antecipada de Capacidade (Capacity Planning)**
+  - **Descrição:** Avançando na gestão inteligente do ecossistema, esta feature introduzirá a capacidade de prever falhas em produção e gargalos de capacidade antes que ocorram. O orquestrador analisará continuamente logs de APM (Application Performance Monitoring), métricas de infraestrutura, e histórico de incidentes para identificar padrões sutis que precedem degradações de serviço. Com base nessas predições, o sistema acionará ações preventivas de orquestração — como provisionamento antecipado de réplicas, isolamento de nós instáveis ou redirecionamento de tráfego — garantindo a máxima resiliência e estabilidade proativa da aplicação sob condições adversas.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver o `CapacityPlanningAgent`, capaz de ingerir e analisar fluxos contínuos de logs, métricas (Prometheus, Datadog) e dados de rastreamento distribuído (OpenTelemetry).
+    - [ ] Implementar integração com modelos preditivos (LLM/Machine Learning) especializados na detecção de anomalias temporais e reconhecimento de padrões de degradação estrutural.
+    - [ ] Automatizar a execução de ações de mitigação proativas, como pré-escalonamento de pods via `PredictiveScalingAgent` e reciclagem de pods (graceful restart) em caso de suspeita de memory leaks.
+    - [ ] Estabelecer um ciclo de feedback onde o agente documenta e aprende com falsos positivos e predições bem-sucedidas para aprimorar a precisão dos modelos ao longo do tempo.
+    - [ ] Criar o painel "Predictive Health Monitor" no Dashboard Executivo, visualizando alertas preditivos, "Health Scores" futuros estimados por serviço e ações preventivas tomadas de forma autônoma.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Engenharia de Caos Contínua e Injeção de Falhas Baseada em Grafos de Dependência".
+
+
+- [ ] **Feature: Automação de Engenharia de Caos Contínua e Injeção de Falhas Baseada em Grafos de Dependência**
+  - **Descrição:** Introduzir uma rotina autônoma de Engenharia de Caos (Chaos Engineering) que compreenda a topologia real do ecossistema de microsserviços. O orquestrador mapeará os grafos de dependência das aplicações para planejar e executar testes de resiliência seguros e precisos em produção. Injetando falhas deliberadas como latência de rede, pod eviction e terminação de nós, ele validará continuamente se os mecanismos de fallback e circuitos de quebra (circuit breakers) funcionam adequadamente, garantindo a confiança no ecossistema distribuído em cenários de degradação.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `ChaosEngineeringAgent` focado em orquestrar injeções de falha em clusters Kubernetes utilizando frameworks nativos, como Chaos Mesh ou LitmusChaos.
+    - [ ] Implementar análise de grafos de dependência utilizando telemetria (OpenTelemetry/Istio) para calcular e delimitar rigorosamente o "blast radius" (raio de impacto) dos experimentos.
+    - [ ] Automatizar a execução de cenários de caos em janelas de manutenção preditivas ou em tráfego de espelho (shadow traffic), injetando latências, quedas de DNS e interrupções de CPU/Memória.
+    - [ ] Desenvolver mecanismos de "Halt-and-Catch-Fire" onde o agente monitora métricas de negócio (ex: taxa de conversão) e aborta instantaneamente o experimento se os SLOs de produção forem gravemente feridos.
+    - [ ] Gerar relatórios de resiliência ("Resilience Reports") com *Pull Requests* de correções arquiteturais recomendadas sempre que falhas em cascata (cascading failures) não mitigadas forem descobertas.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria de Segurança e Correção Autônoma de Vulnerabilidades (DAST/SAST) com LLM Integrado aos Pipelines CI/CD".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
