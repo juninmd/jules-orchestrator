@@ -2488,6 +2488,16 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Gerar relatórios de resiliência ("Resilience Reports") com *Pull Requests* de correções arquiteturais recomendadas sempre que falhas em cascata (cascading failures) não mitigadas forem descobertas.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria de Segurança e Correção Autônoma de Vulnerabilidades (DAST/SAST) com LLM Integrado aos Pipelines CI/CD".
 
+- [ ] **Feature: Auditoria de Segurança e Correção Autônoma de Vulnerabilidades (DAST/SAST) com LLM Integrado aos Pipelines CI/CD**
+  - **Descrição:** Funcionalidade na qual o orquestrador atuará ativamente para identificar, auditar e corrigir vulnerabilidades. O agente realizará análises de código estáticas (SAST) e dinâmicas (DAST) em tempo real, integrando-se aos pipelines de CI/CD para bloquear deploys de risco e gerar PRs de auto-correção embasados nas recomendações de segurança mais atualizadas (OWASP, MITRE), reduzindo drasticamente o tempo de exposição.
+  - **Critérios de Aceite:**
+    - [ ] Mapear a arquitetura e criar os serviços base necessários (`AuditoriaSegurancaCorrecaoAutonomaService`).
+    - [ ] Integrar as ferramentas de scanners DAST e SAST ao motor de orquestração do pipeline CI/CD de forma resiliente.
+    - [ ] Criar métricas de telemetria focadas em segurança (SecOps) e dashboards visuais para acompanhamento contínuo.
+    - [ ] Desenvolver suítes de testes autônomas e injetores de falha de segurança que validem a prontidão e detecção das barreiras criadas.
+    - [ ] Implementar a orquestração autônoma (auto-healing) para aplicar patches imediatos a vulnerabilidades críticas detectadas no repositório.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação de Política de Zero-Trust e Verificação Contínua de Identidades de Agentes Autônomos".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
