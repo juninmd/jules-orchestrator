@@ -2498,6 +2498,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar a orquestração autônoma (auto-healing) para aplicar patches imediatos a vulnerabilidades críticas detectadas no repositório.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação de Política de Zero-Trust e Verificação Contínua de Identidades de Agentes Autônomos".
 
+
+- [ ] **Feature: Implementação de Política de Zero-Trust e Verificação Contínua de Identidades de Agentes Autônomos**
+  - **Descrição:** Funcionalidade na qual o orquestrador atuará ativamente para estabelecer um ecossistema de confiança zero (Zero-Trust). Em vez de confiar tacitamente nas ações internas de qualquer agente autônomo (P.O., Arquitetura, Self-Healing, QA), o sistema irá implementar uma validação e verificação criptográfica contínua das identidades dos agentes envolvidos em cada operação ou deliberação. O objetivo é assegurar que nenhuma alteração arquitetural, pull request, ou aprovação de deploy seja executada por um processo ou agente autônomo não verificado, mitigando vetores de ataque internos ou anomalias no comportamento dos LLMs.
+  - **Critérios de Aceite:**
+    - [ ] Mapear todos os fluxos e instâncias de agentes do orquestrador, criando a infraestrutura base do serviço `ZeroTrustIdentityService`.
+    - [ ] Implementar a emissão e rotação automática de identidades de curto prazo (Short-Lived Tokens / Certificates) para cada agente antes de iniciarem a execução no `SwarmBusService`.
+    - [ ] Adicionar um middleware de verificação criptográfica que intercepta, analisa e valida a assinatura digital das deliberações em todos os serviços de Swarm.
+    - [ ] Configurar alertas de Segurança em Tempo Real (SecOps) e bloqueios imediatos automáticos (circuit breaker) caso um agente não autenticado tente iniciar um Pull Request, deploy ou aprovação administrativa.
+    - [ ] Desenvolver suítes de testes autônomos e fuzzing que tentem simular um acesso ou aprovação forjada de agente para validar a resiliência do Zero-Trust.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria e Monitoramento de Identidades Zero-Trust via IA Preditiva".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
