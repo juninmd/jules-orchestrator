@@ -2509,6 +2509,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver suítes de testes autônomos e fuzzing que tentem simular um acesso ou aprovação forjada de agente para validar a resiliência do Zero-Trust.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Auditoria e Monitoramento de Identidades Zero-Trust via IA Preditiva".
 
+
+- [ ] **Feature: Auditoria e Monitoramento de Identidades Zero-Trust via IA Preditiva**
+  - **Descrição:** Dando continuidade à segurança e modelo Zero-Trust implementado, esta funcionalidade visa auditar e monitorar continuamente todas as interações de identidades e agentes no ecossistema utilizando modelos de IA preditiva (LLM/Machine Learning). O sistema analisará os padrões de comportamento e acesso dos agentes, correlacionando-os em tempo real com matrizes de risco. Qualquer desvio sutil no comportamento — como um agente de Self-Healing tentando acessar escopos diferentes, ou um bot operando em horários atípicos — será sinalizado. Além disso, o sistema fornecerá relatórios granulares e trilhas de auditoria sobre quem executou cada ação, os motivos e o contexto da aprovação.
+  - **Critérios de Aceite:**
+    - [ ] Desenvolver a ingestão contínua de logs e eventos do `ZeroTrustIdentityService` e `SwarmBusService` em uma base analítica segura (SIEM/Data Lake de Segurança).
+    - [ ] Criar o `PredictiveAuditAgent` integrado com modelos de Machine Learning não-supervisionado para estabelecer baselines (linhas de base) comportamentais de cada tipo de agente e identificar anomalias sutis em tempo real.
+    - [ ] Implementar a atribuição de um "Trust Score" (Pontuação de Confiança) dinâmico, que degrada automaticamente diante de ações suspeitas, acionando o bloqueio provisório da identidade do agente.
+    - [ ] Construir uma interface de "Forense e Auditoria" no Dashboard Administrativo, visualizando os grafos de dependência das ações (como um agente acionou outro e com quais permissões).
+    - [ ] Automatizar testes de intrusão (Red Teaming automatizado) contra o sistema, tentando injetar comportamentos anômalos para validar a detecção do monitoramento preditivo.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Orquestração Federada Multi-Cluster para Alta Disponibilidade e Recuperação de Desastres em Nível Global".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
