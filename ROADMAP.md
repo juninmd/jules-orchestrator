@@ -2531,6 +2531,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Implementar integração com Service Mesh Global (ex: Istio Multi-Cluster) para redirecionamento inteligente do tráfego norte-sul e leste-oeste no nível de aplicação.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Automação de Escalabilidade Preditiva e Redirecionamento Dinâmico de Tráfego Global Baseado em Demanda (Follow the Sun e Load Balancing)".
 
+
+- [ ] **Feature: Automação de Escalabilidade Preditiva e Redirecionamento Dinâmico de Tráfego Global Baseado em Demanda (Follow the Sun e Load Balancing)**
+  - **Descrição:** Implementar um sistema autônomo que utiliza algoritmos de Machine Learning e dados históricos para prever picos de tráfego (Escalabilidade Preditiva) e alocar recursos preventivamente em clusters globais. Além disso, introduzir o roteamento dinâmico "Follow the Sun", redirecionando o tráfego dos usuários para datacenters operando em horário comercial diurno para otimizar latência, aproveitando janelas de menor custo computacional (spot instances) noturno em outras regiões.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `PredictiveScalingAgent` integrado aos provedores de nuvem para provisionar nós antecipadamente com base em sazonalidade e tendências de tráfego.
+    - [ ] Implementar a lógica de roteamento "Follow the Sun" no Global Traffic Manager / DNS, minimizando latência ao mapear usuários para os clusters ativos geograficamente mais próximos.
+    - [ ] Integrar análise de custo contínua, fazendo downscaling agressivo em regiões em horário noturno e trocando cargas de trabalho não críticas para instâncias de baixo custo (Spot/Preemptible).
+    - [ ] Construir o dashboard "Global Traffic & Predictive Scaling", permitindo a visualização em tempo real das predições de carga, tráfego redirecionado e economia de custos (FinOps).
+    - [ ] Automatizar testes de stress globais simulando um pico de acesso repentino de 10x em uma região específica, validando o spin-up preditivo e o balanceamento global automático.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de FinOps Autônomo e Otimização de Custos em Tempo Real baseada em IA".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
