@@ -2542,6 +2542,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Automatizar testes de stress globais simulando um pico de acesso repentino de 10x em uma região específica, validando o spin-up preditivo e o balanceamento global automático.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de FinOps Autônomo e Otimização de Custos em Tempo Real baseada em IA".
 
+- [ ] **Feature: Integração Contínua de FinOps Autônomo e Otimização de Custos em Tempo Real baseada em IA**
+  - **Descrição:** Funcionalidade autônoma onde o orquestrador gerenciará e otimizará o escopo desta feature, garantindo resiliência, segurança, e governança contínua baseada em regras de negócio e contexto de infraestrutura.
+  - **Critérios de Aceite:**
+    - [ ] Mapear arquitetura e criar serviços base necessários (`IntegraçãoContínuadeFinOpsAutônomoeOtimizaçãodeCustosemTempoRealbaseadaemIAService`).
+    - [ ] Implementar a lógica de orquestração autônoma e comunicação no `SwarmBusService`.
+    - [ ] Criar métricas de telemetria e dashboards visuais para observabilidade (Painel / Prometheus).
+    - [ ] Desenvolver suítes de testes autônomas (E2E/Integração) garantindo que falhas sejam interceptadas antes do merge no Main.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão Modular e Refinamento de Heurísticas para a Feature Integração Contínua de FinOps Autônomo e Otimização de Custos em Tempo Real baseada em IA".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
