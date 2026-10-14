@@ -2551,6 +2551,15 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver suítes de testes autônomas (E2E/Integração) garantindo que falhas sejam interceptadas antes do merge no Main.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Expansão Modular e Refinamento de Heurísticas para a Feature Integração Contínua de FinOps Autônomo e Otimização de Custos em Tempo Real baseada em IA".
 
+- [ ] **Feature: Expansão Modular e Refinamento de Heurísticas para a Feature Integração Contínua de FinOps Autônomo e Otimização de Custos em Tempo Real baseada em IA**
+  - **Descrição:** Evoluir as capacidades de orquestração de FinOps autônomo, introduzindo algoritmos preditivos avançados (Machine Learning não supervisionado) para analisar perfis de consumo e padrões de uso do cluster em tempo real. Esta funcionalidade visa reduzir o desperdício de recursos infraestruturais ao identificar anomalias sazonais e sugerir ou executar remediações automáticas de escalabilidade, como realocação de workloads para horários ou zonas de menor custo ("Follow the Sun"). Além disso, o sistema deve fornecer recomendações granulares diretamente nos dashboards e gerenciar as faturas cloud simuladas para projeção futura, mantendo compliance estrito com as políticas de orçamento das contas do ambiente.
+  - **Critérios de Aceite:**
+    - [ ] Mapear arquitetura analítica e construir o serviço `PredictiveCostHeuristicsService` responsável por agregar as métricas de Prometheus e aplicar os modelos de ML.
+    - [ ] Implementar a lógica autônoma de migração de cargas de trabalho não críticas (`spot-instance-manager`) gerenciada pelo `SwarmBusService`.
+    - [ ] Criar módulos de predição de faturamento e exibição de alertas proativos no Dashboard Visual para detecção de anomalias financeiras.
+    - [ ] Desenvolver suítes de testes autônomas focadas em testes de stress financeiro e validação de compliance com orçamentos restritos antes da integração na Branch Principal.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Preditiva e Auditoria de Orçamento via IA Generativa em Processos de FinOps Autônomos".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
