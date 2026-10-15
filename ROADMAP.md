@@ -2560,6 +2560,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
     - [ ] Desenvolver suítes de testes autônomas focadas em testes de stress financeiro e validação de compliance com orçamentos restritos antes da integração na Branch Principal.
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Preditiva e Auditoria de Orçamento via IA Generativa em Processos de FinOps Autônomos".
 
+- [ ] **Feature: Integração Preditiva e Auditoria de Orçamento via IA Generativa em Processos de FinOps Autônomos**
+  - **Descrição:** Adicionar capacidades de auditoria avançada utilizando IA Generativa para interpretar faturas, anomalias e projeções de custos, fornecendo resumos executivos detalhados e sugestões proativas de otimização no escopo do FinOps Autônomo. A funcionalidade integrará LLMs diretamente aos pipelines de faturamento na nuvem, permitindo que a IA dialogue com os gestores financeiros explicando picos de consumo, alertando sobre desperdícios (como instâncias não utilizadas) e orquestrando automaticamente a aplicação de limites (budget caps). Esta camada cognitiva transforma a análise preditiva em ações diretas e auditáveis para garantir a saúde financeira e o compliance do ambiente.
+  - **Critérios de Aceite:**
+    - [ ] Criar o `GenerativeFinOpsAuditAgent` integrado aos serviços do cloud provider (AWS Cost Explorer, GCP Billing) e ao `SwarmBusService`.
+    - [ ] Implementar a capacidade de gerar relatórios semanais em linguagem natural sobre o consumo e projeções financeiras usando modelos de linguagem locais (Ollama).
+    - [ ] Desenvolver um pipeline de auditoria autônoma capaz de identificar recursos órfãos (volumes EBS desanexados, IPs ociosos) e sugerir a deleção ou encerramento, requerendo aprovação humana apenas para ambientes produtivos.
+    - [ ] Configurar alertas interativos no painel que permitem ao gestor aceitar, via clique único, as estratégias de otimização propostas pela IA (como migrar serviços para instâncias ARM).
+    - [ ] Automatizar suítes de testes de validação de auditoria, simulando faturas anômalas para garantir que os relatórios e gatilhos de corte sejam acionados corretamente antes da aprovação do limite orçamentário.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Segurança em Camada de Aplicação (DevSecOps Autônomo) para Pipelines de FinOps".
+
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
