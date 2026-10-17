@@ -2571,6 +2571,17 @@ Abaixo estão listadas as tarefas detalhadas. Marque-as conforme o desenvolvimen
   - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Integração Contínua de Segurança em Camada de Aplicação (DevSecOps Autônomo) para Pipelines de FinOps".
 
 
+
+- [ ] **Feature: Integração Contínua de Segurança em Camada de Aplicação (DevSecOps Autônomo) para Pipelines de FinOps**
+  - **Descrição:** Implementar uma camada de segurança autônoma que se integra diretamente aos processos de FinOps (DevSecOps Autônomo). Esta funcionalidade visa validar configurações, auditar permissões e detectar vulnerabilidades em tempo de execução nos serviços orquestrados, especificamente focando na integridade das ferramentas de faturamento e otimização de custos. O objetivo é garantir que a escalabilidade e o gerenciamento financeiro operem em um ambiente zero-trust, avaliando ameaças continuamente através da análise de padrões anômalos de acesso à API e desvios nas configurações de IAM, aplicando políticas de mitigação de risco de forma autônoma.
+  - **Critérios de Aceite:**
+    - [ ] Mapear as superfícies de ataque e construir o serviço `AutonomousDevSecOpsService` para inspecionar métricas e metadados nos pipelines FinOps.
+    - [ ] Integrar ferramentas de análise estática e dinâmica de segurança de forma transparente dentro do orquestrador via `SwarmBusService`.
+    - [ ] Criar fluxos de validação de IAM (Identity and Access Management) verificando permissões granulares nos serviços da nuvem interagidos pelo orquestrador.
+    - [ ] Desenvolver módulos interativos em linguagem natural via LLMs (Ollama) para justificar anomalias de segurança para os administradores antes de executar correções automáticas drásticas.
+    - [ ] Automatizar testes de intrusão base focados em tentativas de exfiltração de dados financeiros e elevação de privilégios nos nós gerenciados, integrando-os à esteira de CI/CD principal.
+  - **Gatilho de Novas Tasks:** A conclusão desta feature gerará a task "Implementação de Automação de Resposta a Incidentes de Segurança em Tempo Real (SOAR) para Ambientes Cloud Native".
+
 ## 📝 Gestão do Documento e Próximos Passos
 
 Como P.O., garantirei que:
